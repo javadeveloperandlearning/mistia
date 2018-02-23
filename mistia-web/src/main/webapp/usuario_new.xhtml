@@ -1,0 +1,118 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<f:view contentType="text/html" encoding="UTF-8" />
+<ui:composition template="/plantillas/template.xhtml">
+	<ui:define name="bodyarea">
+		<h:body>
+			<h:outputStylesheet name="css/default.css" />
+
+			<h:form id="form">
+				
+				<h:inputHidden value="#{usuarioMaganeBean.accion}" />
+				<p:growl id="messages" />
+				<h:panelGroup>
+					<h2>
+						<p:outputLabel> Registro de Nuevo Usuario </p:outputLabel>
+					</h2>
+				</h:panelGroup>
+
+
+				<h:panelGrid id="grid" columns="3" border="0">
+
+					<p:outputLabel>Usuario: </p:outputLabel>
+
+					<c:if test="${usuarioMaganeBean.accion == NUEVO}">
+						<p:inputText id="txtcodUsua"
+							value="#{usuarioMaganeBean.usuario.codUsua}" styleClass="upper"
+							required="true" requiredMessage="Ingrese un Valor válido" />
+						<p:message for="txtcodUsua" />
+					</c:if>
+
+					<c:if test="${usuarioMaganeBean.accion == EDITAR}">
+						<p:inputText id="txtcodUsua"
+							value="#{usuarioMaganeBean.usuario.codUsua}"
+							style="text-transform: uppercase" disabled="true" required="true"
+							requiredMessage="Ingrese un Valor válido" />
+						<p:message for="txtcodUsua" />
+					</c:if>
+
+
+
+
+					<p:outputLabel>Nombres: </p:outputLabel>
+					<p:inputText id="txtNombres"
+						value="#{usuarioMaganeBean.usuario.nombres}"
+						style="text-transform: uppercase" required="true" />
+					<p:message for="txtNombres" />
+
+
+
+					<p:outputLabel>Clave: </p:outputLabel>
+					<p:password id="txtClave"
+						value="#{usuarioMaganeBean.usuario.clave}" required="true"
+						pattern="dd/MM/yyyy" redisplay="true" />
+					<p:message for="txtClave" />
+
+					<p:outputLabel>Confirmación de clave: </p:outputLabel>
+					<p:password id="txtClaveConfirmacion"
+						value="#{usuarioMaganeBean.usuario.claveConfirmacion}"
+						required="true" pattern="dd/MM/yyyy" redisplay="true" />
+					<p:message for="txtClaveConfirmacion" />
+
+					<p:outputLabel>Fecha caducidad usuario : </p:outputLabel>
+					<p:calendar id="txtFecCadu"
+						value="#{usuarioMaganeBean.usuario.fec_cadu}" showOn="button" />
+					<p:message for="txtFecCadu" />
+
+
+
+					<p:outputLabel>Fecha caducidad de clave</p:outputLabel>
+					<p:calendar id="txtfecCaduClave"
+						value="#{usuarioMaganeBean.usuario.fec_cadu_clave}"
+						showOn="button" />
+					<p:message for="txtfecCaduClave" />
+
+					<p:outputLabel>Estado: </p:outputLabel>
+					<p:selectOneMenu id="cmbEstado"
+						value="#{usuarioMaganeBean.usuario.estadoRegistro}"
+						converter="#{estadoRegistroConverter}">
+
+
+						<f:selectItems value="#{usuarioMaganeBean.estadoRegistroList}"
+							var="estado" itemValue="#{estado}" itemLabel="#{estado.desEsta}" />
+					</p:selectOneMenu>
+					<p:message for="cmbEstado" />
+
+
+
+					<p:commandButton value="Grabar"
+						action="#{usuarioMaganeBean.grabar()}" update="form">
+					</p:commandButton>
+
+					<p:button value="Cancelar" outcome="usuarios" ajax="false" />
+
+
+				</h:panelGrid>
+
+
+				<br></br>
+
+
+
+
+
+
+			</h:form>
+
+		</h:body>
+	</ui:define>
+</ui:composition>
+</html>

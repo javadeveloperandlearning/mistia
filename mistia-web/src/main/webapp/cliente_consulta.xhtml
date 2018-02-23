@@ -1,0 +1,229 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"  >
+	<f:view contentType="text/html" encoding="UTF-8"/> 
+<ui:composition template="/plantillas/template.xhtml">
+	<ui:define name="bodyarea">
+	
+		<style type="text/css">
+            .column1{width: 35%;height:auto}
+            .column2{width: 30%;height:auto}
+            .column3{width: 35%;height:auto}
+           </style>
+	
+		<h:body>
+		
+			<h:outputStylesheet name="css/default.css" />
+			
+			<h:form  id="form" >
+			
+				<p:growl id="messages" />
+				
+				<h:panelGroup>
+				<h1>
+				
+					<p:outputLabel>  Buscar datos del cliente </p:outputLabel>
+				
+					</h1>
+				</h:panelGroup>
+				
+				<br></br>
+				<br></br>
+				<br></br>
+				
+   
+ 			<p:panel style="width:80%;" header="Criterios de Búsqueda">
+ 	
+ 
+ 				
+				 	<h:panelGrid  style="width:100%;" columnClasses="column1,column2,column3"  columns="3"  border="0" cellspacing="2" cellpadding="2" >
+				 	
+						 	<p:column >
+						 		<h:outputText value="D.N.I." />
+			       			    <p:selectBooleanCheckbox  />
+						 	</p:column>
+						 	<p:column >
+						 		<h:outputText value="R.U.C." />
+			       			    <p:selectBooleanCheckbox  />
+						 	</p:column>
+	
+							<p:column>
+						 		<h:outputText value="Carnet de extranjería" />
+			       			    <p:selectBooleanCheckbox  />
+						 	</p:column>
+						 		 
+
+				 	</h:panelGrid>
+
+ 			
+				<h:panelGrid style="width:100%;" columns="4" border="0">
+				
+				
+					<p:outputLabel for="txtNumeroCliente"> Número de Cliente:</p:outputLabel>
+					<p:inputText id="txtNumeroCliente" ></p:inputText>
+					
+					<p:outputLabel for="txtRazonSocial">Nombres Razón Social:</p:outputLabel>
+					<p:inputText id="txtRazonSocial" ></p:inputText>
+        			
+				    <p:outputLabel for="txtApellidoPaterno">Apellido Paterno: </p:outputLabel>
+				    <p:inputText id="txtApellidoPaterno" ></p:inputText>
+        			
+     	  			
+					<p:outputLabel for="txtApellidoMaterno">Apellido Materno: </p:outputLabel>
+					  <p:inputText id="txtApellidoMaterno" ></p:inputText>
+
+					<p:spacer></p:spacer>
+					<p:spacer></p:spacer>
+					<p:spacer></p:spacer>
+					<p:spacer></p:spacer>
+					
+		
+					
+
+	
+				</h:panelGrid>
+				
+				
+				
+				<div align="center">
+					<h:panelGrid  columns="3" border="0">
+					
+						<p:commandButton value="Buscar" action="#{soliservcon.buscar()}"
+							ajax="false" style="width: 100px;">
+						</p:commandButton>
+						
+						<p:commandButton value="Nuevo" action="#{soliservcon.nuevo()}"
+							ajax="false" style="width: 100px;">
+						</p:commandButton>
+	        	
+					    <p:commandButton value="Limpiar	" style="width: 100px;" action="#{soliservcon.limpiar()}"
+							ajax="false">
+						</p:commandButton>
+
+					</h:panelGrid>
+					</div>
+
+				</p:panel>
+				
+								<br></br>
+				<p:dataTable  style="width:80%; height: 300px;" id="dataTable" var="reg" value="#{clientecon.lista}"
+					paginator="true" rows="5" 
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					currentPageReportTemplate="( Página : {currentPage} de {totalPages})"
+					>
+				
+
+				
+					<p:column  style="width:6%">
+						<f:facet name="header">
+							<h:outputText value="" />
+						</f:facet>
+						<p:selectOneRadio id="console" value="#{radioView.console}">
+				            <f:selectItem  itemValue="Xbox One" />
+				        </p:selectOneRadio>
+
+					</p:column>	
+					
+					<p:column  style="width:10%">
+						<f:facet name="header">
+							<h:outputText value="Número Cliente" />
+						</f:facet>
+						<h:outputText value="#{reg['numerocliente']}" >
+				
+						 </h:outputText>
+	
+					</p:column>
+					
+					
+					<p:column style="width:15%" >
+						<f:facet name="header">
+							<h:outputText value="Razo Social" />
+						</f:facet>
+						
+						<h:outputText value="#{reg['razonsocial']}" />
+						
+					</p:column>
+					
+					
+					<p:column  style="width:15%">
+						<f:facet name="header">
+							<h:outputText value="Apellidos y  Nombres" />
+						</f:facet>
+						<h:outputText value="#{reg['nombres']}" >
+					
+						</h:outputText>
+					</p:column>
+
+					<p:column  style="width:15%">
+						<f:facet name="header">
+							<h:outputText value="Teléfonos" />
+						</f:facet>
+						<h:outputText value="#{reg['telefonos']}" >
+											<f:convertDateTime pattern="dd/MM/yyyy hh:mm" />
+						</h:outputText>
+						
+					</p:column>
+
+
+					<p:column  style="width:20%">
+						<f:facet name="header">
+							<h:outputText value="Email" />
+						</f:facet>
+						<h:outputText value="#{reg['email']}" />
+					</p:column>
+
+
+
+					
+					<p:column style="width:5%;align:center" >
+					
+							<f:facet name="header">
+							<h:outputText value="Opciones" style="align:center" />
+							</f:facet>
+							
+							<f:attribute name="align" value="center" />
+							
+							<p:commandButton icon="ui-icon-pencil"   action="#{soliservcon.editar(reg['numeroSolicitud'])}"   
+							 	ajax="false"   title="validar" update="form:dataTable"  > 
+							</p:commandButton>
+							
+		
+							
+ 							<h:panelGroup  styleClass="ui-icon ui-icon-circle-check" rendered="#{reg['cantencuestas'] > 0}" />
+					</p:column>
+
+				</p:dataTable>
+					
+				<div align="center" style="width:80%;"   >		
+					<h:panelGrid columns="2"  border="0">
+					
+						<p:commandButton   style="width: 100px;" value="Seleccionar" action="#{soliservcon.salir()}"
+							ajax="false">
+						</p:commandButton>
+	
+					    <p:commandButton   style="width: 100px;" value="Salir" action="#{soliservcon.salir()}"
+							ajax="false">
+						</p:commandButton>
+					</h:panelGrid>
+				</div>
+			
+				
+				<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+					<p:commandButton value="Si" type="button"
+						styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+					<p:commandButton value="No" type="button"
+						styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+				</p:confirmDialog>
+			</h:form>
+			
+		</h:body>
+	</ui:define>
+</ui:composition>
+</html>

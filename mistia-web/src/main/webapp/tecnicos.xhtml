@@ -1,0 +1,256 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+	<f:view contentType="text/html" encoding="UTF-8"/> 
+<ui:composition template="/plantillas/template.xhtml">
+	<ui:define name="bodyarea">
+		<h:body>
+			<h:outputStylesheet name="css/default.css" />
+			
+			<h:form  id="form" >
+			
+				<p:growl id="messages"  widgetVar="messages" />
+				
+			    <p:remoteCommand name="updateDataTable" update="dataTable" />
+			    <p:remoteCommand name="updateMessages" update="messages" />
+			 	<p:remoteCommand name="updateForm" update="form" />
+				<h:panelGroup>
+					<p:outputLabel>Registro de Técnicos </p:outputLabel>
+				</h:panelGroup>
+
+				<br></br>
+				<br></br>
+				
+				<p:panel style="width:80%;" header="Criterios de Búsqueda">
+
+				<h:panelGrid columns="2" border="0">
+
+					<p:outputLabel>Distritos : </p:outputLabel>
+					<p:selectOneMenu id="cmbDistritos" value="#{tecnicobean.distrito}"  converter="#{distritoConverter}"  style="width: 200px;">
+						<f:selectItems value="#{tecnicobean.distritoList}" var="m"
+							itemValue="#{m}" itemLabel="#{m.descripcion}" />
+					</p:selectOneMenu>
+					
+					
+					<p:outputLabel>Cargos : </p:outputLabel>
+					<p:selectOneMenu id="cmbCargos" value="#{tecnicobean.cargo}"  converter="#{cargoConverter}"  style="width: 200px;">
+						<f:selectItems value="#{tecnicobean.cargoList}" var="m"
+							itemValue="#{m}" itemLabel="#{m.descripcion}" />
+					</p:selectOneMenu>
+					
+					<p:spacer></p:spacer>
+					<p:spacer></p:spacer>
+					
+					<p:outputLabel>Ingrese criterio de búsqueda: </p:outputLabel>
+					<p:inputText value="#{tecnicobean.criterio}"  style="width: 250px;" maxlength="50" ></p:inputText>
+					
+					<p:spacer></p:spacer>
+					<p:spacer></p:spacer>
+
+					<p:commandButton value="Mostrar" action="#{tecnicobean.mostrar()}"
+						ajax="false"  style="width: 100px;" >
+					</p:commandButton>
+
+					<p:commandButton value="Nuevo" actionListener="#{tecnicobean.nuevo}"  style="width: 100px;"  update=":formsave:dlgsave"  oncomplete="PF('dlgsave').show()" >
+					</p:commandButton>
+
+				</h:panelGrid>
+				
+				</p:panel>
+				<br></br>
+				<br></br>
+				
+				<p:dataTable  style="width:80%; height: 300px;" id="dataTable" var="reg" value="#{tecnicobean.tecnicoList}"
+					paginator="true" rows="10"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					currentPageReportTemplate="( Página : {currentPage} de {totalPages})"
+					>
+					<p:column style="width:5%" >
+						<f:facet name="header">
+							<h:outputText value="Código" />
+						</f:facet>
+						<p:commandLink id= "ajax" actionListener="#{tecnicobean.editar}"   update="formsave:dlgsave"    oncomplete="PF('dlgsave').show()"   >
+							<h:outputText value="#{reg.codigoTecnico}" />	
+							<f:param  name="codigoTecnico" value="#{reg.codigoTecnico}" />						
+						</p:commandLink>
+					</p:column>
+
+					<p:column  style="width:25%">
+						<f:facet name="header">
+							<h:outputText value="Nombres" />
+						</f:facet>
+						<h:outputText value="#{reg.nombres} #{reg.apellidos}" />
+					</p:column>
+
+					<p:column style="width:20%">
+						<f:facet name="header">
+							<h:outputText value="Dirección" />
+						</f:facet>
+						<h:outputText value="#{reg.direccion} -  #{reg.distrito.descripcion} " />
+					</p:column>
+					
+					<p:column style="width:10%">
+						<f:facet name="header">
+							<h:outputText value="DNI" />
+						</f:facet>
+						<h:outputText value="#{reg.dni}" />
+					</p:column>
+					
+					<p:column style="width:10%">
+						<f:facet name="header">
+							<h:outputText value="Teléfono" />
+						</f:facet>
+						<h:outputText value="#{reg.telefono}" />
+					</p:column>
+
+					<p:column style="width:15%">
+						<f:facet name="header">
+							<h:outputText value="E-mail" />
+						</f:facet>
+						<h:outputText value="#{reg.email}" />
+					</p:column>		
+					
+					<p:column style="width:20%">
+						<f:facet name="header">
+							<h:outputText value="Cargo" />
+						</f:facet>
+						<h:outputText value="#{reg.cargo.descripcion}" />
+					</p:column>				
+					
+					<p:column style="width:7%" >
+						<f:facet name="header">
+							<h:outputText value="Eliminar" />
+						</f:facet>
+						<p:commandButton icon="ui-icon-trash"  actionListener="#{tecnicobean.eliminar(reg)}"    title="eliminar" update="form:dataTable,form:messages" > 
+							<p:confirm header="Eliminar" message="¿Está seguro de eliminar el nodo?" icon="ui-icon-alert"  ></p:confirm>
+						</p:commandButton>
+					</p:column>
+
+				</p:dataTable>
+				
+				<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+					<p:commandButton value="Si" type="button"
+						styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+					<p:commandButton value="No" type="button"
+						styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+				</p:confirmDialog>
+
+			</h:form >
+			
+			
+			<h:form id= "formsave">
+					
+				
+					
+				<p:dialog id = "dlgsave" widgetVar="dlgsave" header="#{tecnicobean.headerpopup}"  width="700"    onHide="PF('dlgsave').content.empty()">
+							
+							<h:inputHidden id="action" value="#{tecnicobean.action}" />
+							<h:panelGrid id="pnlupdate" columns="3" border="0">
+												
+							
+							<p:spacer></p:spacer>
+							<p:spacer></p:spacer>
+							<p:spacer></p:spacer>
+							
+							<p:outputLabel>Nombres: </p:outputLabel>
+							<p:inputText id="txtNombres" value="#{tecnicobean.tecnico.nombres}" maxlength="50" size="30" required="true" requiredMessage="Debe ingresar los nombres">
+							</p:inputText>
+							<p:message for="txtNombres"  ></p:message>		
+							
+							<p:outputLabel>Apellidos: </p:outputLabel>
+							<p:inputText id="txtApellidos" value="#{tecnicobean.tecnico.apellidos}" maxlength="50" size="30" required="true" requiredMessage="Debe ingresar los apllidos">
+							</p:inputText>
+							<p:message for="txtApellidos"  ></p:message>	
+							
+							
+							<p:outputLabel>Dirección: </p:outputLabel>
+							<p:inputTextarea id="txtDirección" value="#{tecnicobean.tecnico.direccion}" maxlength="50" size="30" required="true" requiredMessage="Debe ingresar la dirección">
+							</p:inputTextarea>
+							<p:message for="txtDirección"  ></p:message>				
+												
+												
+							<p:outputLabel>Distrito : </p:outputLabel>
+							<p:selectOneMenu id="cmbDistritos" value="#{tecnicobean.tecnico.distrito}"  converter="#{distritoConverter}"  style="width: 200px;">
+								<f:selectItems value="#{tecnicobean.distritoListp}" var="m"
+									itemValue="#{m}" itemLabel="#{m.descripcion}" />
+							</p:selectOneMenu>
+							<p:spacer></p:spacer>
+						
+							<p:outputLabel>DNI: </p:outputLabel>
+							<p:inputText id="txtDNI" value="#{tecnicobean.tecnico.dni}" maxlength="50" size="30" required="true" requiredMessage="Debe ingresar DNI"    >
+							</p:inputText>
+							<p:message for="txtDNI"  ></p:message>		   
+							
+													
+							<p:outputLabel>Teléfono: </p:outputLabel>
+							<p:inputText id="txtTelefono" value="#{tecnicobean.tecnico.telefono}" maxlength="50" size="30" required="true" requiredMessage="Debe ingresar Teléfono"  >
+							</p:inputText>
+							<p:message for="txtTelefono"  ></p:message>	
+							
+							
+							<p:outputLabel>Email: </p:outputLabel>
+							<p:inputText id="txtemail" value="#{tecnicobean.tecnico.email}" maxlength="50" size="30" required="true" requiredMessage="Debe ingresar E-mail"
+							validatorMessage="Ingrese un email válido"
+							 >
+							
+							 <f:validateRegex pattern="#{Validations.emailpattern}" />
+							</p:inputText>
+							<p:message for="txtemail"  ></p:message>	
+							
+							<p:outputLabel>Cargo : </p:outputLabel>
+							<p:selectOneMenu id="cmbCargos" value="#{tecnicobean.tecnico.cargo}"  converter="#{cargoConverter}"  style="width: 200px;">
+								<f:selectItems value="#{tecnicobean.cargoListp}" var="m"
+									itemValue="#{m}" itemLabel="#{m.descripcion}" />
+							</p:selectOneMenu>	
+							<p:spacer></p:spacer>
+								
+							<p:spacer></p:spacer>
+							<p:spacer></p:spacer>
+							<p:spacer></p:spacer>
+		
+								<p:commandButton value="Grabar" action="#{tecnicobean.grabar()}" ajax="true" update="formsave:pnlupdate, form:dataTable"  oncomplete="handleSaveRequest(xhr, status, args)" >
+								</p:commandButton>
+								
+								
+								<p:commandButton value="Cancelar" onclick="PF('dlgsave').hide();" ajax="true">	
+								
+								
+								</p:commandButton>
+		
+							</h:panelGrid>
+						
+				
+					</p:dialog>
+					
+					
+			</h:form>
+			
+			
+			<h:outputScript target="head">
+				 	function handleSaveRequest(xhr, status, args) {
+				 	
+					 	if( args.notValid || args.validationFailed){
+					 		return;
+					 	}else{
+					 	
+					 		PF('dlgsave').hide();
+					 		PF('messages').renderMessage({ detail: 'Operación realizada con éxito', severity: 'info'});
+							//updateForm();
+					 	}  
+           		
+		
+				    }  
+			</h:outputScript>
+			
+			
+			
+		</h:body>
+	</ui:define>
+</ui:composition>
+</html>

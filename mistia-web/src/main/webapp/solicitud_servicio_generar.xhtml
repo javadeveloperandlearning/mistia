@@ -1,0 +1,273 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"  >
+	<f:view contentType="text/html" encoding="UTF-8"/> 
+<ui:composition template="/plantillas/template.xhtml">
+	<ui:define name="bodyarea">
+		<h:body>
+		
+			<h:outputStylesheet name="css/default.css" />
+			
+			<h:form  id="form" >
+			
+				<p:growl id="messages" />
+				
+				<h:panelGroup>
+				<h1>
+				
+					<p:outputLabel>  Actualizar solicitud de servicio </p:outputLabel>
+				
+					</h1>
+				</h:panelGroup>				
+   
+ 				<p:panel style="width:80%;" header="Nueva solicitud de servicio">
+ 	
+					<h:panelGrid style="width:100%;" columns="4" border="0">				
+						<p:outputLabel for="cmbCliente">Cliente:</p:outputLabel>
+						<p:autoComplete id="cmbCliente"  dropdown="true" value="#{soliservgene.nombreCliente}" completeMethod="#{soliservgene.completeText}" >
+						
+							<p:ajax event="itemSelect" listener="#{soliservgene.cargarTipoSolicitServicio()}" update = "cmbTipoSolicitud" />
+						
+						
+						</p:autoComplete>	
+						
+													
+						<p:outputLabel for="cmbTipoSolicitud">Tipo:</p:outputLabel>
+	        			<p:selectOneMenu id="cmbTipoSolicitud"  value="${soliservgene.codigoTipoSolicitud}"  style="width: 200px;">
+	        				<f:selectItem itemLabel="--Seleccione--" itemValue="-1" />
+	        				<f:selectItems value="#{soliservgene.tipoSolicitudList}"  var="c"  itemLabel="#{c.descripcion}" itemValue="#{c.codigoTipoSolicitud}" />
+	        				<p:ajax listener="#{soliservgene.actualizarContratoList()}" update = "cmbContrato,cmbProvincia,cmbDistrito,cmbTipoDomicilio, txtDireccion, txtLote, txtReferencia, txtDpto, txtUbrbanizacion " />
+	        			</p:selectOneMenu>
+	        			
+	        			
+					</h:panelGrid>
+			
+				</p:panel>
+				
+				<p:panel style="width:80%;" header="Dirección física de la solicitud de servicio">
+				
+				
+				
+					<h:panelGrid style="width:100%;" columns="4" border="0">				
+						
+						
+						<p:outputLabel for="cmbContrato">Contrato de Servicio:</p:outputLabel>
+	        			<p:selectOneMenu id="cmbContrato"  value="${soliservgene.numeroContrato}"  style="width: 200px;" disabled="#{soliservgene.disabled}"  >
+	        				<f:selectItems value="#{soliservgene.mpcontratoList}"  var="map"  itemLabel="#{map['numeroContrato']}" itemValue="#{map['numeroContrato']}" />
+	        				
+	        				<p:ajax listener="#{soliservgene.cargardetallecontrato()}" update = "cmbProvincia,cmbDistrito,cmbTipoDomicilio,txtDireccion, txtLote, txtReferencia, txtDpto, txtUbrbanizacion " />
+	        				
+	        			</p:selectOneMenu>
+	        			
+	        			
+	        			<p:commandButton value="Google Maps" action="#{soliservgene.sendCobertura()}"
+							ajax="false" style="width: 100px;"  disabled="#{soliservgene.disabled2}"   >
+						</p:commandButton>
+	        			<p:outputLabel>latitud, longitud</p:outputLabel>
+	        			
+	        									
+						<p:outputLabel for="cmbProvincia">Provincia:</p:outputLabel>
+	        			<p:selectOneMenu id="cmbProvincia"  value="${soliservgene.codigoProvincia}"  style="width: 200px;"  disabled="#{soliservgene.disabled2}"   >
+	
+	        				<f:selectItems value="#{soliservgene.provinciaList}"  var="c"  itemLabel="#{c.descripcion}" itemValue="#{c.codigoProvincia}" />
+	        				<p:ajax listener="#{soliservgene.cargarDistritos()}" update = "cmbDistrito" />
+	        			</p:selectOneMenu>
+	        			
+	        			<p:outputLabel for="cmbDistrito">Distrito:</p:outputLabel>
+	        			<p:selectOneMenu id="cmbDistrito"  value="${soliservgene.codigoDisrito}"  style="width: 200px;"  disabled="#{soliservgene.disabled2}" >
+	        				<f:selectItems value="#{soliservgene.distritoList}"  var="c"  itemLabel="#{c.descripcion}" itemValue="#{c.codigoDistrito}" />
+	        			</p:selectOneMenu>
+	        			
+	        			<p:outputLabel for="cmbTipoDomicilio">Tipo Domicilio:</p:outputLabel>
+	        			<p:selectOneMenu id="cmbTipoDomicilio"  value="${soliservgene.codigoTipoDomicilio}"  style="width: 200px;"  disabled="#{soliservgene.disabled2}" >
+	        				<f:selectItems value="#{soliservgene.tipoDomicilioList}"  var="c"  itemLabel="#{c.descripcion}" itemValue="#{c.codigoTipo}" />
+	        			</p:selectOneMenu>
+	        			
+	        			
+	        			
+	        			<p:outputLabel for="txtDireccion">Dirección:</p:outputLabel   >
+	        			<p:inputText id="txtDireccion" value="#{soliservgene.direccion}"  disabled="#{soliservgene.disabled2}" ></p:inputText>
+	        			
+	        			<p:outputLabel for="txtLote">Nro./ lote</p:outputLabel>
+	        			<p:inputText id = "txtLote"  value="#{soliservgene.nroDomicilio}" disabled="#{soliservgene.disabled2}"   > </p:inputText>
+	        			
+	        		
+	        			<p:outputLabel for="txtReferencia">Referencia</p:outputLabel>
+	        			<p:inputText id = "txtReferencia" value="#{soliservgene.referencia}" disabled="#{soliservgene.disabled2}" > </p:inputText>
+	        			
+	        			
+	        			<p:outputLabel for="txtDpto">Dpto./ Int</p:outputLabel>
+	        			<p:inputText id = "txtDpto"   value="#{soliservgene.dptoIntDomicilio}"  disabled="#{soliservgene.disabled2}"> </p:inputText>
+	        			
+	        			<p:outputLabel for="txtUbrbanizacion">Urbanización</p:outputLabel>
+	        			<p:inputText id = "txtUbrbanizacion"  value="#{soliservgene.urbanizacion}"  disabled="#{soliservgene.disabled2}" > </p:inputText>
+	        			
+					</h:panelGrid>
+				
+				</p:panel>
+				
+				<p:panel style="width:80%;" header="Horario de atención">
+					<p:dataTable  style="width:80%; height: 200px;"  var="reg" value="#{soliservgene.horarioList}">
+					
+						<p:column  style="width:10%">
+							<f:facet name="header">
+								<h:outputText value="" />
+							</f:facet>
+							
+								<h:outputText value="#{reg['rango']}" />
+						</p:column>
+						
+						
+						<p:column  style="width:10%">
+							<f:facet name="header">
+								<h:outputText value="Lunes" />
+							</f:facet>
+							<p:selectBooleanCheckbox >
+							<p:ajax listener="#{soliservgene.checkHorario( 1, reg['nse'] )}" />
+							</p:selectBooleanCheckbox>
+						</p:column>
+					
+						<p:column  style="width:10%">
+							<f:facet name="header">
+								<h:outputText value="Martes" />
+							</f:facet>
+							<p:selectBooleanCheckbox >
+							<p:ajax listener="#{soliservgene.checkHorario(2 , reg['nse'] )}" />
+							</p:selectBooleanCheckbox>
+						</p:column>
+						
+						<p:column  style="width:10%">
+							<f:facet name="header">
+								<h:outputText value="Miercoles" />
+							</f:facet>
+							<p:selectBooleanCheckbox >
+								<p:ajax listener="#{soliservgene.checkHorario(3 , reg['nse'] )}" />
+							</p:selectBooleanCheckbox>
+						</p:column>
+						
+						<p:column  style="width:10%">
+							<f:facet name="header">
+								<h:outputText value="Jueves" />
+							</f:facet>
+							
+							<p:selectBooleanCheckbox >
+								<p:ajax listener="#{soliservgene.checkHorario(4 , reg['nse'] )}" />
+							</p:selectBooleanCheckbox>
+							
+						</p:column>
+						
+						<p:column  style="width:10%">
+							<f:facet name="header">
+								<h:outputText value="Viernes" />
+							</f:facet>
+							<p:selectBooleanCheckbox >
+								<p:ajax listener="#{soliservgene.checkHorario(5 , reg['nse'] )}" />
+							</p:selectBooleanCheckbox>
+						</p:column>
+						
+						<p:column  style="width:10%">
+							<f:facet name="header">
+								<h:outputText value="Sábado" />
+							</f:facet>
+						 <p:selectBooleanCheckbox >
+								<p:ajax listener="#{soliservgene.checkHorario(6 , reg['nse'] )}" />
+							</p:selectBooleanCheckbox>
+						</p:column>
+						
+						<p:column  style="width:10%">
+							<f:facet name="header">
+								<h:outputText value="Domingo" />
+							</f:facet>
+							<p:selectBooleanCheckbox >
+								<p:ajax listener="#{soliservgene.checkHorario(7 , reg['nse'] )}" />
+							</p:selectBooleanCheckbox>
+						</p:column>
+					</p:dataTable>
+
+				</p:panel>	
+				
+				
+				<p:panel style="width:80%;" header="Detalle de solicitud de Servicio">
+					
+					<h:panelGrid style="align:center;" columns="4" border="0">
+						<p:outputLabel for="cmbTelevisores">Televisores:</p:outputLabel>
+	        			<p:selectOneMenu id="cmbTelevisores"  value="${soliservgene.codigoCantTele}"  style="width: 200px;">
+	        				<f:selectItem itemLabel="--Seleccione--" itemValue="0" />
+	        				<f:selectItems value="#{soliservgene.cantTelevisorList}"  var="map"  itemLabel="#{map['descripcion']}" itemValue="#{map['codigo']}" />
+	        				<p:ajax listener="#{soliservgene.addListaServicios()}"  update="txtCostoSolicitud,txtFacturacion" />
+	        				
+	        			</p:selectOneMenu>
+					
+						<p:outputLabel for="cmbPaquetes">Paquetes:</p:outputLabel>
+	        			<p:selectOneMenu id="cmbPaquetes"  value="${soliservgene.codigoTipoPaquete}"  style="width: 200px;">
+	        				<f:selectItem itemLabel="--Seleccione--" itemValue="0" />
+	        				<f:selectItems value="#{soliservgene.tipoPaqueteList}"  var="c"  itemLabel="#{c.descripcion}" itemValue="#{c.codigoTipo}" />
+	        				<p:ajax listener="#{soliservgene.addListaServicios()}" update="txtCostoSolicitud,txtFacturacion" />
+	        			</p:selectOneMenu>
+	        			
+	      
+       					<p:selectBooleanCheckbox label="Internet:"  />  			
+	        			<p:selectOneMenu id="cmbVelocidadInternet"  value="${soliservgene.codigoTipoVeloInternet}"  style="width: 200px;">
+	        				<f:selectItem itemLabel="--Seleccione--" itemValue="0" />
+	        				<f:selectItems value="#{soliservgene.tipoVelocidadInternetList}"  var="c"  itemLabel="#{c.descripcion}" itemValue="#{c.codigoTipo}" />
+	        				<p:ajax listener="#{soliservgene.addListaServicios()}" update="txtCostoSolicitud,txtFacturacion" />
+	        			</p:selectOneMenu>
+	        			
+	        			
+					
+					</h:panelGrid>	
+					<h:panelGrid style="align:center;" columns="4" border="0">
+					
+					 
+					 <p:outputLabel for="txtCostoSolicitud">Costo de solicitud:</p:outputLabel>
+					 <p:inputText id = "txtCostoSolicitud" value = "#{soliservgene.tarifaSolicitud}"   > </p:inputText> 
+					
+					 					 
+					 <p:outputLabel for="txtFacturacion">Facturación mensual:</p:outputLabel>
+					 <p:inputText id = "txtFacturacion"   value = "#{soliservgene.tarifaMensual }" > </p:inputText> 
+					
+					</h:panelGrid>
+					
+				</p:panel>
+				
+		
+				
+				
+				<h:panelGrid style="align:center;" columns="3" border="0">
+				
+						<p:commandButton value="Registrar" action="#{soliservgene.registrar()}"
+							ajax="false" style="width: 100px;">
+						</p:commandButton>
+	        		
+						<p:commandButton value="Limpiar" action="#{soliservgene.limpiar()}"
+							ajax="false" style="width: 100px;">
+						</p:commandButton>
+	
+					    <p:commandButton   style="width: 100px;" value="Salir" action="#{soliservgene.salir()}"
+							ajax="false">
+						</p:commandButton>
+
+	
+				</h:panelGrid>
+
+			
+				
+				<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+					<p:commandButton value="Si" type="button"
+						styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+					<p:commandButton value="No" type="button"
+						styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+				</p:confirmDialog>
+			</h:form>
+			
+		</h:body>
+	</ui:define>
+</ui:composition>
+</html>

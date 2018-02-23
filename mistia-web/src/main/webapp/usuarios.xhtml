@@ -1,0 +1,106 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+	<f:view contentType="text/html" encoding="UTF-8"/> 
+<ui:composition template="/plantillas/template.xhtml">
+	<ui:define name="bodyarea">
+		<h:body>
+			<h:outputStylesheet name="css/default.css" />
+			
+			<h:form  id="form" >
+				
+				
+				<h:panelGroup>
+					<p:outputLabel>Registro de Usuarios </p:outputLabel>
+				</h:panelGroup>
+				
+				
+				<h:panelGrid columns="2" border="0">
+
+					<p:outputLabel>Usuario: </p:outputLabel>
+					<p:inputText value="#{usuarioMaganeBean.codUsua}"   />
+					
+					<p:outputLabel>Nombres: </p:outputLabel>
+					<p:inputText value="#{usuarioMaganeBean.nombres}"   />
+					
+					<p:outputLabel>Estado: </p:outputLabel>
+					
+					
+					<p:selectOneMenu id="cmbModulo" value="#{usuarioMaganeBean.estadoRegistro}"  converter="#{estadoRegistroConverter}">
+						
+					<f:selectItems value="#{usuarioMaganeBean.estadoRegistroList}" var="estado"
+							itemValue="#{estado}" itemLabel="#{estado.desEsta}" />
+					</p:selectOneMenu>
+					
+					
+					<p:commandButton value="Mostrar" action="#{usuarioMaganeBean.mostrar()}"
+						ajax="false">
+					</p:commandButton>
+
+				    <p:commandButton value="Nuevo" action="#{usuarioMaganeBean.nuevo()}"
+						ajax="false">
+					</p:commandButton>
+					
+
+				</h:panelGrid>
+				
+				
+								<br></br>
+				<p:dataTable  style="width:100%" id="dataTable" var="reg" value="#{usuarioMaganeBean.usuarioList}"
+					paginator="true" rows="5"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					currentPageReportTemplate="( Página : {currentPage} de {totalPages})"
+					>
+					<p:column style="width:20%" >
+						<f:facet name="header">
+							<h:outputText value="Codigo" />
+						</f:facet>
+						
+						<p:commandLink id= "ajax" actionListener="#{usuarioMaganeBean.editar()}" >
+							<h:outputText value="#{reg.codUsua}" />
+							<f:param name="codUsua" value="#{reg.codUsua}" ></f:param>
+						</p:commandLink>
+					</p:column>
+
+					<p:column  style="width:40%">
+						<f:facet name="header">
+							<h:outputText value="Nombres" />
+						</f:facet>
+						<h:outputText value="#{reg.nombres}" />
+					</p:column>
+
+					<p:column style="width:30%">
+						<f:facet name="header">
+							<h:outputText value="Estado" />
+						</f:facet>
+						<h:outputText value="#{reg.estadoRegistro.desEsta}" />
+					</p:column>
+					
+					<p:column style="width:10%" >
+					
+						<f:facet name="header">
+							<h:outputText value="Eliminar" />
+						</f:facet>
+						
+						<p:commandButton icon="ui-icon-trash"  actionListener="#{usuarioMaganeBean.eliminar(reg)}"    ajax="false"   title="eliminar" update="form:dataTable"  >  </p:commandButton>
+						  
+					</p:column>
+
+				</p:dataTable>
+				
+				
+
+				
+			
+			</h:form>
+			
+		</h:body>
+	</ui:define>
+</ui:composition>
+</html>

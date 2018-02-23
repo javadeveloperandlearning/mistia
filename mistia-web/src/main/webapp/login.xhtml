@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	>
+
+
+<h:head>
+</h:head>
+<h:body>
+	<h:outputStylesheet name="css/default.css" />
+
+	<div class="Absolute-Center">
+		<h:form>
+
+<h:panelGrid columns="2" border="0">
+
+ <f:facet name="header">
+            <p:outputLabel>Iniciar Sesión</p:outputLabel>
+        </f:facet>
+        <f:facet name="header">
+        <p:spacer></p:spacer>
+        </f:facet>
+
+
+			<h:panelGrid columns="3" border="0">
+				<p:outputLabel>Usuario</p:outputLabel>
+				<p:inputText id="txtUsuario" value="#{login.usuario}" maxlength="10"
+					required="true" requiredMessage="Ingrese Nombre de Usuario" />
+					<p:message id="usuarioError" for="txtUsuario" />
+
+					<p:outputLabel>Clave</p:outputLabel>
+				<p:password id="txtClave" value="#{login.clave}" maxlength="8"
+					required="true" requiredMessage="Ingrese Clave" />
+				<p:message id="claveError" for="txtClave" />
+				<f:facet name="footer">
+				<h:panelGroup style="display:block; text-align:center">
+					<p:commandButton value="Ingresar" action="#{login.ingresar()}"
+						ajax="false"></p:commandButton>
+				</h:panelGroup>
+				</f:facet>
+			</h:panelGrid>
+</h:panelGrid>			
+			
+			
+			
+			
+			
+		</h:form>
+	</div>
+</h:body>
+</html>

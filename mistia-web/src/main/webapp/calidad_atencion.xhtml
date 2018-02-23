@@ -1,0 +1,192 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"  >
+	<f:view contentType="text/html" encoding="UTF-8"/> 
+<ui:composition template="/plantillas/template.xhtml">
+	<ui:define name="bodyarea">
+		<h:body>
+		
+			<h:outputStylesheet name="css/default.css" />
+			
+			<h:form  id="form" >
+			
+				<p:growl id="messages" />
+				
+				<h:panelGroup>
+				<h1>
+				
+					<p:outputLabel>  Registrar Calidad Atención </p:outputLabel>
+				
+					</h1>
+				</h:panelGroup>
+				
+				<br></br>
+				<br></br>
+				<br></br>
+				
+   
+ 			<p:panel style="width:80%;" header="Criterios de Búsqueda">
+ 	
+ 			
+				<h:panelGrid style="width:100%;" columns="4" border="0">
+				
+					<p:outputLabel for="cmbCliente">Cliente:</p:outputLabel>
+					<p:autoComplete id="cmbCliente"  dropdown="true" value="#{caliatencon.nombreCliente}" completeMethod="#{caliatencon.completeText}" />
+					<p:spacer></p:spacer>
+					<p:spacer></p:spacer>
+				
+					
+					<p:outputLabel for="cmbCuadrillas">Cuadrilla:</p:outputLabel>
+        			<p:selectOneMenu id="cmbCuadrillas"  value="${caliatencon.numeroCuadrilla}"  style="width: 200px;">
+        				<f:selectItem itemLabel="--Todos--" itemValue="0" />
+        				<f:selectItems value="#{caliatencon.cuadrillaList}"  var="c"  itemLabel="#{c.nombre}" itemValue="#{c.numeroCuadrilla}" />
+        			</p:selectOneMenu>
+				    <p:outputLabel for="cmbDistritos">Distrito: </p:outputLabel>
+        			
+     	  			<p:selectOneMenu id="cmbDistritos"  value="${caliatencon.codigoDistrito}"  style="width: 200px;">
+        				<f:selectItem itemLabel="--Todos--" itemValue="0" />
+        				<f:selectItems value="#{caliatencon.distritoList}"  var="r"  itemLabel="#{r.descripcion}" itemValue="#{r.codigoDistrito}" />     				
+        			</p:selectOneMenu>
+					
+					<p:outputLabel for="fecini">Fecha Inicio: </p:outputLabel>
+        			<p:calendar id="fecini" value="#{caliatencon.fechaInicio}"   pattern="dd/MM/yyyy"  />
+				    <p:outputLabel for="fecfin">Fecha Fin: </p:outputLabel>
+        			<p:calendar id="fecfin" value="#{caliatencon.fechaFin}"  pattern="dd/MM/yyyy" />
+        								<p:spacer></p:spacer>
+					<p:spacer></p:spacer>
+					<p:spacer></p:spacer>
+					<p:spacer></p:spacer>
+        		
+					<p:commandButton value="Buscar" action="#{caliatencon.buscar()}"
+						ajax="false" style="width: 100px;">
+					</p:commandButton>
+
+				    <p:commandButton value="Limpiar	" style="width: 100px;" action="#{caliatencon.limpiar()}"
+						ajax="false">
+					</p:commandButton>
+					
+
+					<p:spacer></p:spacer>
+					<p:spacer></p:spacer>
+					<p:spacer></p:spacer>
+					<p:spacer></p:spacer>
+					
+					<p:spacer></p:spacer>
+					<p:spacer></p:spacer>
+				</h:panelGrid>
+
+				</p:panel>
+				
+								<br></br>
+				<p:dataTable  style="width:80%; height: 300px;" id="dataTable" var="reg" value="#{caliatencon.lista}"
+					paginator="true" rows="5" 
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					currentPageReportTemplate="( Página : {currentPage} de {totalPages})"
+					>
+					
+					
+					<p:column  style="width:5%">
+						<f:facet name="header">
+							<h:outputText value="Codigo" />
+						</f:facet>
+						<h:outputText value="#{reg['numeroSolicitud']}" >
+				
+						 </h:outputText>
+	
+					</p:column>
+					
+					
+					<p:column style="width:15%" >
+						<f:facet name="header">
+							<h:outputText value="Estado" />
+						</f:facet>
+						
+						<h:outputText value="#{reg['desEstado']}" />
+						
+					</p:column>
+					
+					
+					<p:column  style="width:15%">
+						<f:facet name="header">
+							<h:outputText value="Cambio Estado" />
+						</f:facet>
+						<h:outputText value="#{reg['cambioestado']}" >
+						<f:convertDateTime pattern="dd/MM/yyyy hh:mm" />
+						</h:outputText>
+					</p:column>
+
+					<p:column  style="width:15%">
+						<f:facet name="header">
+							<h:outputText value="Fecha registro" />
+						</f:facet>
+						<h:outputText value="#{reg['fecharegistro']}" >
+											<f:convertDateTime pattern="dd/MM/yyyy hh:mm" />
+						</h:outputText>
+						
+					</p:column>
+
+
+					<p:column  style="width:10%">
+						<f:facet name="header">
+							<h:outputText value="Código Cliente" />
+						</f:facet>
+						<h:outputText value="#{reg['codigoCliente']}" />
+					</p:column>
+
+
+
+					<p:column  style="width:20%">
+						<f:facet name="header">
+							<h:outputText value="Cuadrilla" />
+						</f:facet>
+						<h:outputText value="#{reg['desCuadrilla']}" />
+					</p:column>
+
+					
+					<p:column style="width:10%;align:center" >
+					
+							<f:facet name="header">
+							<h:outputText value="Opciones" style="align:center" />
+							</f:facet>
+							
+							<f:attribute name="align" value="center" />
+							
+							<p:commandButton icon="ui-icon-pencil" rendered="#{reg['cantencuestas'] == 0}"   action="#{caliatencon.editar(reg['numeroSolicitud'])}"   
+							 ajax="false"   title="validar" update="form:dataTable"  > 
+							</p:commandButton>
+							
+		
+							
+ 							<h:panelGroup  styleClass="ui-icon ui-icon-circle-check" rendered="#{reg['cantencuestas'] > 0}" />
+					</p:column>
+
+				</p:dataTable>
+					
+				<h:panelGrid columns="4"  border="0">
+
+				    <p:commandButton   style="width: 100px;" value="Salir" action="#{caliatencon.salir()}"
+						ajax="false">
+					</p:commandButton>
+				</h:panelGrid>
+
+			
+				
+				<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+					<p:commandButton value="Si" type="button"
+						styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+					<p:commandButton value="No" type="button"
+						styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+				</p:confirmDialog>
+			</h:form>
+			
+		</h:body>
+	</ui:define>
+</ui:composition>
+</html>

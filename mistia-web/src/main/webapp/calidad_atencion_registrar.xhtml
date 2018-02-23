@@ -1,0 +1,174 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"  >
+	<f:view contentType="text/html" encoding="UTF-8"/> 
+<ui:composition template="/plantillas/template.xhtml">
+	<ui:define name="bodyarea">
+		<h:body>
+		
+			<h:outputStylesheet name="css/default.css" />
+			
+			<h:form  id="form" >
+			
+				<p:growl id="messages" />
+				
+				<h:inputHidden value="#{caliatenreg.numeroSolicitud}" />
+				
+				<h:panelGroup>
+				
+				<h1>
+					<p:outputLabel>  Registrar Calidad Atención </p:outputLabel>
+				
+				</h1>
+				</h:panelGroup>
+				
+				<br></br>
+	
+				
+   
+ 			<p:panel header="Identificación de la solicitud de servicio">
+ 			
+ 			
+				<h:panelGrid columns="4" border="0">
+				
+				
+					
+					<p:outputLabel for="txtCliente">Cliente</p:outputLabel>
+					<p:inputText id= "txtCliente"  readonly="true" value="#{caliatenreg.solicitud['cliente']}" >   </p:inputText>
+        			
+				    <p:outputLabel for="txtTipoSolicitud">Tipo de Solicitud </p:outputLabel>
+				    <p:inputText id= "txtTipoSolicitud"  readonly="true" value="#{caliatenreg.solicitud['tiposolicitud']}" >   </p:inputText>
+     	  			
+     	  			
+        			<p:outputLabel for="txtDireccion">Dirección </p:outputLabel>
+					<p:inputText id= "txtDireccion" readonly="true" value="#{caliatenreg.solicitud['direccion']}"  >   </p:inputText>
+        			
+				    <p:outputLabel for="txtDistrito">Distrito </p:outputLabel>
+				    <p:inputText id= "txtDistrito" readonly="true" value="#{caliatenreg.solicitud['distrito']}"  >   </p:inputText>
+     	  		
+     	  			     	  			
+        			<p:outputLabel for="txtTelevisores">Televisores</p:outputLabel>
+					<p:inputText id= "txtTelevisores" readonly="true"   >   </p:inputText>
+        			
+				    <p:outputLabel for="txtPaquete">Paquete </p:outputLabel>
+				    <p:inputText id= "txtPaquete" readonly="true" value="#{caliatenreg.solicitud['servicio']}"    >   </p:inputText>
+     	  			
+     	  			
+     	  			<p:outputLabel for="txtInternet">Internet </p:outputLabel>
+				    <p:inputText id= "txtInternet" readonly="true" >   </p:inputText>
+       
+		  			<p:outputLabel for="txtAccess">Access Point </p:outputLabel>
+					<p:inputText id= "txtAccess" readonly="true" >   </p:inputText>
+									
+					<p:spacer></p:spacer>
+					<p:spacer></p:spacer>
+	
+	
+				</h:panelGrid>
+				
+				<h:panelGrid columns="2" border="0" style="align:center">
+					<p:outputLabel for="txtTarifa"> Monto mensual a facturar </p:outputLabel>
+					<p:inputText id= "txtTarifa" readonly="true"  value="#{caliatenreg.solicitud['tarifa']}"    >   </p:inputText>
+				</h:panelGrid>
+
+				</p:panel>
+				<br></br>
+				<p:panel header="Tiempos de atención">
+							
+					<p:dataTable  style="width:40%; height: 200px;" id="dataTable" var="reg" value="#{caliatenreg.estados}">
+						
+						<p:column  style="width:10%">
+							<f:facet name="header">
+								<h:outputText value="Estado" />
+							</f:facet>
+							<h:outputText value="#{reg['desestado']}" />
+							 
+						</p:column>
+												
+						<p:column style="width:15%" >
+							<f:facet name="header">
+								<h:outputText value="Cambio de Estado" />
+							</f:facet>
+							<h:outputText value="#{reg['fechahora']}" >
+									<f:convertDateTime pattern="dd/MM/yyyy hh:mm" />
+							</h:outputText>
+						</p:column>
+						
+						<p:column  style="width:10%">
+							<f:facet name="header">
+								<h:outputText value="Tiempo acumulado" />
+							</f:facet>
+							<h:outputText value="#{reg['acumulado']}" />
+						</p:column>
+							
+					</p:dataTable>
+					
+				</p:panel>
+						<br></br>
+				<p:panel header="Preguntas sobre el servicio">
+				
+				 		<h:panelGrid columns="1" style="margin-bottom:10px" cellpadding="0">
+							<h:outputLabel >En una escala del 1 al 4, donde 1 es muy malo y 4 es muy bueno</h:outputLabel>
+						</h:panelGrid>	
+
+						<h:outputLabel > <h:outputText value="#{caliatenreg.preguntas[0]}" />   </h:outputLabel>
+						
+					    <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="3">
+					      
+					        <p:selectOneRadio id="rbapreguntasA" value="#{caliatenreg.respuesta1}"  layout="grid" columns="4">
+					            <f:selectItems value="#{caliatenreg.respuestas}" var="c" itemLabel="#{pregunta}" itemValue="#{pregunta}"/>
+					        </p:selectOneRadio>
+					    </h:panelGrid>
+					    
+						<h:outputLabel ><h:outputText value="#{caliatenreg.preguntas[1]}" /> </h:outputLabel>
+						
+						
+					    <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="3">
+					        <p:selectOneRadio id="rbapreguntasB" value="#{caliatenreg.respuesta2}"  layout="grid" columns="4">
+					            <f:selectItems value="#{caliatenreg.respuestas}" var="c" itemLabel="#{pregunta}" itemValue="#{pregunta}"/>
+					        </p:selectOneRadio>
+					    </h:panelGrid>
+				
+				</p:panel>	
+					
+					
+					
+				<h:panelGrid columns="2"  border="0">
+				
+				
+					<p:commandButton value="Guardar" action="#{caliatenreg.guardar()}" update="form:messages"
+						ajax="true">
+						
+						    <p:confirm header="Confirmation" message="¿Está seguro que desea guardar la calificación?" icon="ui-icon-alert" />
+						    
+						    
+					</p:commandButton>
+	
+				    <p:commandButton value="Salir" action="#{caliatenreg.salir()}"
+						ajax="false">
+					</p:commandButton>
+					
+					
+				</h:panelGrid>
+
+			
+				
+				<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+					<p:commandButton value="Si" type="button"
+						styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+					<p:commandButton value="No" type="button"
+						styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+				</p:confirmDialog>
+			</h:form>
+			
+		</h:body>
+	</ui:define>
+</ui:composition>
+</html>

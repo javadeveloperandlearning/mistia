@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    JBoss, Home of Professional Open Source
+    Copyright 2013, Red Hat, Inc. and/or its affiliates, and individual
+    contributors by the @authors tag. See the copyright.txt in the
+    distribution for a full listing of individual contributors.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+    http://www.apache.org/licenses/LICENSE-2.0
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+<persistence version="2.0"
+   xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="
+        http://java.sun.com/xml/ns/persistence
+        http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+   <persistence-unit name="primary">
+      <!-- If you are running in a production environment, add a managed 
+         data source, this example data source is just for development and testing! -->
+      <!-- The datasource is deployed as <EAR>/META-INF/ebSystems-ds.xml, you
+         can find it in the source at ear/src/main/application/META-INF/ebSystems-ds.xml -->
+      <provider>org.hibernate.ejb.HibernatePersistence</provider>
+      <jta-data-source>java:jboss/datasources/PostgreSQLDS</jta-data-source>
+      <class>pe.com.eb.model.Usuario</class>
+      <class>pe.com.eb.model.Modulo</class>
+      <class>pe.com.eb.model.Opcion</class>
+      <class>pe.com.eb.model.OpcionPK</class>
+      <class>pe.com.eb.model.Perfil</class>
+      <class>pe.com.eb.model.PerfilPK</class>
+      <class>pe.com.eb.model.PerfilOpcion</class>
+      <class>pe.com.eb.model.PerfilOpcionPK</class>
+      <class>pe.com.eb.model.UsuarioPerfil</class>
+      <class>pe.com.eb.model.UsuarioPerfilPK</class>
+      <class>pe.com.eb.model.EstadoRegistro</class>
+      <class>pe.com.cablered.mistia.model.Cargo</class>
+      <class>pe.com.cablered.mistia.model.Cliente</class>
+      <class>pe.com.cablered.mistia.model.Competencia</class>
+      <class>pe.com.cablered.mistia.model.ComprobantePago</class>
+      <class>pe.com.cablered.mistia.model.ComprobantePagoDetalle</class>
+      <class>pe.com.cablered.mistia.model.ComprobantePagoDetallePK</class>
+      <class>pe.com.cablered.mistia.model.Concepto</class>
+      <class>pe.com.cablered.mistia.model.ContratoServicio</class>
+      <class>pe.com.cablered.mistia.model.Cuadrilla</class>
+      <class>pe.com.cablered.mistia.model.CuadrillasDetalle</class>
+      <class>pe.com.cablered.mistia.model.CuadrillasDetallePK</class>
+      <class>pe.com.cablered.mistia.model.Departamento</class>
+      <class>pe.com.cablered.mistia.model.Distrito</class>
+      <class>pe.com.cablered.mistia.model.DocumentoCompromiso</class>
+      <class>pe.com.cablered.mistia.model.Estado</class>
+      <class>pe.com.cablered.mistia.model.GrupoAtencion</class>
+      <class>pe.com.cablered.mistia.model.GrupoAtencionDetalle</class>
+      <class>pe.com.cablered.mistia.model.GrupoAtencionDetallePK</class>
+      <class>pe.com.cablered.mistia.model.Matriz</class>
+      <class>pe.com.cablered.mistia.model.Motivo</class>
+      <class>pe.com.cablered.mistia.model.Nodo</class>
+      <class>pe.com.cablered.mistia.model.Pago</class>
+      <class>pe.com.cablered.mistia.model.Parametro</class>
+      <class>pe.com.cablered.mistia.model.PlanTrabajo</class>
+      <class>pe.com.cablered.mistia.model.PlanTrabajoDetalle</class>
+      <class>pe.com.cablered.mistia.model.PlanTrabajoDetallePK</class>
+      <class>pe.com.cablered.mistia.model.Poste</class>
+      <class>pe.com.cablered.mistia.model.Programacion</class>
+      <class>pe.com.cablered.mistia.model.ProgramacionDetalle</class>
+      <class>pe.com.cablered.mistia.model.ProgramacionDetallePK</class>
+      <class>pe.com.cablered.mistia.model.Provincia</class>
+      <class>pe.com.cablered.mistia.model.Reclamo</class>
+      <class>pe.com.cablered.mistia.model.SectorGeografico</class>
+      <class>pe.com.cablered.mistia.model.SectorGeograficoDetalle</class>
+      <class>pe.com.cablered.mistia.model.SectorGeograficoDetallePK</class>
+      <class>pe.com.cablered.mistia.model.ServicioHistorialDetalle</class>
+      <class>pe.com.cablered.mistia.model.Servicio</class>
+      <class>pe.com.cablered.mistia.model.SolicitudServicio</class>
+      <class>pe.com.cablered.mistia.model.TecnicoCompetenciaDetalle</class>
+      <class>pe.com.cablered.mistia.model.TecnicoCompetenciaDetallePK</class>
+      <class>pe.com.cablered.mistia.model.Tecnico</class>
+      <class>pe.com.cablered.mistia.model.TipoSolicitudCompetenciaDetalle</class>
+      <class>pe.com.cablered.mistia.model.TipoSolicitudCompetenciaDetallePK</class>
+      <class>pe.com.cablered.mistia.model.Tipo</class>
+      <class>pe.com.cablered.mistia.model.VehiculoMarca</class>
+      <class>pe.com.cablered.mistia.model.VehiculoModelo</class>
+      <class>pe.com.cablered.mistia.model.Vehiculo</class>
+      <class>pe.com.cablered.mistia.model.RedNeuronal</class>
+      <class>pe.com.cablered.mistia.model.RedNeuronalDetalle</class>
+      <class>pe.com.cablered.mistia.model.RedNeuronalDetallePK</class>
+      <class>pe.com.cablered.mistia.model.Encuesta</class>
+      <class>pe.com.cablered.mistia.model.EncuestaPregunta</class>
+      <class>pe.com.cablered.mistia.model.EncuestaPreguntaPK</class>
+      <class>pe.com.cablered.mistia.model.SolicitudServicioEstado</class>
+      <class>pe.com.cablered.mistia.model.SolicitudServicioEstadoPK</class>
+      
+      
+      
+      <properties>
+         <!-- Properties for Hibernate -->
+         
+         <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
+         
+          
+            <property name="hibernate.show_sql" value="true" />
+            
+          
+          
+      </properties>
+   </persistence-unit>
+   
+   
+   
+   
+   
+</persistence>

@@ -1,0 +1,175 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+	<f:view contentType="text/html" encoding="UTF-8"/> 
+<ui:composition template="/plantillas/template.xhtml">
+	<ui:define name="bodyarea">
+		<h:body>
+			<h:outputStylesheet name="css/default.css" />
+			
+			<h:form  id="form" >
+			
+				<p:growl id="messages" />
+			
+				<h:panelGroup>
+					<p:outputLabel>Registro de Postes </p:outputLabel>
+				</h:panelGroup>
+
+				<br></br>
+				<br></br>
+				
+				<p:panel style="width:80%;" header="Criterios de Búsqueda">
+
+				<h:panelGrid columns="2" border="0">
+
+					<p:outputLabel>Nodos: </p:outputLabel>
+					<p:selectOneMenu id="cmbNodo1" value="#{poste.nodo}"  converter="#{nodoConverter}"  style="width: 200px;">
+						<f:selectItems value="#{poste.nodoList}" var="m"
+							itemValue="#{m}" itemLabel="#{m.descripcion}" />
+					</p:selectOneMenu>
+					
+					
+					<p:spacer></p:spacer>
+					<p:spacer></p:spacer>
+					
+					<p:outputLabel>Ingrese criterio de búsqueda: </p:outputLabel>
+					<p:inputText value="#{poste.criterio}"  style="width: 250px;" maxlength="50" ></p:inputText>
+					
+					<p:spacer></p:spacer>
+					<p:spacer></p:spacer>
+
+					<p:commandButton value="Mostrar" action="#{poste.mostrar()}"
+						ajax="false"  style="width: 100px;" >
+					</p:commandButton>
+
+					<p:commandButton value="Nuevo" actionListener="#{poste.nuevo}"  style="width: 100px;"  update=":formsave:dlgsave"  oncomplete="PF('dlgsave').show()" >
+					</p:commandButton>
+
+				</h:panelGrid>
+				
+				</p:panel>
+				<br></br>
+				<br></br>
+				
+				<p:dataTable  style="width:80%; height: 300px;" id="dataTable" var="reg" value="#{poste.posteList}"
+					paginator="true" rows="10"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					currentPageReportTemplate="( Página : {currentPage} de {totalPages})"
+					>
+					<p:column style="width:10%" >
+						<f:facet name="header">
+							<h:outputText value="Codigo" />
+						</f:facet>
+						<p:commandLink id= "ajax" actionListener="#{poste.editar}"   update="formsave:dlgsave"    oncomplete="PF('dlgsave').show()"   >
+							<h:outputText value="#{reg.codigoPoste}" />	
+							<f:param  name="codigoPoste" value="#{reg.codigoPoste}" />						
+						</p:commandLink>
+					</p:column>
+
+					<p:column  style="width:40%">
+						<f:facet name="header">
+							<h:outputText value="Descripción" />
+						</f:facet>
+						<h:outputText value="#{reg.descripcion}" />
+					</p:column>
+
+					<p:column style="width:20%">
+						<f:facet name="header">
+							<h:outputText value="Latitud" />
+						</f:facet>
+						<h:outputText value="#{reg.latitud}" />
+					</p:column>
+					
+					
+					<p:column style="width:20%">
+						<f:facet name="header">
+							<h:outputText value="Longitud" />
+						</f:facet>
+						<h:outputText value="#{reg.longitud}" />
+					</p:column>
+					
+					<p:column style="width:10%" >
+						<f:facet name="header">
+							<h:outputText value="Eliminar" />
+						</f:facet>
+						<p:commandButton icon="ui-icon-trash"  actionListener="#{poste.eliminar(reg)}"    title="eliminar" update="form:dataTable,form:messages" > 
+							<p:confirm header="Eliminar" message="¿Está seguro de eliminar el nodo?" icon="ui-icon-alert"  ></p:confirm>
+						</p:commandButton>
+					</p:column>
+
+				</p:dataTable>
+				
+				<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+					<p:commandButton value="Si" type="button"
+						styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+					<p:commandButton value="No" type="button"
+						styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+				</p:confirmDialog>
+
+			</h:form >
+			
+			
+			<h:form id= "formsave">
+					
+				<p:dialog id = "dlgsave" widgetVar="dlgsave" header="Nuevo Poste"  width="600"    onHide="PF('dlgsave').content.empty()">
+							
+							<h:inputHidden id="action" value="#{nodo.action}" />
+							<h:panelGrid columns="3" border="0">
+												
+								<p:outputLabel>Nodo: </p:outputLabel>
+								<p:selectOneMenu id="cmbNodo2" value="#{poste.poste.nodo}"  converter="#{nodoConverter}"  style="width: 200px;">
+									<f:selectItems value="#{poste.nodoList}" var="m"
+										itemValue="#{m}" itemLabel="#{m.descripcion}" />
+								</p:selectOneMenu>
+								<p:spacer></p:spacer>
+									
+								<p:outputLabel>Descripción: </p:outputLabel>
+								<p:inputText id="txtdescripcion" value="#{poste.poste.descripcion}" maxlength="50" size="30" required="false">
+								</p:inputText>
+								<p:message for="txtdescripcion"  ></p:message>
+								
+								
+								<p:outputLabel>Latitud: </p:outputLabel>
+								<p:inputNumber id="txtlatitud" value="#{poste.poste.latitud}" decimalPlaces="7">  
+               					 </p:inputNumber>
+               					<p:spacer></p:spacer>
+               					 
+               					 
+               					 <p:outputLabel>Longitud: </p:outputLabel>
+               					 <p:inputNumber id="txtlongitud" value="#{poste.poste.longitud}" decimalPlaces="7">  
+               					 </p:inputNumber>
+								 <p:spacer></p:spacer>
+		
+								<p:spacer></p:spacer>
+								<p:spacer></p:spacer>
+								<p:spacer></p:spacer>
+		
+		
+								<p:commandButton value="Grabar" action="#{poste.grabar()}" ajax="false">
+								</p:commandButton>
+								<p:commandButton value="Cancelar" onclick="PF('dlgsave').hide();" ajax="true">
+								</p:commandButton>
+		
+							</h:panelGrid>
+						
+				
+					</p:dialog>
+					
+					
+			</h:form>
+			
+			
+			
+			
+			
+			
+		</h:body>
+	</ui:define>
+</ui:composition>
+</html>

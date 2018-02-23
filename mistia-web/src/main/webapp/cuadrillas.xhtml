@@ -1,0 +1,262 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+	<f:view contentType="text/html" encoding="UTF-8"/> 
+<ui:composition template="/plantillas/template.xhtml">
+	<ui:define name="bodyarea">
+		<h:body>
+			<h:outputStylesheet name="css/default.css" />
+			
+			<h:form  id="form" >
+			
+				<p:growl id="messages"  widgetVar="messages" />
+				
+			    <p:remoteCommand name="updateDataTable" update="dataTable" />
+			    <p:remoteCommand name="updateMessages" update="messages" />
+			 	<p:remoteCommand name="updateForm" update="form" />
+				<h:panelGroup>
+					<p:outputLabel>Registro de Cuadrillas</p:outputLabel>
+				</h:panelGroup>
+
+				<br></br>
+				<br></br>
+				<p:panel style="width:80%;" header="Criterios de Búsqueda">
+
+				<h:panelGrid columns="3" border="0">
+
+					<p:outputLabel for="fecini">Fecha Inicio: </p:outputLabel>
+        			<p:calendar id="fecini" value="#{cuadrillabean.fechaInicio}"   pattern="dd/MM/yyyy"  readonlyInput="true" />
+        			<p:spacer></p:spacer>
+        			
+				    <p:outputLabel for="fecfin">Fecha Fin: </p:outputLabel>
+        			<p:calendar id="fecfin" value="#{cuadrillabean.fechaFin}"  pattern="dd/MM/yyyy" readonlyInput="true" />
+					
+					
+					<p:spacer></p:spacer>
+					
+					<p:outputLabel>Vehiculo: </p:outputLabel>
+					<p:selectOneMenu id="cmbVehiculo" value="#{cuadrillabean.vehiculo}"  converter="#{vehiculoConverter}"  style="width: 200px;">
+						<f:selectItems value="#{cuadrillabean.vehiculoList}" var="m"
+							itemValue="#{m}" itemLabel="#{m.descripcion}" />
+					</p:selectOneMenu>
+					<p:spacer></p:spacer>
+					
+					<p:outputLabel>Ingrese criterio de búsqueda: </p:outputLabel>
+					<p:inputText value="#{tecnicobean.criterio}"  style="width: 250px;" maxlength="50" ></p:inputText>
+					<p:spacer></p:spacer>
+					
+					<p:spacer></p:spacer>
+					<p:spacer></p:spacer>
+					<p:spacer></p:spacer>	
+
+					<p:commandButton value="Mostrar" action="#{cuadrillabean.mostrar()}"
+						ajax="false"  style="width: 100px;" >
+					</p:commandButton>
+
+					<p:commandButton value="Nuevo" actionListener="#{cuadrillabean.nuevo()}"  style="width: 100px;"  update=":formsave:dlgsave"  oncomplete="PF('dlgsave').show()" >
+					</p:commandButton>
+					
+					<p:commandButton value="Limpiar	" action="#{cuadrillabean.limpiar()}"  style="width: 100px;" ajax="false"   >
+					</p:commandButton>
+
+				</h:panelGrid>
+				
+				</p:panel>
+				<br></br>
+				<br></br>
+				
+				<p:dataTable  style="width:80%; height: 300px;" id="dataTable" var="reg" value="#{cuadrillabean.list}"
+					paginator="true" rows="10"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					currentPageReportTemplate="( Página : {currentPage} de {totalPages})"
+					>
+					<p:column style="width:3%" >
+						<f:facet name="header">
+							<h:outputText value="Código" />
+						</f:facet>
+						<p:commandLink id= "ajax" actionListener="#{cuadrillabean.editar(reg)}"   update="formsave:dlgsave"    oncomplete="PF('dlgsave').show()"   >
+							<h:outputText value="#{reg.numeroCuadrilla}" />	
+							<f:param  name="numeroCuadrilla" value="#{reg}"/>						
+						</p:commandLink>
+					</p:column>
+
+					<p:column style="width:10%">
+						<f:facet name="header">
+							<h:outputText value="Fecha" />
+						</f:facet>
+						<h:outputText value="#{reg.fechaProgramacion} " >
+							 <f:convertDateTime pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</p:column>
+					
+					
+					<p:column style="width:15%">
+						<f:facet name="header">
+							<h:outputText value="Nombre" />
+						</f:facet>
+						<h:outputText value="#{reg.nombre}" />
+					</p:column>
+					
+					
+					<p:column style="width:10%">
+						<f:facet name="header">
+							<h:outputText value="Vehiculo" />
+						</f:facet>
+						<h:outputText value="#{reg.vehiculo.placaVehiculo}" />
+					</p:column>
+
+					
+					<p:column style="width:7%" >
+						<f:facet name="header">
+							<h:outputText value="Eliminar" />
+						</f:facet>
+						<p:commandButton icon="ui-icon-trash"  actionListener="#{cuadrillabean.eliminar(reg)}"    title="eliminar" update="form:dataTable,form:messages" > 
+							<p:confirm header="Eliminar" message="¿Está seguro de eliminar el nodo?" icon="ui-icon-alert"  ></p:confirm>
+						</p:commandButton>
+					</p:column>
+
+				</p:dataTable>
+				
+				<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+					<p:commandButton value="Si" type="button"
+						styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+					<p:commandButton value="No" type="button"
+						styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+				</p:confirmDialog>
+
+			</h:form >
+			
+			
+			<h:form id= "formsave">
+					
+				<p:growl id="messages"  widgetVar="messages" />
+					
+				<p:dialog id = "dlgsave" widgetVar="dlgsave" header="#{cuadrillabean.headerpopup}"  width="700"    onHide="PF('dlgsave').content.empty()">
+							
+							<h:inputHidden id="action" value="#{cuadrillabean.action}" />
+							<h:panelGrid id="pnlupdate" columns="3" border="0">
+												
+							
+							<p:spacer></p:spacer>
+							<p:spacer></p:spacer>
+							<p:spacer></p:spacer>
+							
+							
+							<p:outputLabel for="fecPrgn">Fecha Programación: </p:outputLabel>
+        					<p:calendar id="fecPrgn" value="#{cuadrillabean.fecPrgn}"   pattern="dd/MM/yyyy"    readonlyInput="true" />
+							<p:message for="fecPrgn"  ></p:message>		
+							
+							
+							<p:outputLabel>Vehiculo: </p:outputLabel>
+							<p:selectOneMenu id="cmbVehiculo" value="#{cuadrillabean.cuadrilla.vehiculo}"  converter="#{vehiculoConverter}"  style="width: 200px;">
+								<f:selectItems value="#{cuadrillabean.vehiculoList}" var="m"
+									itemValue="#{m}" itemLabel="#{m.descripcion}" />
+							</p:selectOneMenu>
+							<p:message for="cmbVehiculo"  ></p:message>	
+							
+							<p:outputLabel>Nombre: </p:outputLabel>
+							<p:inputText id="txtNombre" value="#{cuadrillabean.cuadrilla.nombre}" maxlength="50" size="30" required="true" requiredMessage="Debe ingresar nombre para la nueva cuadrilla">
+							</p:inputText>
+							<p:message for="txtNombre"  ></p:message>
+							
+							<p:spacer></p:spacer>
+							<p:spacer></p:spacer>
+							<p:spacer></p:spacer>
+
+							</h:panelGrid>
+							
+							<p:fieldset style="margin-bottom:20px">
+							
+
+								<h:panelGrid id="pnl" columns="3" border="0">
+									<p:outputLabel for="cmbTenico">Buscar Técnico:</p:outputLabel>
+									<p:autoComplete id="cmbTenico"  dropdown="true" value="#{cuadrillabean.nombreTecnico}" completeMethod="#{cuadrillabean.completeText}"    style="width: 200px;" />
+									<p:commandButton value="Agregar" action="#{cuadrillabean.agregarDetalle()}" update="formsave:pnlupdate, formsave:dataTable, formsave:messages"  ajax="true"  style="width: 100px;" >
+									</p:commandButton>
+								</h:panelGrid>
+								
+							</p:fieldset>	
+							
+
+							<!-- incio detalle  -->
+							<p:dataTable  style="width:100%; height: 300px;" id="dataTable" var="reg" value="#{cuadrillabean.cuadrilla.cuadrillasDetalles}"
+								
+								>
+								<p:column style="width:3%" >
+									<f:facet name="header">
+										<h:outputText value="Código" />
+									</f:facet>
+										<h:outputText value="#{reg.tecnico.codigoTecnico}" />	
+								</p:column>
+			
+								<p:column style="width:10%">
+									<f:facet name="header">
+										<h:outputText value="Ténico" />
+									</f:facet>
+									<h:outputText value="#{reg.tecnico.apellidos} -  #{reg.tecnico.nombres}" />						
+								</p:column>
+								
+								<p:column style="width:7%" >
+									<f:facet name="header">
+										<h:outputText value="Eliminar" />
+									</f:facet>
+									
+									<p:commandButton icon="ui-icon-trash"  actionListener="#{cuadrillabean.eliminarDetalle(reg.id.numeroSecuencia)}"    title="eliminar" update="formsave:dataTable,formsave:messages" > 
+										<p:confirm header="Eliminar" message="¿Está seguro de eliminar al tecnico de la cuadrilla?" icon="ui-icon-alert"  ></p:confirm>
+									</p:commandButton>
+								</p:column>
+			
+							</p:dataTable>
+							
+				
+							<p:commandButton value="Grabar" action="#{cuadrillabean.grabar()}" ajax="true" 
+								update="formsave:pnlupdate, form:dataTable"  oncomplete="handleSaveRequest(xhr, status, args)" style="width: 100px;" >
+							</p:commandButton>
+							<p:commandButton value="Cancelar" onclick="PF('dlgsave').hide();" ajax="true" style="width: 100px;">	
+							</p:commandButton>
+							
+							
+							
+						
+				
+				</p:dialog>
+					
+					
+			</h:form>
+			
+			
+			<h:outputScript target="head">
+				 	function handleSaveRequest(xhr, status, args) {
+					 	if( args.notValid || args.validationFailed){
+					 		//console.log(xhr.responseText);
+					 		//console.log(status);
+					 		//console.log(args);
+					 		//alert("error");
+					 		PF('messages').renderMessage({ detail: args.mensaje, severity: 'warm'});
+					 		return;
+					 	}else{
+					 		//alert('test');
+					 		//console.log(xhr);
+					 		//console.log(status);
+					 		//console.log(args);
+					 		PF('dlgsave').hide();
+					 		PF('messages').renderMessage({ detail: 'Operación realizada con éxito', severity: 'info'});
+							//updateForm();
+					 	}  
+           		
+		
+				    }  
+			</h:outputScript>
+			
+			
+			
+		</h:body>
+	</ui:define>
+</ui:composition>
+</html>

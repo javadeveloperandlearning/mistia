@@ -1,0 +1,54 @@
+.ui-widget, .ui-widget .ui-widget {
+    font-size: 90%;
+}
+.Absolute-Center {
+	width: 50%;
+	height: 50%;
+	overflow: auto;
+	margin: auto;
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+}
+
+.Absolute-Center-modulo {
+	width: 65%;
+	height: 100%;
+	overflow: auto;
+	margin: auto;
+	position: absolute;
+	top: 15%;
+	left: 0;
+	bottom: 0;
+	right: 0;
+}
+
+.Absolute-Programacion {
+	width: 95%;
+	height: 100%;
+	overflow: auto;
+	margin: auto;
+	position: absolute;
+	top: 15%;
+	left: 0;
+	bottom: 0;
+	right: 0;
+}
+
+.upper { text-transform: uppercase; }
+
+.capitalized {
+    text-transform: capitalize;
+}
+
+#map {
+        height: 100%;
+      }
+         /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }

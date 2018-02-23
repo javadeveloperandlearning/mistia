@@ -1,0 +1,195 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+	<f:view contentType="text/html" encoding="UTF-8"/> 
+<ui:composition template="/plantillas/template.xhtml">
+	<ui:define name="bodyarea">
+		<h:body>
+			<h:outputStylesheet name="css/default.css" />
+			
+			<h:form  id="form" >
+				<h:inputHidden id="action" value="#{perfil.action}" />
+				<h:panelGroup>
+					<p:outputLabel>Registro de Perfiles </p:outputLabel>
+				</h:panelGroup>
+				<br></br>
+				<br></br>
+				<p:panel style="width:80%;" header="Criterios de Búsqueda">
+					<h:panelGrid columns="2" border="0">
+	
+						<p:outputLabel>Modulo: </p:outputLabel>
+						<p:selectOneMenu id="cmbModulo" value="#{perfil.modulo}"  converter="#{moduloConverter}">
+							<f:selectItems value="#{perfil.moduloList}" var="modu"
+								itemValue="#{modu}" itemLabel="#{modu.desModu}" />
+						</p:selectOneMenu>
+	
+			
+						<p:spacer></p:spacer>
+						<p:spacer></p:spacer>
+						
+					</h:panelGrid>
+					
+					<h:panelGrid columns="3" border="0">
+					
+						<p:commandButton value="Mostrar" action="#{perfil.mostrar()}"  style="width: 100px;" ajax="false">
+						</p:commandButton>
+	
+						<p:commandButton value="Nuevo" actionListener="#{perfil.nuevo}"  style="width: 100px;" update=":formsave:dlgsave,:formsave:action"  oncomplete ="PF('dlgsave').show();"   >
+						</p:commandButton>
+						
+						<p:commandButton value="Limpiar	" action="#{perfil.limpiar()}"  style="width: 100px;" ajax="false"   >
+						</p:commandButton>
+					
+					</h:panelGrid>
+					
+					
+				</p:panel>
+				<br></br>
+				<p:dataTable  style="width:80%; height: 300px;" id="dataTable" var="reg" value="#{perfil.perfilList}"
+					paginator="true" rows="5"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					currentPageReportTemplate="( Página : {currentPage} de {totalPages})"
+					>
+					<p:column style="width:10%" >
+						<f:facet name="header">
+							<h:outputText value="Codigo" />
+						</f:facet>
+						<p:commandLink id= "ajax" actionListener="#{perfil.editar}" update=":formedit:dlge,:formedit:action" oncomplete="#{p:widgetVar(':formedit:dlge')}.show()" >
+							<h:outputText value="#{reg.id.codPerf}" />
+							<f:param  name="codPerf" value="#{reg.id.codPerf}" />
+							<f:param  name="codModu" value="#{reg.id.codModu}" />
+							
+						</p:commandLink>
+					</p:column>
+
+					<p:column  style="width:60%">
+						<f:facet name="header">
+							<h:outputText value="Descripción" />
+						</f:facet>
+						<h:outputText value="#{reg.desPerf}" />
+					</p:column>
+
+					<p:column style="width:20%">
+						<f:facet name="header">
+							<h:outputText value="Estado" />
+						</f:facet>
+						<h:outputText value="#{reg.estadoRegistro.desEsta}" />
+					</p:column>
+					
+					<p:column style="width:10%" >
+					
+						<f:facet name="header">
+							<h:outputText value="Eliminar" />
+						</f:facet>
+						
+						<p:commandButton icon="ui-icon-trash"  actionListener="#{perfil.eliminar(reg)}"    ajax="false"   title="eliminar" >  </p:commandButton>
+						  
+					</p:column>
+
+				</p:dataTable>
+
+				
+				
+				
+			</h:form >
+				<h:form id= "formsave">
+				<h:inputHidden id="action" value="#{perfil.action}" />
+				<p:dialog id = "dlgsave" widgetVar="dlgsave"  width="500"  header ="Actualizar  Perfil"   onHide="PF('dlgsave').content.empty()">
+
+					
+					<h:panelGrid columns="3" border="0">
+					
+					
+						<p:outputLabel>Modulo: </p:outputLabel>
+						<p:selectOneMenu id="cmbModulo" value="#{perfil.perfil.modulo}"   converter="#{moduloConverter}" >
+							<f:selectItems value="#{perfil.moduloList}" var="modu"
+								itemValue="#{modu}" itemLabel="#{modu.desModu}" />
+								<f:validator validatorId="#{secu.genericvalidator}"  ></f:validator>
+						</p:selectOneMenu>
+						<p:spacer></p:spacer>
+
+						<p:outputLabel>Perfil: </p:outputLabel>
+						<h:inputText id="txtOpcion" value="#{perfil.perfil.desPerf}" maxlength="50" size="30" required="false">
+						</h:inputText>
+						<p:message for="txtOpcion"  ></p:message>
+
+
+
+						<p:outputLabel>Estado: </p:outputLabel>
+						<p:selectOneMenu id="cmbEstado" value= "#{perfil.perfil.estadoRegistro}" converter="#{estadoRegistroConverter}" >
+							<f:selectItems value="#{perfil.estadoRegistroList}" var="estado"
+								itemValue="#{estado}" itemLabel="#{estado.desEsta}" />
+						</p:selectOneMenu>
+						<p:spacer></p:spacer>
+
+						
+						<p:spacer></p:spacer>
+						<p:spacer></p:spacer>
+						<p:spacer></p:spacer>
+
+					</h:panelGrid>
+					
+						<p:commandButton value="Grabar"  style="width: 100px;" action="#{perfil.grabar()}" ajax="false">
+						</p:commandButton>
+						<p:commandButton value="Cancelar"  style="width: 100px;" onclick="PF('dlgsave').hide();" ajax="true">
+						</p:commandButton>
+			
+				</p:dialog>
+			</h:form>
+			
+			
+			
+			<h:form id= "formedit">
+
+			<p:dialog id = "dlge" widgetVar="dlgEdit"  width="500"  header ="Actualizar  Perfil"  onHide="PF('dlgEdit').content.empty()">
+			
+			
+				<h:inputHidden id="action" value="#{perfil.action}" />
+			    <h:inputHidden id="txtcodmodu_e"  value="#{perfil.perfil.id.codModu}" />
+				<h:inputHidden id="txtcodperf_e"  value="#{perfil.perfil.id.codPerf}" />
+					
+
+					<h:panelGrid columns="2" border="0">
+						<p:outputLabel>Modulo: </p:outputLabel>
+						<p:outputLabel>#{perfil.perfil.modulo.desModu}  </p:outputLabel>
+
+						<p:outputLabel>Perfil: </p:outputLabel>
+						<p:inputText  value="#{perfil.perfil.desPerf}" maxlength="50" size="30" required="false" > 
+						<f:validator validatorId="#{secu.genericvalidator}"  ></f:validator>
+						</p:inputText>
+
+						<p:outputLabel>Estado: </p:outputLabel>
+						<p:selectOneMenu id="cmbEstado" value= "#{perfil.perfil.estadoRegistro}" converter="#{estadoRegistroConverter}" >
+							<f:selectItems value="#{perfil.estadoRegistroList}" var="estado"
+								itemValue="#{estado}" itemLabel="#{estado.desEsta}" />
+						</p:selectOneMenu>
+
+
+						<p:spacer></p:spacer>
+						<p:spacer></p:spacer>
+						<p:commandButton value="Grabar"  style="width: 100px;" action="#{perfil.grabar()}" ajax="false">
+						</p:commandButton>
+						<p:commandButton value="Cancelar"  style="width: 100px;" onclick="PF('dlgEdit').hide();" ajax="true">
+						</p:commandButton>
+
+					</h:panelGrid>
+
+				</p:dialog>
+			
+			
+			</h:form>
+			
+			
+			
+			
+			
+		</h:body>
+	</ui:define>
+</ui:composition>
+</html>
