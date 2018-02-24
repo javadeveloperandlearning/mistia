@@ -28,7 +28,7 @@
 		pool-name="PostgreSQLDS" enabled="true" use-ccm="false">
 		<connection-url>dbc:postgresql:mistiadb</connection-url>
 		<driver-class>org.postgresql.Driver</driver-class>
-		<driver>postgresql-jdbc</driver>
+		<driver>postgresql</driver>
 		<security>
 			<user-name>postgres</user-name>
 			<password>adminadmin</password>
@@ -40,11 +40,12 @@
 
 	</datasource>
 
+<!-- 
     <drivers>
          <driver name="postgresql-jdbc" module="org.postgresql.jdbc"/>
       
     </drivers>
-
+ -->
 
 </datasources>
  
