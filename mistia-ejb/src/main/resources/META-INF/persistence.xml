@@ -27,6 +27,9 @@
          can find it in the source at ear/src/main/application/META-INF/ebSystems-ds.xml -->
       <provider>org.hibernate.ejb.HibernatePersistence</provider>
       <jta-data-source>java:jboss/datasources/PostgreSQLDS</jta-data-source>
+      
+       
+      
       <class>pe.com.eb.model.Usuario</class>
       <class>pe.com.eb.model.Modulo</class>
       <class>pe.com.eb.model.Opcion</class>
