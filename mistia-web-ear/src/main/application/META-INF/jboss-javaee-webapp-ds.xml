@@ -41,7 +41,7 @@
 	</datasource>
 
     <drivers>
-         <driver name="postgresql-jdbc" module="org.postgresql"/>
+         <driver name="postgresql-jdbc" module="org.postgresql.jdbc"/>
       
     </drivers>
 
