@@ -40,12 +40,6 @@
 
 	</datasource>
 
-<!-- 
-    <drivers>
-         <driver name="postgresql-jdbc" module="org.postgresql.jdbc"/>
-      
-    </drivers>
- -->
 
 </datasources>
  

@@ -2,5 +2,5 @@ eclipse.preferences.version=1
 org.jboss.tools.openshift.Connection=https\://roggerchangg%40gmail.com@console.starter-us-west-2.openshift.com
 org.jboss.tools.openshift.DeployProject=mistia-web-ear
 org.jboss.tools.openshift.PodPath=
-org.jboss.tools.openshift.Service=proyecto1@postgresql
+org.jboss.tools.openshift.Service=proyecto1@mistia-web
 org.jboss.tools.openshift.SourcePath=${workspace_loc\:/mistia-web-ear}
