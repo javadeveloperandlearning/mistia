@@ -30,16 +30,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Path("/ejecucion")
+//@Named
+//@Path("/ejecucion")  nuevvvvv
+
+
+
 public class EjecucionRest {
 
-	
-	
+	/*
 	final static Logger logger = Logger.getLogger(EjecucionRest.class);
-	
 	@Inject
 	private EjecucionService  ejecucionService;
-	
 	
 	@GET
 	@POST
@@ -185,7 +186,7 @@ public class EjecucionRest {
 	
 	
 	
-	
+	*/
 	
 	
 	
