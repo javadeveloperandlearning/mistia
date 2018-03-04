@@ -77,6 +77,7 @@ public class UsuarioController implements Mantenible {
 	@Override
 
 	public void nuevo() {
+	
 
 		try {
 			setAccion(NUEVO);
@@ -84,9 +85,11 @@ public class UsuarioController implements Mantenible {
 			this.usuario.setFec_cadu(Util.getSimpleDate());
 			this.usuario.setFec_cadu_clave(Util.getSimpleDate());
 			//usuario.setClave("miclave");
-			ExternalContext ec = facesContext.getExternalContext();
-			ec.redirect(ec.getRequestContextPath()					+ ConstansView.USUARIO_NEW_VIEW);
-		} catch (IOException e) {
+			//	ExternalContext ec = facesContext.getExternalContext();
+			//ec.redirect(ec.getRequestContextPath()					+ ConstansView.USUARIO_NEW_VIEW);
+			
+			
+		} catch (Exception e) {
 			logger.error(e);
 			e.printStackTrace();
 		}
@@ -106,9 +109,9 @@ public class UsuarioController implements Mantenible {
 			setAccion(EDITAR);
 
 			
-		ExternalContext ec = facesContext.getExternalContext();
-		ec.redirect(ec.getRequestContextPath()+ ConstansView.USUARIO_NEW_VIEW);
-		} catch (IOException e) {
+		//ExternalContext ec = facesContext.getExternalContext();
+		//ec.redirect(ec.getRequestContextPath()+ ConstansView.USUARIO_NEW_VIEW);
+		} catch (Exception e) {
 			logger.error(e);
 			e.printStackTrace();
 		}

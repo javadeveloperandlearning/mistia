@@ -49,7 +49,11 @@
   
   <context-param>
     <param-name>primefaces.THEME</param-name>
+    
     <param-value>excite-bike</param-value>
+    
+    
+    
   </context-param>
   <welcome-file-list>
     <welcome-file>index.jsp</welcome-file>
