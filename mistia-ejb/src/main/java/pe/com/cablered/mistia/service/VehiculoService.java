@@ -51,16 +51,12 @@ public class VehiculoService extends AbstractSevice<Vehiculo> {
 				return response;
 			}
 			
-			
-			
 			if(vehiculo.getVehiculoModelo()==null || 
 					(vehiculo.getVehiculoModelo()==null && vehiculo.getVehiculoModelo().getCodigoModelo().equals(0))){
 				response =  new Response(Response.ERROR, " El nombre del modelo es invalido");
 				logger.info(response.toString());
 				return response;
 			}
-			
-			
 			
 			Vehiculo _vehiculo =  null;
 			_vehiculo =  vehiculoDao.getVehiculo(vehiculo.getDescripcion());

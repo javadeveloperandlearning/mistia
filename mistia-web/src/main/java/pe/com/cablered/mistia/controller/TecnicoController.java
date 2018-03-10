@@ -101,6 +101,8 @@ public class TecnicoController implements Mantenible, Serializable {
 	@Override
 	public void mostrar() {
 		
+		logger.info(" metodo : mostrar ");
+		logger.info(criterio);
 		
 		criterio = (criterio==null || criterio.trim().equals(""))?null:criterio;
 		tecnicoList =  tecnicoService.getTecnicoList(distrito,cargo,  criterio);

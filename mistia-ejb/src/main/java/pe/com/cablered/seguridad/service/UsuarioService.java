@@ -49,8 +49,10 @@ public class UsuarioService {
 		}
 		
 		ResponseSecurity responseSecurity = new ResponseSecurity();
+		
+		usuario.setClave(EncryptUtils.sha256(usuario.getClave()));
 
-		Usuario _usuario = usuarioRepository.validar(usuario);
+		Usuario _usuario = usuarioRepository.validar(  usuario);
 
 		logger.info(" El usuario:" + usuario);
 

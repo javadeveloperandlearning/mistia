@@ -44,7 +44,7 @@
 
 						<p:outputLabel>Modelo: </p:outputLabel>
 						<p:selectOneMenu id="cmbmodelo"
-							value="#{vehiculobean.vehiculoMarca}"
+							value="#{vehiculobean.vehiculoModelo}"
 							converter="#{vehiculoModeloConverter}" style="width: 200px;">
 							<f:selectItems value="#{vehiculobean.vehiculoModeloList1}" var="m"
 								itemValue="#{m}" itemLabel="#{m.descripcion}" />
@@ -54,7 +54,7 @@
 
 
 						<p:outputLabel>Ingrese criterio de búsqueda: </p:outputLabel>
-						<p:inputText value="#{tecnicobean.criterio}" style="width: 250px;"
+						<p:inputText value="#{vehiculobean.criterio}" style="width: 250px;"
 							maxlength="50"></p:inputText>
 						<p:spacer></p:spacer>
 
@@ -67,7 +67,7 @@
 							style="width: 100px;">
 						</p:commandButton>
 
-						<p:commandButton value="Nuevo"
+						<p:commandButton value="Nuevo" 
 							actionListener="#{vehiculobean.nuevo()}" style="width: 100px;"
 							update=":formsave:dlgsave" oncomplete="PF('dlgsave').show()">
 						</p:commandButton>

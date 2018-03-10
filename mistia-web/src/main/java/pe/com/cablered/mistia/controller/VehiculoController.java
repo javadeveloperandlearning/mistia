@@ -89,9 +89,7 @@ public class VehiculoController extends BaseController<Vehiculo> implements Seri
 		vehiculoMarcaList1.addAll(vehiculoMarcaList);
 		vehiculoModeloList1 =  new ArrayList<>();
 		vehiculoModeloList1.addAll(vehiculoModeloList);
-		
-		
-		
+	
 	
 		VehiculoMarca vehiculoMarca  = new VehiculoMarca(SELECCIONE_VALUE, SELECCIONE_LABEL);
 		vehiculoMarcaList.add(vehiculoMarca);
@@ -115,6 +113,7 @@ public class VehiculoController extends BaseController<Vehiculo> implements Seri
 		
 		
 		vehiculo =  new Vehiculo();
+		setHeaderpopup("Actualizar Vehículo");
 		
 		mostrar();
 		
@@ -123,6 +122,8 @@ public class VehiculoController extends BaseController<Vehiculo> implements Seri
 	
 	@Override
 	public void mostrar() {
+		logger.info(" metodo :  mostrar");
+		logger.info(" criterio :"+criterio);
 		criterio = (criterio==null || criterio.trim().equals(""))?null:criterio;
 		vehiculoList = vehiculoService.getVehiculoList(vehiculoMarca, vehiculoModelo, criterio);
 		setList(vehiculoList);
@@ -158,6 +159,9 @@ public class VehiculoController extends BaseController<Vehiculo> implements Seri
 	@Override
 	public void limpiar() {
 		this.criterio =  null;
+		this.vehiculoMarca = null;
+		this.vehiculoModelo = null;
+		mostrar();
 	}
 	
 	@Override

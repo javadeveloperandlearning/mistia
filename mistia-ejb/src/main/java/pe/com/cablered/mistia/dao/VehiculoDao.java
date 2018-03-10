@@ -47,14 +47,21 @@ public class VehiculoDao extends CrudDao<Vehiculo> {
 
 	public List<Vehiculo> getVehiculoList(VehiculoMarca vehiculoMarca,
 			VehiculoModelo vehiculoModelo, String criterio) {
-		
+
 		List<Vehiculo> list =  Collections.emptyList();
+		if( vehiculoMarca!=null){
+			logger.info(" marca :"+vehiculoMarca.getCodigoMarca());
+		}
+		if( vehiculoModelo!=null){
+			logger.info("modelo :"+vehiculoModelo.getCodigoModelo());
+		}
+		
 		try{
 			String sql =  "Select d from Vehiculo d  where "
-					+ " (d.placaVehiculo like :pcriterio  or  :pcriterio is null ) "
-					+ "and  (d.descripcion like :pcriterio  or  :pcriterio is null ) "	
-					+ "and  (d.vehiculoMarca = :pvehiculomarca  or   :pvehiculomarca is null) "
-					+ "and (d.vehiculoModelo = :pvehiculomodelo  or   :pvehiculomodelo is null) ";
+					+ " 	((upper(d.placaVehiculo) like :pcriterio  or  :pcriterio is null ) "
+					+ "or   (upper(d.descripcion)   like :pcriterio  or  :pcriterio is null )) "	
+					+ "and  (d.vehiculoMarca  = :pvehiculomarca  or    :pvehiculomarca is null) "
+					+ "and  (d.vehiculoModelo = :pvehiculomodelo  or   :pvehiculomodelo is null) ";
 					
 			TypedQuery<Vehiculo> query =  getEntityManager().createQuery(sql, Vehiculo.class);	
 			criterio = criterio==null?null:"%"+criterio.trim().trim().toUpperCase()+"%";
