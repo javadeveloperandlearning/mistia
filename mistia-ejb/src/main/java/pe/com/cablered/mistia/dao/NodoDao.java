@@ -12,7 +12,7 @@ import org.apache.log4j.Logger;
 
 
 import pe.com.cablered.mistia.model.Nodo;
-import pe.com.eb.model.Modulo;
+import pe.com.cablered.seguridad.model.Modulo;
 
 @ApplicationScoped
 public class NodoDao extends CrudDao<Nodo> {

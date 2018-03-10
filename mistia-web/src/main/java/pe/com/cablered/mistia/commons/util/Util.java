@@ -4,7 +4,7 @@ import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
 
-import pe.com.eb.model.Usuario;
+import pe.com.cablered.seguridad.model.Usuario;
 
 public class Util {
 	

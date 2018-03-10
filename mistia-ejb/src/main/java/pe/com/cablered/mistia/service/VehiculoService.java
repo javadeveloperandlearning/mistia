@@ -14,7 +14,7 @@ import pe.com.cablered.mistia.model.VehiculoMarca;
 import pe.com.cablered.mistia.model.VehiculoModelo;
 
 @Stateless
-public class VehiculoService {
+public class VehiculoService extends AbstractSevice<Vehiculo> {
 	
 	
 	final static Logger logger = Logger.getLogger(VehiculoService.class);
@@ -27,17 +27,39 @@ public class VehiculoService {
 	private CuadrillaDao cuadrillaDao;
 	
 	
-	
+	@Override
 	public Response registrar(Vehiculo vehiculo){
+		
+		logger.info(" metodo : registrar");
 
 		Response  response =  new Response(Response.OK, Response.MSG_OK);
 		try{
 		
-		
-			if(vehiculo.getDescripcion()==null){
+			logger.info(" registrando vehiculo "+vehiculo.toString());
+			logger.info(vehiculo);
+			
+			if(vehiculo.getDescripcion()==null ){
 				response =  new Response(Response.ERROR, " El nombre del Vehiculo no es válido");
 				return response;
 			}
+			
+			if(vehiculo.getVehiculoMarca()==null ||
+					(vehiculo.getVehiculoMarca().getCodigoMarca()!=null && vehiculo.getVehiculoMarca().getCodigoMarca().equals(0)) ){
+				response =  new Response(Response.ERROR, " El nombre de la marca es invalido");
+				
+				logger.info(response.toString());
+				return response;
+			}
+			
+			
+			
+			if(vehiculo.getVehiculoModelo()==null || 
+					(vehiculo.getVehiculoModelo()==null && vehiculo.getVehiculoModelo().getCodigoModelo().equals(0))){
+				response =  new Response(Response.ERROR, " El nombre del modelo es invalido");
+				logger.info(response.toString());
+				return response;
+			}
+			
 			
 			
 			Vehiculo _vehiculo =  null;
@@ -54,6 +76,7 @@ public class VehiculoService {
 				response =  new Response(Response.ERROR, "La placa del vehiculo ya existe ingrese otra");
 				return response;
 			}
+			
 			
 			
 			vehiculoDao.create(vehiculo);

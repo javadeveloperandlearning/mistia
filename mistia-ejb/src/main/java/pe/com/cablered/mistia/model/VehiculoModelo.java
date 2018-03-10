@@ -81,5 +81,41 @@ public class VehiculoModelo extends ObjectBean implements Serializable {
 
 		return vehiculo;
 	}
+	
+	@Override
+	public String toString() {
+	
+		return descripcion;
+	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((codigoModelo == null) ? 0 : codigoModelo.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		VehiculoModelo other = (VehiculoModelo) obj;
+		if (codigoModelo == null) {
+			if (other.codigoModelo != null)
+				return false;
+		} else if (!codigoModelo.equals(other.codigoModelo))
+			return false;
+		return true;
+	}
+	
+
+	
+	
+	
+	
 }

@@ -98,6 +98,7 @@ public class VehiculoDao extends CrudDao<Vehiculo> {
 	
 	
 	public Vehiculo getVehiculoByPlaca(String placaVehiculo) {
+		logger.info(" consultando : "+placaVehiculo);
 	
 		Vehiculo vehiculo = null;
 		try{

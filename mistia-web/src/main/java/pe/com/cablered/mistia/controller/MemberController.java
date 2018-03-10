@@ -24,8 +24,8 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import pe.com.eb.model.Member;
-import pe.com.eb.service.MemberRegistration;
+import pe.com.cablered.seguridad.model.Member;
+import pe.com.cablered.seguridad.service.MemberRegistration;
 
 // The @Model stereotype is a convenience mechanism to make this a request-scoped bean that has an
 // EL name

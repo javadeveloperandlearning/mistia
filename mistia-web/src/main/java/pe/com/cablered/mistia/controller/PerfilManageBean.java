@@ -18,15 +18,15 @@ import javax.ws.rs.core.Response;
 
 import pe.com.cablered.mistia.commons.util.Util;
 import pe.com.cablered.mistia.util.ConstantSecurity;
-import pe.com.eb.model.EstadoRegistro;
-import pe.com.eb.model.Modulo;
-import pe.com.eb.model.Perfil;
-import pe.com.eb.model.PerfilPK;
-import pe.com.eb.model.Usuario;
-import pe.com.eb.service.EstadoRegistroService;
-import pe.com.eb.service.ModuloService;
-import pe.com.eb.service.PerfilService;
-import pe.com.eb.service.ResponseSecurity;
+import pe.com.cablered.seguridad.model.EstadoRegistro;
+import pe.com.cablered.seguridad.model.Modulo;
+import pe.com.cablered.seguridad.model.Perfil;
+import pe.com.cablered.seguridad.model.PerfilPK;
+import pe.com.cablered.seguridad.model.Usuario;
+import pe.com.cablered.seguridad.service.EstadoRegistroService;
+import pe.com.cablered.seguridad.service.ModuloService;
+import pe.com.cablered.seguridad.service.PerfilService;
+import pe.com.cablered.seguridad.service.ResponseSecurity;
 
 import org.apache.log4j.Logger;
 import org.primefaces.component.inputtext.InputText;
@@ -151,12 +151,14 @@ public class PerfilManageBean implements Serializable, Mantenible {
 				ResponseSecurity response =null;
 				if(this.action.equals(NUEVO)){
 					
-					perfil.setComCrea(Util.getHost());
+					/*perfil.setComCrea(Util.getHost());
 					perfil.setComModi(Util.getHost());
 					perfil.setUsuCrea(user.getCodUsua());
 					perfil.setUsuModi(user.getCodUsua());
 					perfil.setFecCrea( Util.getSimpleTime());
-					perfil.setFecModi(Util.getSimpleTime());
+					perfil.setFecModi(Util.getSimpleTime());*/
+					
+					
 					response  =  perfilManager.create(perfil);
 					
 				}else{
@@ -164,9 +166,9 @@ public class PerfilManageBean implements Serializable, Mantenible {
 					this.perfil =  perfilManager.getPerfil(_perfil);
 					this.perfil.setDesPerf(_perfil.getDesPerf());
 					this.perfil.setEstadoRegistro(_perfil.getEstadoRegistro());
-					perfil.setComModi(Util.getHost());
+					/*perfil.setComModi(Util.getHost());
 					perfil.setUsuModi(user.getCodUsua());
-					perfil.setFecModi( Util.getSimpleTime());
+					perfil.setFecModi( Util.getSimpleTime());*/
 					response  =  perfilManager.update(perfil);
 				}
 				

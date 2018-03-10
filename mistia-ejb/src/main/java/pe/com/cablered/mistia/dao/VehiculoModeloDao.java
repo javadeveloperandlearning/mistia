@@ -34,14 +34,15 @@ public class VehiculoModeloDao extends CrudDao<VehiculoModelo> {
 		List<VehiculoModelo> list = Collections.emptyList();	
 		
 		try {
-			
-			String sql = "Select c from VehiculoModeloDao c  ";
+			String sql = "Select c from VehiculoModelo c  ";
 			System.out.println(sql);
 			TypedQuery<VehiculoModelo> query = getEntityManager().createQuery(sql, VehiculoModelo.class);
 			list = query.getResultList();
 
 		} catch (Exception e) {
-				e.printStackTrace();
+			logger.info(e);
+			e.printStackTrace();
+			
 		}
 		
 		return list;

@@ -10,8 +10,8 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 import javax.inject.Inject;
 
-import pe.com.eb.model.Modulo;
-import pe.com.eb.service.ModuloService;
+import pe.com.cablered.seguridad.model.Modulo;
+import pe.com.cablered.seguridad.service.ModuloService;
 
 
 

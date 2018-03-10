@@ -1,0 +1,252 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<f:view contentType="text/html" encoding="UTF-8" />
+<ui:composition template="/plantillas/template.xhtml">
+	<ui:define name="bodyarea">
+		<h:body>
+			<h:outputStylesheet name="css/default.css" />
+
+			<h:form id="form">
+
+				<p:growl id="messages" widgetVar="messages" />
+
+				<p:remoteCommand name="updateDataTable" update="dataTable" />
+				<p:remoteCommand name="updateMessages" update="messages" />
+				<p:remoteCommand name="updateForm" update="form" />
+				<h:panelGroup>
+					<p:outputLabel>Registro de Vehiculos</p:outputLabel>
+				</h:panelGroup>
+
+				<br></br>
+				<br></br>
+				<p:panel style="width:80%;" header="Criterios de Búsqueda">
+
+					<h:panelGrid columns="3" border="0">
+
+
+
+						<p:outputLabel>Marca: </p:outputLabel>
+						<p:selectOneMenu id="cmbmarca"
+							value="#{vehiculobean.vehiculoMarca}"
+							converter="#{vehiculoMarcaConverter}" style="width: 200px;">
+							<f:selectItems value="#{vehiculobean.vehiculoMarcaList1}" var="m"
+								itemValue="#{m}" itemLabel="#{m.descripcion}" />
+						</p:selectOneMenu>
+						<p:spacer></p:spacer>
+
+						<p:outputLabel>Modelo: </p:outputLabel>
+						<p:selectOneMenu id="cmbmodelo"
+							value="#{vehiculobean.vehiculoMarca}"
+							converter="#{vehiculoModeloConverter}" style="width: 200px;">
+							<f:selectItems value="#{vehiculobean.vehiculoModeloList1}" var="m"
+								itemValue="#{m}" itemLabel="#{m.descripcion}" />
+						</p:selectOneMenu>
+						<p:spacer></p:spacer>
+
+
+
+						<p:outputLabel>Ingrese criterio de búsqueda: </p:outputLabel>
+						<p:inputText value="#{tecnicobean.criterio}" style="width: 250px;"
+							maxlength="50"></p:inputText>
+						<p:spacer></p:spacer>
+
+						<p:spacer></p:spacer>
+						<p:spacer></p:spacer>
+						<p:spacer></p:spacer>
+
+						<p:commandButton value="Mostrar"
+							action="#{vehiculobean.mostrar()}" ajax="false"
+							style="width: 100px;">
+						</p:commandButton>
+
+						<p:commandButton value="Nuevo"
+							actionListener="#{vehiculobean.nuevo()}" style="width: 100px;"
+							update=":formsave:dlgsave" oncomplete="PF('dlgsave').show()">
+						</p:commandButton>
+
+						<p:commandButton value="Limpiar	"
+							action="#{vehiculobean.limpiar()}" style="width: 100px;"
+							ajax="false">
+						</p:commandButton>
+
+					</h:panelGrid>
+
+				</p:panel>
+				<br></br>
+				<br></br>
+
+				<p:dataTable style="width:80%; height: 300px;" id="dataTable"
+					var="reg" value="#{vehiculobean.list}" paginator="true" rows="10"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					currentPageReportTemplate="( Página : {currentPage} de {totalPages})">
+					<p:column style="width:3%">
+						<f:facet name="header">
+							<h:outputText value="Código" />
+						</f:facet>
+						<p:commandLink id="ajax"
+							actionListener="#{vehiculobean.editar(reg)}"
+							update="formsave:dlgsave" oncomplete="PF('dlgsave').show()">
+							<h:outputText value="#{reg.placaVehiculo}" />
+							<f:param name="numeroCuadrilla" value="#{reg}" />
+						</p:commandLink>
+					</p:column>
+
+					<p:column style="width:15%">
+						<f:facet name="header">
+							<h:outputText value="Nombre" />
+						</f:facet>
+						<h:outputText value="#{reg.descripcion}" />
+					</p:column>
+
+
+					<p:column style="width:10%">
+						<f:facet name="header">
+							<h:outputText value="Marca" />
+						</f:facet>
+						<h:outputText value="#{reg.vehiculoMarca.descripcion}" />
+					</p:column>
+
+
+					<p:column style="width:10%">
+						<f:facet name="header">
+							<h:outputText value="Modelo" />
+						</f:facet>
+						<h:outputText value="#{reg.vehiculoModelo.descripcion}" />
+					</p:column>
+
+
+
+
+					<p:column style="width:7%">
+						<f:facet name="header">
+							<h:outputText value="Eliminar" />
+						</f:facet>
+						<p:commandButton icon="ui-icon-trash"
+							actionListener="#{vehiculobean.eliminar(reg)}" title="eliminar"
+							update="form:dataTable,form:messages">
+							<p:confirm header="Eliminar"
+								message="¿Está seguro de eliminar el nodo?" icon="ui-icon-alert"></p:confirm>
+						</p:commandButton>
+					</p:column>
+
+				</p:dataTable>
+
+				<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+					<p:commandButton value="Si" type="button"
+						styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+					<p:commandButton value="No" type="button"
+						styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+				</p:confirmDialog>
+
+			</h:form>
+			
+			
+			<p:growl id="messages" widgetVar="messages" />
+
+			<h:form id="formsave">
+
+				
+
+				<p:dialog id="dlgsave" widgetVar="dlgsave"
+					header="#{vehiculobean.headerpopup}" width="600"
+					onHide="PF('dlgsave').content.empty()">
+
+					<p:panelGrid id="pnlupdate" style="width:100%" columns="3" border="0"
+						styleClass="ui-noborder">
+						<p:spacer></p:spacer>
+						<p:spacer></p:spacer>
+						<p:spacer></p:spacer>
+						
+						
+						<p:outputLabel>Placas: </p:outputLabel>
+						
+						
+							<p:inputText id="txtPlaca"
+								value="#{vehiculobean.vehiculo.placaVehiculo}" disabled="#{vehiculobean.disabled}" maxlength="50"
+								size="30" required="true"
+								requiredMessage="Debe ingresar el número de placa">
+							</p:inputText>
+							<p:message for="txtPlaca"></p:message>
+						
+						
+				
+						
+
+						<p:outputLabel>Marca: </p:outputLabel>
+						<p:selectOneMenu id="cmbmarca1" value="#{vehiculobean.vehiculo.vehiculoMarca}" required="true"  requiredMessage="Debe seleccionar una Marca"
+							converter="#{vehiculoMarcaConverter}" style="width: 200px;">
+							<f:selectItems value="#{vehiculobean.vehiculoMarcaList}" var="m"
+								itemValue="#{m}" itemLabel="#{m.descripcion}" />
+						</p:selectOneMenu>
+						<p:message for="cmbmarca1" />
+
+
+						<p:outputLabel>Modelo: </p:outputLabel>
+						<p:selectOneMenu id="cmbmodelo1"
+							value="#{vehiculobean.vehiculo.vehiculoModelo}" required="true" requiredMessage="Debe seleccionar un Modelo"
+							converter="#{vehiculoModeloConverter}" style="width: 200px;">
+							<f:selectItems value="#{vehiculobean.vehiculoModeloList}" var="m"
+								itemValue="#{m}" itemLabel="#{m.descripcion}" />
+						</p:selectOneMenu>
+						<p:message for="cmbmodelo1" />
+
+						<p:outputLabel>Nombre: </p:outputLabel>
+						<p:inputText id="txtNombre"
+							value="#{vehiculobean.vehiculo.descripcion}" maxlength="50"
+							size="30" required="true"
+							requiredMessage="Debe ingresar nombre de un vehiculo">
+						</p:inputText>
+						<p:message for="txtNombre"></p:message>
+
+						<p:spacer></p:spacer>
+						<p:spacer></p:spacer>
+						<p:spacer></p:spacer>
+
+					</p:panelGrid>
+
+					<p:commandButton value="Grabar" action="#{vehiculobean.grabar()}"
+						ajax="true" update="pnlupdate"
+						oncomplete="handleSaveRequest(xhr, status, args)"
+						style="width: 100px;">
+					</p:commandButton>
+					<p:commandButton value="Cancelar" onclick="PF('dlgsave').hide();"
+						ajax="true" style="width: 100px;">
+					</p:commandButton>
+
+				</p:dialog>
+
+
+			</h:form>
+
+
+			<h:outputScript target="head">
+				 	function handleSaveRequest(xhr, status, args) {
+					 	if( args.notValid || args.validationFailed){
+					 		if(args.mensaje!=null){
+					 			PF('messages').renderMessage({ detail: args.mensaje, severity: 'warm'});
+					 		}
+					 		return;
+					 	}else{
+					 		PF('dlgsave').hide();
+					 		PF('messages').renderMessage({ detail: 'Operación realizada con éxito', severity: 'info'});
+							updateDataTable();
+					 	}  
+           		
+		
+				    }  
+			</h:outputScript>
+
+
+
+		</h:body>
+	</ui:define>
+</ui:composition>
+</html>

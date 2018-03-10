@@ -34,12 +34,15 @@
 						<p:outputLabel>Estado: </p:outputLabel>
 
 						<p:selectOneMenu id="cmbModulo"
-							value="#{usuarioMaganeBean.estadoRegistro}" style="width: 100px;"
+							value="#{usuarioMaganeBean.estadoRegistro}" style="width: 250px;" 
 							converter="#{estadoRegistroConverter}">
 
 							<f:selectItems value="#{usuarioMaganeBean.estadoRegistroList}"
 								var="estado" itemValue="#{estado}" itemLabel="#{estado.desEsta}" />
 						</p:selectOneMenu>
+					
+					<p:spacer></p:spacer>
+					<p:spacer></p:spacer>
 
 						<p:commandButton value="Mostrar"
 							action="#{usuarioMaganeBean.mostrar()}" ajax="false"
@@ -58,7 +61,7 @@
 					value="#{usuarioMaganeBean.usuarioList}" paginator="true" rows="5"
 					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 					currentPageReportTemplate="( Página : {currentPage} de {totalPages})">
-					<p:column style="width:20%">
+					<p:column style="width:10%">
 						<f:facet name="header">
 							<h:outputText value="Codigo" />
 						</f:facet>
@@ -70,21 +73,41 @@
 						</p:commandLink>
 					</p:column>
 
-					<p:column style="width:40%">
+					<p:column style="width:35%">
 						<f:facet name="header">
 							<h:outputText value="Nombres" />
 						</f:facet>
 						<h:outputText value="#{reg.nombres}" />
 					</p:column>
 
-					<p:column style="width:30%">
+					<p:column style="width:10%">
 						<f:facet name="header">
 							<h:outputText value="Estado" />
 						</f:facet>
 						<h:outputText value="#{reg.estadoRegistro.desEsta}" />
 					</p:column>
+					
+										
+					<p:column  style="width:15%">
+						<f:facet name="header">
+							<h:outputText value="Fecha Vencimiento Usuario" />
+						</f:facet>
+						<h:outputText value="#{reg.fec_cadu}" >
+						 <f:convertDateTime pattern="dd/MM/yyyy" />
+						 </h:outputText>
+					</p:column>
+					
+					<p:column  style="width:15%">
+						<f:facet name="header">
+							<h:outputText value="Fecha Vencimiento Clave" />
+						</f:facet>
+						<h:outputText value="#{reg.fec_cadu_clave}" >
+						 <f:convertDateTime pattern="dd/MM/yyyy" />
+						 </h:outputText>
+					</p:column>
 
-					<p:column style="width:10%">
+
+					<p:column style="width:7%">
 
 						<f:facet name="header">
 							<h:outputText value="Eliminar" />
@@ -107,25 +130,26 @@
 
 				<h:panelGrid id="grid" columns="3" border="0">
 
-					<p:outputLabel>Usuario: </p:outputLabel>
+					
 
+
+						 
 						<c:if test="${usuarioMaganeBean.accion == NUEVO}">
+						<p:outputLabel>Usuario: </p:outputLabel>
 							<p:inputText id="txtcodUsua"
 								value="#{usuarioMaganeBean.usuario.codUsua}" styleClass="upper"
 								required="true" requiredMessage="Ingrese un Valor válido"  style="width: 150px;" />
 							<p:message for="txtcodUsua" />
 						</c:if>
-	
+	 					
 						<c:if test="${usuarioMaganeBean.accion == EDITAR}">
+						<p:outputLabel>Usuario: </p:outputLabel>
 							<p:inputText id="txtcodUsua"
 								value="#{usuarioMaganeBean.usuario.codUsua}"
 								style="text-transform: uppercase; width:150px;" disabled="true" required="true"
 								requiredMessage="Ingrese un Valor válido"  />
 							<p:message for="txtcodUsua" />
 						</c:if>
-
-
-
 
 					<p:outputLabel>Nombres: </p:outputLabel>
 					<p:inputText id="txtNombres"
@@ -138,7 +162,7 @@
 					<p:outputLabel>Clave: </p:outputLabel>
 					<p:password id="txtClave"
 						value="#{usuarioMaganeBean.usuario.clave}" required="true"
-						pattern="dd/MM/yyyy" redisplay="true" style="width: 150px;"  />
+						redisplay="true" style="width: 150px;"  />
 					<p:message for="txtClave" />
 
 					<p:outputLabel>Confirmación de clave: </p:outputLabel>
@@ -148,20 +172,19 @@
 					<p:message for="txtClaveConfirmacion" />
 
 
-<!-- 
+
 					<p:outputLabel>Fecha caducidad usuario : </p:outputLabel>
 					<p:calendar id="txtFecCadu"
-						value="#{usuarioMaganeBean.usuario.fec_cadu}" showOn="button" />
+						value="#{usuarioMaganeBean.usuario.fec_cadu}" pattern="dd/MM/yyyy"  showOn="button" />
 					<p:message for="txtFecCadu" />
 
 
 
 					<p:outputLabel>Fecha caducidad de clave</p:outputLabel>
 					<p:calendar id="txtfecCaduClave"
-						value="#{usuarioMaganeBean.usuario.fec_cadu_clave}"
-						showOn="button" />
+						value="#{usuarioMaganeBean.usuario.fec_cadu_clave}" pattern="dd/MM/yyyy" showOn="button" />
 					<p:message for="txtfecCaduClave" />
- -->
+
 					<p:outputLabel>Estado: </p:outputLabel>
 					<p:selectOneMenu id="cmbEstado"
 						value="#{usuarioMaganeBean.usuario.estadoRegistro}"
@@ -172,14 +195,15 @@
 							var="estado" itemValue="#{estado}" itemLabel="#{estado.desEsta}" />
 					</p:selectOneMenu>
 					<p:message for="cmbEstado" />
-
-
-
+					
+					<p:spacer></p:spacer>
+					<p:spacer></p:spacer>
+					<p:spacer></p:spacer>
 					<p:commandButton value="Grabar"
-						action="#{usuarioMaganeBean.grabar()}" update="form">
+						action="#{usuarioMaganeBean.grabar()}" update="form" style="width: 100px;"  >
 					</p:commandButton>
 
-					<p:button value="Cancelar" outcome="usuarios" ajax="false" />
+					<p:button value="Cancelar" outcome="usuarios" ajax="false" style="width: 100px;" />
 
 
 				</h:panelGrid>

@@ -9,7 +9,7 @@ import javax.inject.Inject;
 
 import pe.com.cablered.mistia.model.Matriz;
 import pe.com.cablered.mistia.service.MatrizService;
-import pe.com.eb.model.Modulo;
+import pe.com.cablered.seguridad.model.Modulo;
 
 
 

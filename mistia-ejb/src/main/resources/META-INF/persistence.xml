@@ -30,17 +30,17 @@
       
        
       
-      <class>pe.com.eb.model.Usuario</class>
-      <class>pe.com.eb.model.Modulo</class>
-      <class>pe.com.eb.model.Opcion</class>
-      <class>pe.com.eb.model.OpcionPK</class>
-      <class>pe.com.eb.model.Perfil</class>
-      <class>pe.com.eb.model.PerfilPK</class>
-      <class>pe.com.eb.model.PerfilOpcion</class>
-      <class>pe.com.eb.model.PerfilOpcionPK</class>
-      <class>pe.com.eb.model.UsuarioPerfil</class>
-      <class>pe.com.eb.model.UsuarioPerfilPK</class>
-      <class>pe.com.eb.model.EstadoRegistro</class>
+      <class>pe.com.cablered.seguridad.model.Usuario</class>
+      <class>pe.com.cablered.seguridad.model.Modulo</class>
+      <class>pe.com.cablered.seguridad.model.Opcion</class>
+      <class>pe.com.cablered.seguridad.model.OpcionPK</class>
+      <class>pe.com.cablered.seguridad.model.Perfil</class>
+      <class>pe.com.cablered.seguridad.model.PerfilPK</class>
+      <class>pe.com.cablered.seguridad.model.PerfilOpcion</class>
+      <class>pe.com.cablered.seguridad.model.PerfilOpcionPK</class>
+      <class>pe.com.cablered.seguridad.model.UsuarioPerfil</class>
+      <class>pe.com.cablered.seguridad.model.UsuarioPerfilPK</class>
+      <class>pe.com.cablered.seguridad.model.EstadoRegistro</class>
       <class>pe.com.cablered.mistia.model.Cargo</class>
       <class>pe.com.cablered.mistia.model.Cliente</class>
       <class>pe.com.cablered.mistia.model.Competencia</class>
@@ -105,7 +105,7 @@
          <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
          
           
-            <property name="hibernate.show_sql" value="true" />
+            <property name="hibernate.show_sql" value="false" />
             
           
           

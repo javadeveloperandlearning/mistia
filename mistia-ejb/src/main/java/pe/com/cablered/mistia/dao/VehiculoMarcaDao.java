@@ -51,7 +51,7 @@ public class VehiculoMarcaDao extends CrudDao<VehiculoMarca> {
 		VehiculoMarca vehiculoMarca = null;
 		try{
 			
-			String sql = "Select p From VehiculoMarca p where upper(p.descripcion) = :upper(pdescripcion)";
+			String sql = "Select p From VehiculoMarca p where upper(p.descripcion) = upper(:pdescripcion)";
 			TypedQuery<VehiculoMarca> query  = getEntityManager().createQuery(sql, VehiculoMarca.class);
 			query.setParameter("pdescripcion", descripcion);
 			if(query.getResultList().size()>0){

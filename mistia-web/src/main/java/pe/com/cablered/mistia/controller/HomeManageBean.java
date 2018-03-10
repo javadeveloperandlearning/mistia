@@ -21,9 +21,10 @@ import org.primefaces.model.menu.MenuElement;
 import org.primefaces.model.menu.MenuModel;
 
 import pe.com.cablered.mistia.util.ConstantSecurity;
-import pe.com.eb.model.Opcion;
-import pe.com.eb.model.Usuario;
-import pe.com.eb.service.AccessManger;
+import pe.com.cablered.seguridad.model.Opcion;
+import pe.com.cablered.seguridad.model.Usuario;
+import pe.com.cablered.seguridad.service.AccessManger;
+
 import static pe.com.cablered.mistia.controller.ConstansView.*;
 
 @ManagedBean(name = "home")
@@ -50,13 +51,18 @@ public class HomeManageBean {
 			HttpSession session = (HttpSession) ec.getSession(true);
 			Usuario _usuario =  (Usuario) session.getAttribute("usuario");
 			
-			/*if(_usuario==null){
+			if(_usuario==null){
 				// session.invalidate();
 				 ec.redirect(ec.getRequestContextPath()+ ConstansView.LOGIN_VIEW);
-			}*/
+			}	
 
 			setUsuario(_usuario);
-			//List<Opcion> opciones = accessManger.getOpciones(getUsuario());
+			List<Opcion> _opciones = accessManger.getOpciones(getUsuario());
+			/*for (Opcion opcion : _opciones) {
+				
+				System.out.println(opcion.getDesOpci()+" - "+opcion.getUrlOpci());
+				
+			}*/
 			List<Opcion> opciones = new ArrayList<Opcion>();
 			Opcion opcion0 = new Opcion("Clientes", CLIENTE_CONSULTA_VIEW,ConstantSecurity.TIPO_MENU_CLIENTE); 	
 			Opcion opcion1 = new Opcion("Generar Programación", PROGRAMACION_CONSULTA_VIEW, ConstantSecurity.TIPO_MENU_PROGRAMACION); 

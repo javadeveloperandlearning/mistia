@@ -13,7 +13,7 @@ import org.apache.log4j.Logger;
 
 
 import pe.com.cablered.mistia.model.Matriz;
-import pe.com.eb.model.Modulo;
+import pe.com.cablered.seguridad.model.Modulo;
 
 
 @ApplicationScoped

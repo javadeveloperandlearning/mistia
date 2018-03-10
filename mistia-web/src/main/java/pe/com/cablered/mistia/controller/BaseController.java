@@ -17,6 +17,7 @@ public abstract class BaseController<T extends ObjectBean> {
 	protected List<T> list;
 	protected ObjectBean object;
 	private String headerpopup;
+	private boolean disabled = false;
 	
 	
 	public static final  String NUEVO = "1";
@@ -27,25 +28,27 @@ public abstract class BaseController<T extends ObjectBean> {
 	public static final String SELECCIONE_LABEL = "--Seleccione--"; 
 	public static final int SELECCIONE_VALUE = 0; 
 	
+
 	
 	public static final String TODOS_LABEL = "--Todos--"; 
 	public static final int TODOS_VALUE = 0; 
 	
 	
 	protected  abstract FacesContext getFacesContext();
-	protected abstract  AbstractSevice getService();
+	protected  abstract  AbstractSevice getService();
 	
 	/*public abstract ObjectBean getObject();
-
 	public abstract void setObject(ObjectBean object) ;*/
 	
 
 	public void nuevo() {
 		action = NUEVO;
+		disabled =  false;
 	}
 
 	public void editar(ObjectBean object) {
 		action = EDITAR;
+		disabled =  true;
 		if (object != null && list != null) {
 			int idx = list.indexOf(object);
 			if (idx != -1) {
@@ -56,8 +59,10 @@ public abstract class BaseController<T extends ObjectBean> {
 	}
 
 	public void grabar() {
+		
 		try {
-
+			
+			
 			FacesMessage msg = null;
 			Response response = null;
 
@@ -139,27 +144,27 @@ public abstract class BaseController<T extends ObjectBean> {
 	public void setObject(ObjectBean object) {
 		this.object = object;
 	}
-	
-
 
 	public String getHeaderpopup() {
 		return headerpopup;
 	}
 
-
 	public void setHeaderpopup(String headerpopup) {
 		this.headerpopup = headerpopup;
 	}
+	public String getAction() {
+		return action;
+	}
+	public void setAction(String action) {
+		this.action = action;
+	}
+	public boolean isDisabled() {
+		return disabled;
+	}
+	public void setDisabled(boolean disabled) {
+		this.disabled = disabled;
+	}
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	
 	

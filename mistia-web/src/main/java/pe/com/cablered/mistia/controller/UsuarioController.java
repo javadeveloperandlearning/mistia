@@ -22,11 +22,11 @@ import org.primefaces.mobile.application.MobileNavigationHandler;
 
 import pe.com.cablered.mistia.commons.util.Util;
 import pe.com.cablered.mistia.util.ConstantSecurity;
-import pe.com.eb.model.EstadoRegistro;
-import pe.com.eb.model.Usuario;
-import pe.com.eb.service.EstadoRegistroService;
-import pe.com.eb.service.ResponseSecurity;
-import pe.com.eb.service.UsuarioService;
+import pe.com.cablered.seguridad.model.EstadoRegistro;
+import pe.com.cablered.seguridad.model.Usuario;
+import pe.com.cablered.seguridad.service.EstadoRegistroService;
+import pe.com.cablered.seguridad.service.ResponseSecurity;
+import pe.com.cablered.seguridad.service.UsuarioService;
 
 
 @ManagedBean(name = "usuarioMaganeBean")
@@ -121,27 +121,24 @@ public class UsuarioController implements Mantenible {
 	public void grabar() {
 		try {
 			logger.info("metodo : grabar");
+		
+			HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(false);
+			Usuario user = (Usuario) session.getAttribute(ConstantSecurity.USER_SESSION);
 			
 			usuario.setCodUsua(usuario.getCodUsua().toUpperCase());
 			usuario.setNombres(usuario.getNombres().toUpperCase());
-			HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(false);
-			Usuario user = (Usuario) session.getAttribute(ConstantSecurity.USER_SESSION);
+			
 			ResponseSecurity responseSecurity = null;
 			
+			logger.info(user );
 			if (getAccion().equals(NUEVO)) {
 
-
-				usuario.setUsuCrea(user.getCodUsua());
-				usuario.setUsuModi(user.getCodUsua());
 				responseSecurity = usuarioManager.create(usuario);
-
-
 			}else if ( getAccion().equals(EDITAR)){
-				
-				usuario.setUsuModi(user.getCodUsua());
 				responseSecurity = usuarioManager.update(usuario);
-				
 			}
+			
+			mostrar();
 			
 			if (responseSecurity.getCodigo() != ConstantSecurity.COD_OK) {
 				FacesMessage msg = new FacesMessage( responseSecurity.getMessage());

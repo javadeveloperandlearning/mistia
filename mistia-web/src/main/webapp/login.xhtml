@@ -3,52 +3,102 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:p="http://primefaces.org/ui"
-	>
+	xmlns:p="http://primefaces.org/ui">
 
 
 <h:head>
+
 </h:head>
 <h:body>
 	<h:outputStylesheet name="css/default.css" />
 
 	<div class="Absolute-Center">
-		<h:form>
 
-<h:panelGrid columns="2" border="0">
+		<div align="center">
 
- <f:facet name="header">
-            <p:outputLabel>Iniciar Sesión</p:outputLabel>
-        </f:facet>
-        <f:facet name="header">
-        <p:spacer></p:spacer>
-        </f:facet>
+			<h:form id="form">
+
+				<p:panelGrid style="width:40%;" styleClass="ui-noborder">
+
+					<f:facet name="header">
+						<p:row>
+							<p:column colspan="3">
+				                
+				            </p:column>
+						</p:row>
+					</f:facet>
+
+					<f:facet name="header">
+						<p:row>
+							<p:column colspan="3">
+				                Iniciar Sesión
+				            </p:column>
+						</p:row>
+					</f:facet>
+
+					<p:row>
+						<p:column colspan="3" style="text-align:center">
+							<p:spacer></p:spacer>
+						</p:column>
+					</p:row>
+
+					<p:row>
+						<p:column style="width:30%;text-align:right">
+							<p:outputLabel>Usuario:</p:outputLabel>
+						</p:column>
+						<p:column style="width:70%">
+							<p:inputText id="txtUsuario" value="#{login.usuario}"
+								maxlength="10" required="true"
+								requiredMessage="Ingrese Nombre de Usuario" />
+							<p:message id="usuarioError" for="txtUsuario" />
+						</p:column>
+
+					</p:row>
+
+					<p:row>
+						<p:column style="width:30%;text-align:right">
+							<p:outputLabel>Clave:</p:outputLabel>
+						</p:column>
+
+						<p:column style="width:70%">
+							<p:password id="txtClave" value="#{login.clave}" maxlength="8"
+								required="true" requiredMessage="Ingrese Clave" />
+							<p:message id="claveError" for="txtClave" />
+
+						</p:column>
+
+					</p:row>
+					<p:row>
+						<p:column colspan="3" style="text-align:center">
+							<p:spacer>
+								<p:messages for="messageError" />
+							</p:spacer>
+						</p:column>
+					</p:row>
 
 
-			<h:panelGrid columns="3" border="0">
-				<p:outputLabel>Usuario</p:outputLabel>
-				<p:inputText id="txtUsuario" value="#{login.usuario}" maxlength="10"
-					required="true" requiredMessage="Ingrese Nombre de Usuario" />
-					<p:message id="usuarioError" for="txtUsuario" />
+					<p:row>
+						<p:column colspan="3" style="text-align:center">
+							<p:commandButton id="btnIngresar" style="width: 100px;"
+								value="Ingresar" action="#{login.ingresar()}" ajax="true"
+								update="form"></p:commandButton>
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column colspan="3" style="text-align:center">
+							<p:spacer>
 
-					<p:outputLabel>Clave</p:outputLabel>
-				<p:password id="txtClave" value="#{login.clave}" maxlength="8"
-					required="true" requiredMessage="Ingrese Clave" />
-				<p:message id="claveError" for="txtClave" />
-				<f:facet name="footer">
-				<h:panelGroup style="display:block; text-align:center">
-					<p:commandButton value="Ingresar" action="#{login.ingresar()}"
-						ajax="false"></p:commandButton>
-				</h:panelGroup>
-				</f:facet>
-			</h:panelGrid>
-</h:panelGrid>			
-			
-			
-			
-			
-			
-		</h:form>
+							</p:spacer>
+						</p:column>
+					</p:row>
+
+
+
+				</p:panelGrid>
+
+
+			</h:form>
+		</div>
 	</div>
 </h:body>
 </html>

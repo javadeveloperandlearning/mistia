@@ -1,5 +1,7 @@
 package pe.com.cablered.mistia.converter;
 
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
@@ -13,7 +15,8 @@ import pe.com.cablered.mistia.service.VehiculoModeloService;
 
 
 
-
+@ManagedBean(name="vehiculoMarcaConverter")
+@RequestScoped
 public class VehiculoMarcaConverter implements Converter {
 
 	@Inject

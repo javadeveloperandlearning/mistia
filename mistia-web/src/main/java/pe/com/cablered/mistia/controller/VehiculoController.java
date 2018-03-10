@@ -6,25 +6,28 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
+
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import org.apache.log4j.Logger;
+
+import pe.com.cablered.mistia.model.ObjectBean;
 import pe.com.cablered.mistia.model.Vehiculo;
 import pe.com.cablered.mistia.model.VehiculoMarca;
 import pe.com.cablered.mistia.model.VehiculoModelo;
 import pe.com.cablered.mistia.model.sort.VehiculoMarcaComparator;
 import pe.com.cablered.mistia.model.sort.VehiculoModeloComparator;
-import pe.com.cablered.mistia.service.Response;
+import pe.com.cablered.mistia.service.AbstractSevice;
+
 import pe.com.cablered.mistia.service.VehiculoMarcaService;
 import pe.com.cablered.mistia.service.VehiculoModeloService;
 import pe.com.cablered.mistia.service.VehiculoService;
 
 @ManagedBean(name = "vehiculobean")
 @SessionScoped
-public class VehiculoController  implements Serializable, Mantenible{
+public class VehiculoController extends BaseController<Vehiculo> implements Serializable{
 
 	private static final long serialVersionUID = -32348959599327908L;
 
@@ -39,25 +42,29 @@ public class VehiculoController  implements Serializable, Mantenible{
 	
 	// detalle 
 	private List<Vehiculo> vehiculoList;
-	
 	// combos
 	private List<VehiculoMarca> vehiculoMarcaList;
-	
 	private List<VehiculoModelo> vehiculoModeloList;
+	
+	private List<VehiculoMarca> vehiculoMarcaList1;
+	private List<VehiculoModelo> vehiculoModeloList1;
 		
 	@Inject
 	private FacesContext facesContext;
-
-
 	private Vehiculo vehiculo; 
 	private VehiculoModelo vehiculoModelo;
 	private VehiculoMarca vehiculoMarca;
 	
 	
-	private String criterio ;
-	private String action = null;
+	private String criterio;
+	
+	
 	
 	final static Logger logger = Logger.getLogger(VehiculoController.class);
+	
+	public VehiculoController() {
+
+	}
 	
 	@PostConstruct
 	public void init(){
@@ -65,6 +72,10 @@ public class VehiculoController  implements Serializable, Mantenible{
 		// lista de matrices
 		vehiculoMarcaList =  vehiculoMarcaService.getVehiculoMarcaList();
 		vehiculoModeloList = vehiculoModeloService.getVehiculoModeloList();
+		 
+		logger.info("cantidad de registros vehiculoMarcaList  "+vehiculoMarcaList.size());
+		logger.info("cantidad de registros vehiculoModeloList "+vehiculoModeloList.size());
+		
 		
 		if(vehiculoMarcaList==null){
 			vehiculoMarcaList = new ArrayList<>();
@@ -74,16 +85,35 @@ public class VehiculoController  implements Serializable, Mantenible{
 			vehiculoModeloList = new ArrayList<>();
 		}
 		
+		vehiculoMarcaList1 =  new ArrayList<>();
+		vehiculoMarcaList1.addAll(vehiculoMarcaList);
+		vehiculoModeloList1 =  new ArrayList<>();
+		vehiculoModeloList1.addAll(vehiculoModeloList);
 		
+		
+		
+	
 		VehiculoMarca vehiculoMarca  = new VehiculoMarca(SELECCIONE_VALUE, SELECCIONE_LABEL);
 		vehiculoMarcaList.add(vehiculoMarca);
-		
 		VehiculoModelo vehiculoModelo =  new VehiculoModelo(SELECCIONE_VALUE, SELECCIONE_LABEL);
 		vehiculoModeloList.add(vehiculoModelo);
 		
+		
+		VehiculoMarca vehiculoMarca1  = new VehiculoMarca(TODOS_VALUE, TODOS_LABEL);
+		vehiculoMarcaList1.add(vehiculoMarca1);
+		VehiculoModelo vehiculoModelo1 =  new VehiculoModelo(TODOS_VALUE, TODOS_LABEL);
+		vehiculoModeloList1.add(vehiculoModelo1);
+
+		
 		Collections.sort(vehiculoMarcaList, new VehiculoMarcaComparator());
 		Collections.sort(vehiculoModeloList, new VehiculoModeloComparator());
-
+		
+	
+		
+		Collections.sort(vehiculoMarcaList1, new VehiculoMarcaComparator());
+		Collections.sort(vehiculoModeloList1, new VehiculoModeloComparator());
+		
+		
 		vehiculo =  new Vehiculo();
 		
 		mostrar();
@@ -95,104 +125,46 @@ public class VehiculoController  implements Serializable, Mantenible{
 	public void mostrar() {
 		criterio = (criterio==null || criterio.trim().equals(""))?null:criterio;
 		vehiculoList = vehiculoService.getVehiculoList(vehiculoMarca, vehiculoModelo, criterio);
-		
+		setList(vehiculoList);
+	}
+	
+	
+	@Override
+	protected FacesContext getFacesContext() {
+		return facesContext;
 	}
 
+	@Override
+	protected AbstractSevice getService() {
+		return vehiculoService;
+	}
+
+	
+	public void setObject(ObjectBean object) {
+		this.object = object;
+		this.vehiculo =  (Vehiculo) object;
+	}
+	
 	@Override
 	public void nuevo() {
-		 action =  NUEVO;
-		 logger.info(" ### nuevo vehiculo ### ");
-		 
-		 
+		super.nuevo();
+		this.vehiculo =  new Vehiculo();
+		setObject(vehiculo);
 		
 	}
+	
 
+	
 	@Override
-	public void editar() {
-		
-		action =  EDITAR;
-		logger.info("## editando ##");
-		logger.info( "placaVehiculo :  "+facesContext.getExternalContext().getRequestParameterMap().get("placaVehiculo"));
-		String placaVehiculo =  facesContext.getExternalContext().getRequestParameterMap().get("placaVehiculo");
-		
-		if(placaVehiculo!=null && vehiculoList!=null){
-			int idx =   vehiculoList.indexOf(new Vehiculo(placaVehiculo));
-			if(idx!=-1){
-				vehiculo =  vehiculoList.get(idx);
-			}
-		}
-		
+	public void limpiar() {
+		this.criterio =  null;
 	}
-
+	
 	@Override
-	public void grabar() {
+	public void reset() {
 		
-		logger.info(" grabar accion : "+action);
-		try{
-			
-			FacesMessage msg = null;
-			Response response = null;
-			if(action.equals(NUEVO)){
-			    response = vehiculoService.registrar(vehiculo);
-			}else if (action.equals(EDITAR)) {
-				 response = vehiculoService.modificar(vehiculo);
-			}
-			
-			if(response!=null){
-				msg = new FacesMessage(response.getMensaje());
-				if(response.getCodigo()== Response.OK){
-					mostrar();	
-					msg.setSeverity(FacesMessage.SEVERITY_INFO);
-				}else{
-					msg.setSeverity(FacesMessage.SEVERITY_ERROR);
-				}
-				facesContext.addMessage(null, msg);	
-			}
-	
-		}catch( Exception e ){
-			logger.info(e);
-			e.printStackTrace();
-			
-		}
+
 	}
-
-	@Override
-	public void eliminar(Object object) {
-		logger.info("## eliminar ## ");
-		
-		if(object instanceof Vehiculo){
-			
-			Vehiculo nodo =  (Vehiculo)object;
-			Response response = vehiculoService.eliminar(nodo);
-			logger.info(response.toString());
-			FacesMessage msg = new FacesMessage(response.getMensaje());
-			if(response!=null && response.getCodigo()== Response.OK){
-				mostrar();	
-				msg.setSeverity(FacesMessage.SEVERITY_INFO);
-			}else{
-				msg.setSeverity(FacesMessage.SEVERITY_ERROR);
-			}
-			
-			facesContext.addMessage(null, msg);	
-		}
-	
-	}
-	
-
-	
-
-
-
-
-	public String getAction() {
-		return action;
-	}
-
-	public void setAction(String action) {
-		this.action = action;
-	}
-
-	
 
 	public String getCriterio() {
 		return criterio;
@@ -238,5 +210,56 @@ public class VehiculoController  implements Serializable, Mantenible{
 	public void setVehiculoModeloList(List<VehiculoModelo> vehiculoModeloList) {
 		this.vehiculoModeloList = vehiculoModeloList;
 	}
+
+
+	public VehiculoModelo getVehiculoModelo() {
+		return vehiculoModelo;
+	}
+
+
+	public void setVehiculoModelo(VehiculoModelo vehiculoModelo) {
+		this.vehiculoModelo = vehiculoModelo;
+	}
+
+
+	public VehiculoMarca getVehiculoMarca() {
+		return vehiculoMarca;
+	}
+
+
+	public void setVehiculoMarca(VehiculoMarca vehiculoMarca) {
+		this.vehiculoMarca = vehiculoMarca;
+	}
+
+	public Vehiculo getVehiculo() {
+		return vehiculo;
+	}
+
+	public void setVehiculo(Vehiculo vehiculo) {
+		this.vehiculo = vehiculo;
+	}
+
+	public List<VehiculoMarca> getVehiculoMarcaList1() {
+		return vehiculoMarcaList1;
+	}
+
+	public void setVehiculoMarcaList1(List<VehiculoMarca> vehiculoMarcaList1) {
+		this.vehiculoMarcaList1 = vehiculoMarcaList1;
+	}
+
+	public List<VehiculoModelo> getVehiculoModeloList1() {
+		return vehiculoModeloList1;
+	}
+
+	public void setVehiculoModeloList1(List<VehiculoModelo> vehiculoModeloList1) {
+		this.vehiculoModeloList1 = vehiculoModeloList1;
+	}
+
+
+
+	
+	
+
+
 
 }

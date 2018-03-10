@@ -7,8 +7,8 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.inject.Inject;
 
-import pe.com.eb.model.EstadoRegistro;
-import pe.com.eb.service.EstadoRegistroService;
+import pe.com.cablered.seguridad.model.EstadoRegistro;
+import pe.com.cablered.seguridad.service.EstadoRegistroService;
 
 @ManagedBean(name = "estadoRegistroConverter")
 @RequestScoped
