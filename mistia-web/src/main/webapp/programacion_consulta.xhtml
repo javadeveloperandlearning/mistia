@@ -88,10 +88,10 @@
 						<f:facet name="header">
 							<h:outputText value="Codigo" />
 						</f:facet>
-						<p:commandLink id= "ajax" actionListener="#{progcon.editar(reg)}" >
-							<h:outputText value="#{reg.numeroProgramacion}" />
-							<f:param name="codUsua" value="#{reg.numeroProgramacion}" ></f:param>
-						</p:commandLink>
+                                            
+                                            <h:outputText value="#{reg.numeroProgramacion}" />
+                                            
+
 					</p:column>
 					
 					
@@ -148,8 +148,14 @@
 							<h:outputText value="Opciones" />
 						</f:facet>
 						
-
-							<p:commandButton icon="ui-icon-pencil"  rendered="#{reg.estado.codigoEstado eq 1}"  actionListener="#{progcon.editar(reg)}"   
+                                                        
+                                                        
+                                                    <p:commandButton   icon="ui-icon-pencil"    id= "ajax"  actionListener="#{progcon.editar(reg)}" >
+							
+							<f:param name="codUsua" value="#{reg.numeroProgramacion}" ></f:param>
+                                                    </p:commandButton>
+                                                        
+							<p:commandButton   icon="ui-icon-pencil"  rendered="#{reg.estado.codigoEstado eq 1}"  actionListener="#{progcon.editar(reg)}"   
 							 ajax="false"   title="editar" update="form:dataTable"  > 
 							</p:commandButton>
 
@@ -160,11 +166,7 @@
 							 <p:confirm header="Confirmación"
 								message="¿Está seguro de anular la programación?"
 								icon="ui-icon-alert" />
-							 
-							 
 							</p:commandButton>
-							  	
-							  	
 							  	
 							<p:commandButton icon="ui-icon-search" rendered="#{reg.estado.codigoEstado eq 4  }"   
 							actionListener="#{progcon.editar(reg)}"    ajax="false"   title="consultar" update="form:dataTable"  > 

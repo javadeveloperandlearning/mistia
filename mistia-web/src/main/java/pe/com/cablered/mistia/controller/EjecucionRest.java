@@ -29,16 +29,15 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-//@Named
-//@Path("/ejecucion")  nuevvvvv
-
-
-
+import javax.enterprise.context.RequestScoped;
+/*
+@Named
+@Path("/ejecucion")
+@RequestScoped*/
 public class EjecucionRest {
 
-	/*
-	final static Logger logger = Logger.getLogger(EjecucionRest.class);
+	
+	/*final static Logger logger = Logger.getLogger(EjecucionRest.class);
 	@Inject
 	private EjecucionService  ejecucionService;
 	
@@ -74,13 +73,12 @@ public class EjecucionRest {
 	@Path("/plantrabajodetallelist.html")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getplanTrabajoDetalleList(  @Context HttpServletRequest request) {
-		
+		logger.info("metodo : getplanTrabajoDetalleList ");
 		
 		Response response = new Response(Response.OK, Response.MSG_OK);
-		
 		String _numeroPlanTrabajo  =  request.getParameter("numeroPlanTrabajo");
 		logger.info(" Plan de trabajo "+_numeroPlanTrabajo);
-		Long numeroPlanTrabajo  =  1l;
+		Long numeroPlanTrabajo  =  3l;
 		
 		List<PlanTrabajoDetalle>  planTrabajoDetalleList = ejecucionService.planTrabajoDetalleList(numeroPlanTrabajo);
 		
@@ -181,18 +179,7 @@ public class EjecucionRest {
 		}
 		
 		return response;
-	}
-	
-	
-	
-	
-	*/
-	
-	
-	
-	
-	
-	
-	
+	}*/
+		
 	
 }

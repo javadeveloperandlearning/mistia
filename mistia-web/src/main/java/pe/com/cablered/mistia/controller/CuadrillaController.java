@@ -100,7 +100,7 @@ public class CuadrillaController extends BaseController<Cuadrilla>  implements S
 			vehiculoList =  new ArrayList<>();
 		}
 		
-		Vehiculo vehiculo0 =  new Vehiculo(SELECCIONE_VALUE+"", SELECCIONE_LABEL);
+		Vehiculo vehiculo0 =  new Vehiculo(TODOS_VALUE+"", TODOS_LABEL);
 		vehiculoList.add(vehiculo0);
 		
 		Collections.sort(vehiculoList, new VehiculoComparator());
@@ -125,6 +125,7 @@ public class CuadrillaController extends BaseController<Cuadrilla>  implements S
 	
 	@Override
 	public void mostrar() {
+            logger.info(" metodo : mostrar");
 		
 		try{
 			
@@ -159,7 +160,8 @@ public class CuadrillaController extends BaseController<Cuadrilla>  implements S
 	@Override
 	public void grabar(){
 		//cuadrilla.setVehiculo(vehiculo);
-		cuadrilla.setFechaProgramacion(new Timestamp(fecPrgn.getTime()));
+		//cuadrilla.setFechaProgramacion(new Timestamp(fecPrgn.getTime()));
+                cuadrilla.setFechaProgramacion(fecPrgn);
 		super.grabar();
 		
 	}

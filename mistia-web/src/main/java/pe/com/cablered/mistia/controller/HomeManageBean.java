@@ -53,7 +53,7 @@ public class HomeManageBean {
 			
 			if(_usuario==null){
 				// session.invalidate();
-				 ec.redirect(ec.getRequestContextPath()+ ConstansView.LOGIN_VIEW);
+				// ec.redirect(ec.getRequestContextPath()+ ConstansView.LOGIN_VIEW);
 			}	
 
 			setUsuario(_usuario);
@@ -74,6 +74,7 @@ public class HomeManageBean {
 			Opcion opcion7 = new Opcion("Técnicos", TECNICOS_VIEW, ConstantSecurity.TIPO_MENU_PROGRAMACION);
 			Opcion opcion8 = new Opcion("Cuadrillas", CUADRILLAS_VIEW, ConstantSecurity.TIPO_MENU_PROGRAMACION, "cuadrillabean");
 			Opcion opcion9 = new Opcion("Vehiculos", VEHICULOS_VIEW, ConstantSecurity.TIPO_MENU_PROGRAMACION);
+			Opcion opcion13 = new Opcion("Reclamos", RECLAMOS_VIEW, ConstantSecurity.TIPO_MENU_PROGRAMACION);
 			
 			
 			
@@ -98,6 +99,8 @@ public class HomeManageBean {
 			
 			opciones.add(opcion11);
 			opciones.add(opcion12);
+			opciones.add(opcion13);
+			
 
 			
 			
