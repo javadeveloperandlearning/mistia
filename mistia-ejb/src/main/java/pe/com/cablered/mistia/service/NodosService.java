@@ -140,9 +140,7 @@ public class NodosService {
 		
 		List<Map> coberturaList =  new ArrayList<>();
 		List<Poste> posteList =  posteDao.getPostesLIst();
-	
 		for (Poste poste : posteList) {
-		
 			Map map =  new HashMap<>();
 			map.put("area", null);
 			map.put("descripcion", "nodo");

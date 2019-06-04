@@ -104,10 +104,55 @@ public class SolicitudServicioDao extends CrudDao<SolicitudServicio>{
 		
 		List<SolicitudServicio> list = Collections.EMPTY_LIST;
 		try {
-			String sql = "Select new SolicitudServicio (s.numeroSolicitud,s.fechaAtencion , s.fechaSolicitud, s.poste, s.tipoSolicitud, s.contratoServicio) "
-					+ " from SolicitudServicio s join s.estado e where e.codigoEstado  =:pcodigoestado order by s.numeroSolicitud ";
+			String sql = "Select new SolicitudServicio (s.numeroSolicitud,"
+					+ "s.fechaAtencion , "
+					+ "s.fechaSolicitud, "
+					+ "s.poste, "
+					+ "s.tipoSolicitud, "
+					+ "s.contratoServicio) "
+					+ " from SolicitudServicio s "
+					+ " join s.estado e where e.codigoEstado  =:pcodigoestado "
+					+ "order by s.numeroSolicitud ";
 			TypedQuery<SolicitudServicio> query = getEntityManager().createQuery(sql, SolicitudServicio.class);
 			query.setParameter("pcodigoestado", codigoEstado);
+			list = query.getResultList();
+			
+		} catch (Exception e) {
+				e.printStackTrace();
+		}
+		
+		return list;
+	}
+	
+	
+	
+	
+	
+	public List<SolicitudServicio> getSolicitudList(int codigoEstado, Integer codigoDistrito, Integer codigoTipoSolicitud) {
+		
+		
+		List<SolicitudServicio> list = Collections.EMPTY_LIST;
+		try {
+			String sql = "Select new SolicitudServicio (s.numeroSolicitud,"
+					+ "s.fechaAtencion , "
+					+ "s.fechaSolicitud, "
+					+ "s.poste, "
+					+ "s.tipoSolicitud, "
+					+ "s.contratoServicio) "
+					+ " from SolicitudServicio s "
+					+ " join s.estado e "
+					+ "	join s.distrito d"
+					+ " join s.tipoSolicitud t "
+					+ "where e.codigoEstado  =:pcodigoestado"
+					+ "	and	 ( d.codigoDistrito=:pcodigodistrito or :pcodigodistrito is null) "
+					+ "	and	 (t.codigoTipoSolicitud=:pcodigotiposolicitud or :pcodigotiposolicitud is null )"
+					+ "order by s.numeroSolicitud ";
+			
+			TypedQuery<SolicitudServicio> query = getEntityManager().createQuery(sql, SolicitudServicio.class);
+			query.setParameter("pcodigoestado", codigoEstado);
+			query.setParameter("pcodigodistrito", codigoDistrito);
+			query.setParameter("pcodigotiposolicitud", codigoTipoSolicitud);
+			
 			list = query.getResultList();
 			
 		} catch (Exception e) {

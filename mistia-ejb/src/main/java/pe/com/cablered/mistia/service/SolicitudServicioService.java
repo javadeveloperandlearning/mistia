@@ -49,16 +49,10 @@ public class SolicitudServicioService {
 	@Inject
 	private SolicitudServicioEstadoDao solicitudServicioEstadoDao;
 	
-	
 	// lista de grupos en session
 	private  Map<Long, GrupoAtencion> mpGruposCached ;
 	
-	
-	
-	
 
-
-	
 	
 	/**
 	 * obtiene las lista de solicitudes pendientes, grupos a los cuales estan asigandos y sus respectivas prioridades
@@ -80,25 +74,16 @@ public class SolicitudServicioService {
 	}
 	
 	public List<SolicitudServicio> getSolicitudList(   int codigoTipoSolicitud) {
-
 		return solicitudServicioDao.getSolicitudList(codigoTipoSolicitud);
-
 	}
-	
-	
-	
+
 	public List<SolicitudServicio> getSolicitudListPorEstado(   int codigoEstado) {
 
 		return solicitudServicioDao.getSolicitudListPorEstado(codigoEstado);
 
 	}
 	
-	
-	
-	
-	
-	
-	
+
 	private String  getPriortidad( SolicitudServicio s ){
 		/*if(s.getTipoSolicitudServicio()!=null &&  s.getTipoSolicitudServicio().getCodigoTipo()==1){
 		}*/

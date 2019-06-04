@@ -1,7 +1,9 @@
 package pe.com.cablered.mistia.model;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
+
 import java.sql.Timestamp;
 
 
@@ -12,7 +14,7 @@ import java.sql.Timestamp;
 @Entity
 @Table(name="reclamos")
 @NamedQuery(name="Reclamo.findAll", query="SELECT r FROM Reclamo r")
-public class Reclamo implements Serializable {
+public class Reclamo extends ObjectBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -20,30 +22,31 @@ public class Reclamo implements Serializable {
 	private long numeroReclamo;
 
 	private String descripcion;
+	
+	@Column(name="necesidad")
+	private String necesidad; //<---
+	
+	@Column(name="solucion")
+	private String  solucion;//<---
+	
 
-	@Column(name="estacion_creacion")
-	private String estacionCreacion;
-
-	@Column(name="estacion_modifcion")
-	private String estacionModifcion;
-
-	@Column(name="fecha_cierre")
-	private Timestamp fechaCierre;
-
-	@Column(name="fecha_creacion")
-	private Timestamp fechaCreacion;
-
-	@Column(name="fecha_modificacion")
-	private Timestamp fechaModificacion;
-
+	@ManyToOne
+	@JoinColumn(name="codigo_estado")
+	private Estado estado; //<---
+	
+	@Column(name="plazo_atencion_horas")
+	private Integer plazoAtencionHoras; //<---
+	
+	
 	@Column(name="fecha_reclamo")
-	private Timestamp fechaReclamo;
+	private Timestamp fechaReclamo; // fecha registro
 
-	@Column(name="usuario_creacion")
-	private String usuarioCreacion;
+	
+	@Column(name="fecha_cierre")
+	private Timestamp fechaCierre; // fecha atencion
+	
 
-	@Column(name="usuario_modificacion")
-	private String usuarioModificacion;
+
 
 	//bi-directional many-to-one association to Motivo
 	@ManyToOne
@@ -69,21 +72,7 @@ public class Reclamo implements Serializable {
 		this.descripcion = descripcion;
 	}
 
-	public String getEstacionCreacion() {
-		return this.estacionCreacion;
-	}
 
-	public void setEstacionCreacion(String estacionCreacion) {
-		this.estacionCreacion = estacionCreacion;
-	}
-
-	public String getEstacionModifcion() {
-		return this.estacionModifcion;
-	}
-
-	public void setEstacionModifcion(String estacionModifcion) {
-		this.estacionModifcion = estacionModifcion;
-	}
 
 	public Timestamp getFechaCierre() {
 		return this.fechaCierre;
@@ -93,21 +82,7 @@ public class Reclamo implements Serializable {
 		this.fechaCierre = fechaCierre;
 	}
 
-	public Timestamp getFechaCreacion() {
-		return this.fechaCreacion;
-	}
 
-	public void setFechaCreacion(Timestamp fechaCreacion) {
-		this.fechaCreacion = fechaCreacion;
-	}
-
-	public Timestamp getFechaModificacion() {
-		return this.fechaModificacion;
-	}
-
-	public void setFechaModificacion(Timestamp fechaModificacion) {
-		this.fechaModificacion = fechaModificacion;
-	}
 
 	public Timestamp getFechaReclamo() {
 		return this.fechaReclamo;
@@ -117,21 +92,7 @@ public class Reclamo implements Serializable {
 		this.fechaReclamo = fechaReclamo;
 	}
 
-	public String getUsuarioCreacion() {
-		return this.usuarioCreacion;
-	}
 
-	public void setUsuarioCreacion(String usuarioCreacion) {
-		this.usuarioCreacion = usuarioCreacion;
-	}
-
-	public String getUsuarioModificacion() {
-		return this.usuarioModificacion;
-	}
-
-	public void setUsuarioModificacion(String usuarioModificacion) {
-		this.usuarioModificacion = usuarioModificacion;
-	}
 
 	public Motivo getMotivo() {
 		return this.motivo;
@@ -141,4 +102,36 @@ public class Reclamo implements Serializable {
 		this.motivo = motivo;
 	}
 
+	public String getNecesidad() {
+		return necesidad;
+	}
+
+	public void setNecesidad(String necesidad) {
+		this.necesidad = necesidad;
+	}
+
+	public String getSolucion() {
+		return solucion;
+	}
+
+	public void setSolucion(String solucion) {
+		this.solucion = solucion;
+	}
+
+
+
+	public Estado getEstado() {
+		return estado;
+	}
+
+	public void setEstado(Estado estado) {
+		this.estado = estado;
+	}
+
+	
+	
+	
+	
+	
+	
 }

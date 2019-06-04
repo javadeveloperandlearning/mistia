@@ -40,7 +40,6 @@ public class UsuarioService {
 	/**
 	 * autenticar
 	 * */
-
 	public ResponseSecurity loguear(Usuario usuario) {
 
 		
@@ -54,7 +53,7 @@ public class UsuarioService {
 
 		Usuario _usuario = usuarioRepository.validar(  usuario);
 
-		logger.info(" El usuario:" + usuario);
+		logger.info(" El usuario:" + usuario.toString());
 
 		/* El usuario y clave son incorrecto */
 		if (_usuario == null) {
@@ -162,7 +161,6 @@ public class UsuarioService {
 	
 	public Usuario getUsuarioSingle(Usuario usuario) {
 		Usuario usuario1 = usuarioRepository.getUsuarioSingle(usuario);
-		//logger.info("usuario : "+usuario1.getClave());
 		Usuario _usuario = (Usuario) usuario1.clone();
 		logger.info("claveee :"+_usuario.getClave());
 		_usuario.setClave(TripleDES.decrypt(_usuario.getClave()));

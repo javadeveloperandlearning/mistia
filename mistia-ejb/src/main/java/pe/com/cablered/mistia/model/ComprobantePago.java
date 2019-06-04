@@ -1,7 +1,9 @@
 package pe.com.cablered.mistia.model;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
+
 import java.math.BigDecimal;
 import java.util.Date;
 import java.sql.Timestamp;
@@ -67,6 +69,10 @@ public class ComprobantePago implements Serializable {
 	@OneToMany(mappedBy="comprobantePago")
 	private List<Pago> pagos;
 
+	@ManyToOne
+	@JoinColumn(name="codigo_estado")
+	private Estado  estado ;
+	
 	public ComprobantePago() {
 	}
 
@@ -211,5 +217,18 @@ public class ComprobantePago implements Serializable {
 
 		return pago;
 	}
+
+	public Estado getEstado() {
+		return estado;
+	}
+
+	public void setEstado(Estado estado) {
+		this.estado = estado;
+	}
+	
+	
+	
+	
+	
 
 }

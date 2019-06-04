@@ -73,9 +73,12 @@ public class TipoSolicitud implements Serializable {
 
 	public TipoSolicitud() {
 	}
-	
-	
-	
+
+	public TipoSolicitud(Integer codigoTipoSolicitud, String descripcion) {
+		super();
+		this.codigoTipoSolicitud = codigoTipoSolicitud;
+		this.descripcion = descripcion;
+	}
 
 	public TipoSolicitud(Integer codigoTipoSolicitud) {
 		super();

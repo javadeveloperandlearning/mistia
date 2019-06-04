@@ -11,12 +11,12 @@ public class EncryptUtils {
 	public static String sha256(String text) {
 
 		String str = null;
+                
 		try {
 
 			MessageDigest digest = null;
 			digest = MessageDigest.getInstance("SHA-1");
 			byte[] hash = digest.digest(text.getBytes(StandardCharsets.UTF_8));
-			// str = Base64.getEncoder().encodeToString(hash);
 			str =  byteToHex(hash);
 
 		} catch (NoSuchAlgorithmException e) {

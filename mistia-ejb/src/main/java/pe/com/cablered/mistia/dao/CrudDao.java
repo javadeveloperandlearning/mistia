@@ -34,6 +34,7 @@ public abstract class  CrudDao <T> {
 	public void create(T t) {
 		
 		Calendar cal = Calendar.getInstance();
+                
 		
 		try {
 			((ObjectBean)t).setEstacionCreacion(InetAddress.getLocalHost().getHostName());

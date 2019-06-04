@@ -187,4 +187,11 @@ public class Poste extends ObjectBean implements Serializable {
 		return solicitudServicio;
 	}
 
+    @Override
+    public String toString() {
+        return "Poste{" + "codigoPoste=" + codigoPoste + ", descripcion=" + descripcion + ", latitud=" + latitud + ", longitud=" + longitud +'}';
+    }
+        
+        
+
 }

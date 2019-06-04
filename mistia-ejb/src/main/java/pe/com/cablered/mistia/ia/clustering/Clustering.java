@@ -67,7 +67,6 @@ public class Clustering {
 		
 		// formando segmentos
 		List<Segmento> segmentos = new ArrayList<Segmento>();
-
 		// todos contra todos
 		for (Punto p1 : puntoList) {
 			for (Punto p2 : puntoList) {
@@ -82,54 +81,44 @@ public class Clustering {
 		System.out.println(" # de segmentos : "+segmentos.size());
 		// ordenamos los segementos
 		Collections.sort(segmentos);
-		//mostrarSegmentos(segmentos);
-		
-		
-		//######  aplicando estadistica 
-		
+                
+                
+		// --------------    inicio   aplicando estadistica ------------------
 		//hallamos el ancho de clase de la distancia de los segmentos
-		
 		double min  =  segmentos.get(0).getDistancia();
-		
 		double max  =  segmentos.get(segmentos.size()-1).getDistancia();
-		
 		double ancho = StatisticalMath.getAnchoClase(min, max, segmentos.size());
 		
 		System.out.println("min : "+min);
 		System.out.println("max : "+max);
 		System.out.println("ancho : "+ancho);
-		
-		
 
 		List<Limite> limites =   StatisticalMath.getLimites(min, max, ancho);
-		
 		List<Double> items =  new ArrayList<Double>();
 		for(Segmento s : segmentos){
 			items.add(s.getDistancia());
 		}
 		
 		List<Frecuencia> frecuencias =  StatisticalMath.getFrecuencias(limites, items);
-		
 		// ordenando frecuencias
 		Collections.sort(frecuencias, new FrecuenciaComparator1());
-		
 		mostrarFrecuencias(frecuencias);
-		
 
-		double meddist =  0 ;
-		
+		double meddist =  0 ;		
 		if(frecuencias!=null && frecuencias.size()>0){
 			 meddist =  frecuencias.get(frecuencias.size()-1).getLimite().getSuperior();
 		}
 		
 		System.out.println(" distancia ideal para formar grupos "+meddist);
 		
-		// finalizando esatidistica
+		// --------------    fin   aplicando estadistica ------------------
 		
+                
+                
+                
 	
 		// fitramos hasta la distancia media para obetner los segmentos candidatos para los grupos
 		List<Segmento> segmentocandidatos= new ArrayList<Segmento>();
-	
 		int idx = 0;
 		for (Segmento s : segmentos) {
 			if(s.getDistancia().intValue()<=meddist){
@@ -152,10 +141,8 @@ public class Clustering {
 		}
 		
 		System.out.println("costo total "+costototal);
-		
-		
-		
-		
+
+                
 		if(cantcluster==null  || cantcluster==0){
 			Double dcantcluster= costototal/costoPromedioCluster ;
 			cantcluster =  (int)Math.ceil(dcantcluster);
@@ -170,7 +157,7 @@ public class Clustering {
 		
 		
 		// creamos los clusters según datos estadisticos y pesos de los puntos 
-		// para este caso el tiempo
+		// para este caso el peso es el  tiempo
 		List<Map<Integer,Punto>> clusters =   new ArrayList<>();
 		Map <Integer,Punto> mpts = new HashMap<Integer, Punto>();  
 		clusters.add(mpts);
@@ -233,9 +220,7 @@ public class Clustering {
 				Integer i =  it.next();
 				Punto punto =  map.get(i);				
 				//libreria kmeans
-				
 				Point point =  new Point(punto.getLatitud(), punto.getLongitud());
-				//System.out.println(" point : "+point.toString());
 				points.add(point);
 			}
 			j++;
@@ -244,7 +229,7 @@ public class Clustering {
 		}
 		
 		
-		
+		// aplicamos el algoritmo kmeans
 		System.out.println("Aplicando algoritmo kmeans");	
 		List<Point> points = new ArrayList<>();
 		for(Punto p : puntoList){
@@ -259,20 +244,18 @@ public class Clustering {
 		
 		
 		System.out.println("Aplicando formato ");
-		// pasando a formato		
-	    clusters =   new ArrayList<>();
+                
+		// pasando a objetos de la aplicacion	
+                clusters =   new ArrayList<>();
 		for (Cluster cluster : _clusters) {
 			Map<Integer,Punto> mp =  new HashMap<Integer, Punto>();
 			for(Point p : cluster.getPoints()){
 				//System.out.println("punto kmean "+p.toString());
 				mp.put(  p.getNumber(), new Punto(p.getNumber(),p.getX(), p.getY(),0.0   ));
-				
 			}
 			clusters.add(mp);
 			
 		}
-
-
 		System.out.println("enviando clusters ");
 
 		return clusters;

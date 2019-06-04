@@ -24,7 +24,6 @@ import pe.com.cablered.mistia.model.Vehiculo;
 public class CuadrillaService  extends AbstractSevice<Cuadrilla> {
 	
 	
-	
 	final static Logger logger = Logger.getLogger(CuadrillaService.class);
 	
 	
@@ -160,6 +159,12 @@ public class CuadrillaService  extends AbstractSevice<Cuadrilla> {
 			throw new BusinessException(Response.ERROR, " El nombre de la cuadrilla ya se encuentra registrada para la fecha. Debe ingresar otra");
 		}
 	}
+
+    public List<Cuadrilla> getCuadrillaLibresList(Date fecPrgn) {
+       return cuadrillaDao.getCuadrillaLibresList(fecPrgn);
+    }
+
+
 	
 	
 	

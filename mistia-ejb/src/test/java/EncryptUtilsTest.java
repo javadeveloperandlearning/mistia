@@ -5,6 +5,7 @@ public class EncryptUtilsTest {
 	public static void main(String[] args) {
 		
 		System.out.println(EncryptUtils.sha256("admin"));
+                System.out.println(EncryptUtils.sha256("777777"));
 	}
 
 }

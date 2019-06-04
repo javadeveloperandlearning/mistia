@@ -155,6 +155,7 @@
         var infoWindow;
         var polygontarget;
         var markers = [];
+        var markers_around =  [];
         var circles = [];
         var gruposgenerados = [];
         var markerselect = null;
@@ -200,6 +201,8 @@
 
                     var long_name = results[0].address_components[0].long_name;
                     var myLatLng = results[0].geometry.location;
+                    console.log('my location');
+                    console.log(myLatLng);
                     if (long_name != null && long_name == Provincia) {
 
                         $("#pmensaje").css({color: 'red'})
@@ -207,6 +210,8 @@
                         $("#mensaje").dialog("open");
                         return false;
                     }
+                    
+                    var formatted_address =  results[0].formatted_address;
 
                     removeAllMark();
 
@@ -234,8 +239,6 @@
                                 mensaje = 'La dirección no tiene cobertura '
                                 pinColor = 'ff0000';
                             }
-
-
                             $("#pmensaje").css({color: 'balck'})
                             // respuesta exitosa de busqueda
                             console.log("long_name" + results[0].address_components[0].long_name);
@@ -256,6 +259,8 @@
 
                             //var myLatLng = {lat: -12.069051679036212, lng: -75.20355835952567};
                             //console.log('generando circulo');
+                            
+                            // ciruclo de ubicacion 
                             var cityCircle = new google.maps.Circle({
                                 strokeOpacity: 0.8,
                                 strokeWeight: 2,
@@ -268,25 +273,95 @@
                             });
 
                             var marker = new google.maps.Marker({
-
                                 position: myLatLng,
                                 map: map,
-                                descripcion: '<p><strong> Solicitud: Mi direción </strong> </p>',
+                                descripcion: '<p><strong> Dirección '+formatted_address+'</strong> </p>',
                                 draggable: true,
                                 icon: pinImage,
                                 shadow: pinShadow,
                                 editable: true,
                                 animation: google.maps.Animation.DROP
-
                             });
+                            
+                            var infowindow = new google.maps.InfoWindow({
+                                content: marker.descripcion
+                            });
+
+                            marker.addListener('mouseover', function () {
+                                infowindow.open(map, marker);
+                            });
+
+                            marker.addListener('mouseout', function () {
+                                infowindow.close();
+                            });
+                            
+                            
+                            
                             markers.push(marker);
                             circles.push(cityCircle);
+                            
+                            
                             map.setCenter(myLatLng);
                             map.setZoom(17);
-                            /*for (var idx in data['results']){
-                             console.log(results[idx].address_components[0].long_name);
-                             console.log(results[idx].geometry.location);
-                             }*/
+              
+                            
+                            for (var i = 0; i < postescercanos.length; i++) {
+                                
+                                var g = postescercanos[i];
+                                console.log('añadiendo poste');
+                                console.log(postescercanos[i]);
+                                
+                                var  tag  =  '<p>'+g.descripcion +' ('+g.latitudcentral+','+g.longitudcentral+')</p>';
+                                
+                                addMark(tag, g.numero, g.latitudcentral, g.longitudcentral) ;
+                                /*var _color = '#446600';
+                                var pColor = _color.substring(1, _color.length);
+                                var pImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + pColor,
+                                        new google.maps.Size(21, 34),
+                                        new google.maps.Point(0, 0),
+                                        new google.maps.Point(10, 34));
+
+                                var pShadow = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_shadow",
+                                        new google.maps.Size(40, 37),
+                                        new google.maps.Point(0, 0),
+                                        new google.maps.Point(12, 35));
+                                
+
+                                // poste 
+                                var _marker = new google.maps.Marker({
+                                    position: {lat: g.latitudcentral, lng: g.longitudcentral},
+                                    map: map,
+                                    descripcion: '<p>'+g.latitudcentral+','+g.longitudcentral+'</p>',
+                                    icon: pImage,
+                                    shadow: pShadow,
+                                    fillColor: "blue",
+                                    fillOpacity: .2,
+                                    strokeColor: 'white',
+                                    strokeWeight: .5,
+                                    scale: 10
+                                });
+                                
+                                
+                                var _infowindow = new google.maps.InfoWindow({
+                                    content: _marker.descripcion
+                                });
+
+                                _marker.addListener('mouseover', function () {
+                                    _infowindow.open(map, _marker);
+                                });
+
+                                _marker.addListener('mouseout', function () {
+                                    _infowindow.close();
+                                });
+                                
+                                markers_around.push(_marker);*/
+     
+    
+                            }
+              
+              
+              
+              
                         }});
 
 
@@ -397,32 +472,34 @@
                     new google.maps.Point(0, 0),
                     new google.maps.Point(12, 35));
 
+          
             /*var idx = 0;
-             for (var i = 0; i < nodos.length; i++) {
-             var g = nodos[i];
-             citymap[idx] = {
-             idx: g.numero,
-             name: g.descripcion,
-             center: {lat: g.latitudcentral, lng: g.longitudcentral},
-             population: 50,
-             color: g.color,
-             radio: g.radio,
-             area: g.area
-             };
-             // nodo 
-             new google.maps.Marker({
-             position: {lat: g.latitudcentral, lng: g.longitudcentral},
-             map: map,
-             icon: pImage,
-             shadow: pShadow,
-             fillColor: "blue",
-             fillOpacity: .2,
-             strokeColor: 'white',
-             strokeWeight: .5,
-             scale: 10
-             });
-             idx++;
-             }*/
+            for (var i = 0; i < nodos.length; i++) {
+                var g = nodos[i];
+                citymap[idx] = {
+                    idx: g.numero,
+                    name: g.descripcion,
+                    center: {lat: g.latitudcentral, lng: g.longitudcentral},
+                    population: 50,
+                    color: g.color,
+                    radio: g.radio,
+                    area: g.area
+                };
+                // nodo 
+                new google.maps.Marker({
+                    position: {lat: g.latitudcentral, lng: g.longitudcentral},
+                    map: map,
+                    icon: pImage,
+                    shadow: pShadow,
+                    fillColor: "blue",
+                    fillOpacity: .2,
+                    strokeColor: 'white',
+                    strokeWeight: .5,
+                    scale: 10
+                });
+                idx++;
+            }*/
+        
 
 
             // Define the LatLng coordinates for the polygon's path.
@@ -454,7 +531,7 @@
                 fillOpacity: 0.1
             });
             bermudaTriangle.setMap(map);
-           // addListenersOnPolygon(bermudaTriangle);
+            // addListenersOnPolygon(bermudaTriangle);
 
             /*  google.maps.event.addListener(map, 'click', function(e) {
              
@@ -482,6 +559,55 @@
 
 
         }
+
+
+
+
+
+        function addMark(tag, numero, _lat, _lon) {
+
+            var _color = '#ff0000';
+            var pColor = _color.substring(1, _color.length);
+            var pImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + pColor,
+                    new google.maps.Size(21, 34),
+                    new google.maps.Point(0, 0),
+                    new google.maps.Point(10, 34));
+                    
+             var iconBase = 'https://developers.google.com/maps/documentation/javascript/examples/full/images/';
+
+            var pShadow = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_shadow",
+                    new google.maps.Size(40, 37),
+                    new google.maps.Point(0, 0),
+                    new google.maps.Point(12, 35));
+
+            var marker = new google.maps.Marker({
+                position: {lat: _lat, lng: _lon},
+                map: map,
+                numero: numero,
+                descripcion: tag,
+                draggable: true,
+                icon: iconBase + 'info-i_maps.png',
+                shadow: pShadow,
+                editable: true,
+                animation: google.maps.Animation.DROP
+            });
+
+
+            var infowindow = new google.maps.InfoWindow({
+                content: marker.descripcion
+            });
+
+            marker.addListener('mouseover', function () {
+                infowindow.open(map, marker);
+            });
+
+            marker.addListener('mouseout', function () {
+                infowindow.close();
+            });
+
+            markers_around.push(marker);
+        }
+
 
 
         function removeAllMark() {

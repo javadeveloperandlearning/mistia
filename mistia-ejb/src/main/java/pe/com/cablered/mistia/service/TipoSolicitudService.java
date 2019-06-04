@@ -1,5 +1,6 @@
 package pe.com.cablered.mistia.service;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.ejb.Stateless;
@@ -18,7 +19,17 @@ public class TipoSolicitudService {
 	
 	public List<TipoSolicitud> getTipoSolicitudList(){
 		
-		return tipoSolicitudDao.getTipoSolicitudList();
+		List<TipoSolicitud> tipoSolicitudList = Collections.emptyList();
+		
+		try{
+		
+			tipoSolicitudList =   tipoSolicitudDao.getTipoSolicitudList();
+		
+		}catch (Exception e) {
+
+		}
+		
+		return tipoSolicitudList;
 	}
 	
 	

@@ -53,11 +53,23 @@ public class Usuario extends ObjectBean implements Serializable, Cloneable {
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario")
 	private List<UsuarioPerfil> usuarioPerfilList;
+        
+        @Column(name="cod_pers")
+        private Integer codPers;
 
 
 	public Usuario() {
 	}
+
+    public Usuario(String codUsua, String nombres, Integer ind_camb_clave, EstadoRegistro estadoRegistro, Integer codPers) {
+        this.codUsua = codUsua;
+        this.nombres = nombres;
+        this.ind_camb_clave = ind_camb_clave;
+        this.estadoRegistro = estadoRegistro;
+        this.codPers = codPers;
+    }
 	
+        
 	public Usuario(  String codUsua) {
 		
 		this.codUsua = codUsua;
@@ -146,6 +158,11 @@ public class Usuario extends ObjectBean implements Serializable, Cloneable {
 		this.claveConfirmacion = claveConfirmacion;
 	}
 
+        
+        
+        
+        
+        
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -181,6 +198,27 @@ public class Usuario extends ObjectBean implements Serializable, Cloneable {
 			return this;
 		}
 	}
+
+    /**
+     * @return the codPers
+     */
+    public Integer getCodPers() {
+        return codPers;
+    }
+
+    /**
+     * @param codPers the codPers to set
+     */
+    public void setCodPers(Integer codPers) {
+        this.codPers = codPers;
+    }
+
+    @Override
+    public String toString() {
+        return "Usuario{" + "codUsua=" + codUsua + ", nombres=" + nombres + ", clave=" + clave + ", fec_cadu=" + fec_cadu + ", fec_cadu_clave=" + fec_cadu_clave + ", ind_camb_clave=" + ind_camb_clave + ", num_cone=" + num_cone + ", claveConfirmacion=" + claveConfirmacion + '}';
+    }
+    
+    
 
 
 }

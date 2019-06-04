@@ -42,11 +42,6 @@ public class Programacion extends  ObjectBean implements Serializable {
 	@Column(name="fecha_programacion")
 	private Date fechaProgramacion;
 	
-	
-
-	
-	
-	
 
 	//bi-directional many-to-one association to Estado
 	@ManyToOne

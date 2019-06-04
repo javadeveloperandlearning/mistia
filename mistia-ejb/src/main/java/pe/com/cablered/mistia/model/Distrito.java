@@ -2,6 +2,7 @@ package pe.com.cablered.mistia.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 import java.sql.Timestamp;
@@ -15,6 +16,9 @@ import java.util.List;
 @Entity
 @Table(name="distritos")
 @NamedQuery(name="Distrito.findAll", query="SELECT d FROM Distrito d")
+//@JsonInclude(JsonInclude.Include.NON_EMPTY)
+
+@XmlRootElement(name = "distrito")
 public class Distrito implements Serializable {
 	private static final long serialVersionUID = 1L;
 

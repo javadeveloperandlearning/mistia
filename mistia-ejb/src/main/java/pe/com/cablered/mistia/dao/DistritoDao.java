@@ -35,11 +35,10 @@ public class DistritoDao  extends CrudDao<Distrito>{
 	public List<Distrito> getDistritoList(){
 		
 		logger.info(" metodo : getDistritoList");
-		
 		List<Distrito> distritoList =  Collections.EMPTY_LIST;
 		
 		try{
-			String sql =  "Select d from Distrito d";
+			String sql =  "Select new Distrito(d.codigoDistrito, d.descripcion) from Distrito d";
 			TypedQuery<Distrito> query =  getEntityManager().createQuery(sql, Distrito.class);	
 			distritoList =  query.getResultList();
 		}catch(Exception e){

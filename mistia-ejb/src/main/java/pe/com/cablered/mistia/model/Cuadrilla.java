@@ -8,6 +8,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 
@@ -38,7 +39,7 @@ public class Cuadrilla extends ObjectBean implements Serializable {
 	private BigDecimal gradoAsignacion;
 	
 	@Column(name="fecha_programacion")
-	private Timestamp fechaProgramacion;
+	private Date fechaProgramacion;
 	
 	
 
@@ -82,11 +83,11 @@ public class Cuadrilla extends ObjectBean implements Serializable {
 
 	
 
-	public Timestamp getFechaProgramacion() {
+	public Date getFechaProgramacion() {
 		return this.fechaProgramacion;
 	}
 
-	public void setFechaProgramacion(Timestamp fechaProgramacion) {
+	public void setFechaProgramacion(Date fechaProgramacion) {
 		this.fechaProgramacion = fechaProgramacion;
 	}
 

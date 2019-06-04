@@ -69,6 +69,9 @@ public class PlanTrabajoDetalleDao extends CrudDao<PlanTrabajoDetalle> {
 	
 	public List<PlanTrabajoDetalle> getPlanTrabajoDetalleList(Long numeroPlanTrabajo, Integer estadoProgramacion) {
 		
+            
+                logger.info(" metodo  : getPlanTrabajoDetalleList ");
+                logger.info(" numeroPlanTrabajo : "+numeroPlanTrabajo);
 		List<PlanTrabajoDetalle>  planTrabajoDetalleList = Collections.EMPTY_LIST;
 		try{
 			

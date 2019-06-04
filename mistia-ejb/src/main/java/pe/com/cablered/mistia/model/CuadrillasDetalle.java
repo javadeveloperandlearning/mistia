@@ -24,23 +24,6 @@ public class CuadrillasDetalle extends ObjectBean implements Serializable {
 	@Column(name="grado_asignacion")
 	private BigDecimal gradoAsignacion;
 
-	/*@Column(name="estacion_creacion")
-	private String estacionCreacion;
-
-	@Column(name="estacion_modifcion")
-	private String estacionModifcion;
-
-	@Column(name="fecha_creacion")
-	private Timestamp fechaCreacion;
-
-	@Column(name="fecha_modificacion")
-	private Timestamp fechaModificacion;
-
-	@Column(name="usuario_creacion")
-	private String usuarioCreacion;
-
-	@Column(name="usuario_modificacion")
-	private String usuarioModificacion;*/
 
 	//bi-directional many-to-one association to Cuadrilla
 	@ManyToOne(optional =false)

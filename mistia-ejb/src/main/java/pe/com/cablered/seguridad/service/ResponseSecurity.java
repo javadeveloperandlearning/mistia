@@ -38,6 +38,12 @@ public class ResponseSecurity  implements Serializable{
 	public void setData(Map<String, Object> data) {
 		this.data = data;
 	}
+
+    @Override
+    public String toString() {
+        return "ResponseSecurity{" + "codigo=" + codigo + ", message=" + message + ", data=" + data + '}';
+    }
 	
 	
+        
 }

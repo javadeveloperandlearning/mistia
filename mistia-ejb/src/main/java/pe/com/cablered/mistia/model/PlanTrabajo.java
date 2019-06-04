@@ -163,6 +163,11 @@ public class PlanTrabajo extends ObjectBean implements Serializable, Cloneable {
 			return false;
 		return true;
 	}
+
+    /*@Override
+    public String toString() {
+        return "PlanTrabajo{" + "numeroPlanTrabajo=" + numeroPlanTrabajo + ", fechaProgramacion=" + fechaProgramacion + ", cuadrilla=" + cuadrilla + ", grupoAtencion=" + grupoAtencion + ", planTrabajoDetalles=" + planTrabajoDetalles + ", programacionDetalles=" + programacionDetalles + '}';
+    }*/
 	
 	
 	

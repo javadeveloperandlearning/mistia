@@ -100,8 +100,11 @@ public class UsuarioDao extends CrudRepository<Usuario> {
 	 * 
 	 * */
 	public Usuario getUsuarioSingle(Usuario usuario) {
+            logger.info(" metodo  : getUsuarioSingle ######");
 
-		String sql = "Select u from Usuario u Join fetch u.estadoRegistro where u.codUsua  =:usuario ";
+		//String sql = "Select u from Usuario u Join fetch u.estadoRegistro where u.codUsua  =:usuario ";
+                
+                String sql = "Select new Usuario(u.codUsua, u.nombres, u.ind_camb_clave, u.estadoRegistro, u.codPers ) from Usuario u where u.codUsua  =:usuario ";
 		TypedQuery<Usuario> query = getEntityManager().createQuery(sql,
 				Usuario.class);
 		query.setParameter("usuario", usuario.getCodUsua());
@@ -112,5 +115,16 @@ public class UsuarioDao extends CrudRepository<Usuario> {
 		}
 		return null;
 	}
+        
+        /*
+        
+            public Usuario(String codUsua, String nombres, Integer ind_camb_clave, EstadoRegistro estadoRegistro, Integer codPers) {
+        this.codUsua = codUsua;
+        this.nombres = nombres;
+        this.ind_camb_clave = ind_camb_clave;
+        this.estadoRegistro = estadoRegistro;
+        this.codPers = codPers;
+    }
+        */
 
 }

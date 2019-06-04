@@ -23,9 +23,6 @@ public class ProgramacionDetalle extends ObjectBean implements Serializable {
 	private ProgramacionDetallePK id;
 	
 
-	//@Column(name="numero_plan_trabajo")
-	//private Long numeroPlanTrabajo;
-
 	
 	//bi-directional many-to-one association to PlanTrabajo
 	@ManyToOne

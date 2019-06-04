@@ -59,7 +59,17 @@ public class Estado implements Serializable {
 	
 	@OneToMany(mappedBy="estado")
 	private List<SolicitudServicioEstado> SolicitudServicioEstados;
+	
+	
+	@OneToMany(mappedBy="estado")
+	private List<Reclamo> reclamos;
 
+	@OneToMany(mappedBy="estado")
+	private List<ComprobantePago>  comprobantePagos; 
+	
+	
+	
+	
 
 	public Estado() {
 	}
@@ -193,6 +203,22 @@ public class Estado implements Serializable {
 
 	public void setSolicitudServicioEstados(List<SolicitudServicioEstado> solicitudServicioEstados) {
 		SolicitudServicioEstados = solicitudServicioEstados;
+	}
+
+	public List<Reclamo> getReclamos() {
+		return reclamos;
+	}
+
+	public void setReclamos(List<Reclamo> reclamos) {
+		this.reclamos = reclamos;
+	}
+
+	public List<ComprobantePago> getComprobantePagos() {
+		return comprobantePagos;
+	}
+
+	public void setComprobantePagos(List<ComprobantePago> comprobantePagos) {
+		this.comprobantePagos = comprobantePagos;
 	}
 	
 	

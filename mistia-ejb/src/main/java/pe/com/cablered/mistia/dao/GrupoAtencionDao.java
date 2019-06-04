@@ -64,10 +64,7 @@ public class GrupoAtencionDao  extends CrudDao<GrupoAtencion> {
 
 
 	public List<GrupoAtencion> getGruposAtencionPorProgramacion(Long numeroProgramacion) {
-		
-		
-		
-		
+
 		logger.info(" ## metodo : getGrupoAtencionDetalleListPorProgramacion ## "  );
 		
 		String sql = "Select distinct  a.grupoAtencion  "
@@ -86,13 +83,40 @@ public class GrupoAtencionDao  extends CrudDao<GrupoAtencion> {
 		
 
 	}
+        
+        
+        /**
+         Crear un nuevo grupo de atención
+        */
+        public void create( GrupoAtencion  grupoAtencion){ 
+           long ng =  getMax()+1;
+           grupoAtencion.setNumeroGrupoAtencion(ng);
+           super.create(grupoAtencion);
+           
+        }
+        
+        
+        public long getMax() {
+		long  max =  0;
+		try{
+				
+			String sql = "select max(g.numeroGrupoAtencion) from GrupoAtencion g";
+			TypedQuery<Long> query = getEntityManager().createQuery(sql,Long.class);
+			return ((Long)query.getSingleResult()).longValue();
+				
+		}catch(Exception e ){
+			e.printStackTrace();
+			logger.info(e);
+			logger.error(e);
+			return 0;
+		}
+		
+		
+	}
 	
 	
 	public Response remove(long numeroGrupoAtencion) {
-		
-		
-		Response response = new Response(Response.OK, Response.MSG_OK);
-		
+		Response response = new Response(Response.OK, Response.MSG_OK);	
 		try{	
 				
 		   String sql = "delete from GrupoAtencion p  where p.numeroGrupoAtencion = :pnumerogrupoatencion";

@@ -22,6 +22,7 @@ import pe.com.cablered.mistia.model.PlanTrabajo;
 import pe.com.cablered.mistia.model.PlanTrabajoDetalle;
 import pe.com.cablered.mistia.model.SolicitudServicio;
 import pe.com.cablered.mistia.util.ConstantBusiness;
+import pe.com.cablered.seguridad.model.Usuario;
 
 
 
@@ -129,5 +130,18 @@ public class EjecucionService {
 	
 	
 	// actualizar detalle de plan de trabajo
+
+    public PlanTrabajo getPlanTrabajo(Usuario usuario) {
+        PlanTrabajo planTrabajo = null;
+        try{
+            planTrabajo =  planTrabajoDao.getPlanTrabajo(usuario);
+        }catch(Exception e ){
+            e.printStackTrace();
+        }
+        
+        return planTrabajo;
+    }
+
+
 
 }

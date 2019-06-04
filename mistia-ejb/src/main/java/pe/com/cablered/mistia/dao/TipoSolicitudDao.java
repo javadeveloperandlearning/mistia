@@ -28,7 +28,7 @@ public class TipoSolicitudDao extends CrudDao<TipoSolicitud>{
 		
 		List<TipoSolicitud> tipoSolicitudList =  Collections.EMPTY_LIST;
 		try{
-			String sql =  " select t from TipoSolicitud  t";
+			String sql =  " select new TipoSolicitud(t.codigoTipoSolicitud, t.descripcion )from TipoSolicitud  t";
 			TypedQuery<TipoSolicitud> query =  getEntityManager().createQuery(sql, TipoSolicitud.class);	
 			tipoSolicitudList =  query.getResultList();
 		}catch(Exception e){
