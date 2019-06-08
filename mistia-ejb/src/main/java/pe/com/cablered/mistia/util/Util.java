@@ -117,6 +117,14 @@ public class Util {
 		return nombre;
 	}
 	
+        
+        public  static boolean  isEmpty(String value){
+             return (value==null|| (value!=null && value.trim().equals("")));
+        }
+        
+        public  static boolean  isEmpty(Integer value){
+             return (value==null);
+        }
 	
 	
 }

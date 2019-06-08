@@ -15,7 +15,7 @@ package pe.com.cablered.mistia.controller;
 	protected static final String CALIDA_ATENCION_CONSULTA_VIEW  = "/calidad_atencion.jsf";
 	protected static final String SOLICITUD_SERVICIO_CONSULTA_VIEW  = "/solicitud_servicio_consulta.jsf";
 	protected static final String SOLICITUD_SERVICIO_GENERAR_VIEW  = "/solicitud_servicio_generar.jsf";
-	protected static final String CLIENTE_CONSULTA_VIEW  = "/cliente_consulta.jsf";
+	protected static final String CLIENTE_CONSULTA_VIEW  = "/cliente.jsf";
 	
 	protected static final String PROGRAMACION_CONSULTA_VIEW =  "programacion_consulta.jsf";
 	protected static final String MONITOREAR_PLAN_TRABAJO_VIEW =  "monitorear_plan_trabajo.jsf";

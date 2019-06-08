@@ -13,159 +13,151 @@ import pe.com.cablered.mistia.service.Response;
 
 public abstract class BaseController<T extends ObjectBean> {
 
-	protected String action;
-	protected List<T> list;
-	protected ObjectBean object;
-	private String headerpopup;
-	private boolean disabled = false;
-	
-	
-	public static final  String NUEVO = "1";
-	public static final String EDITAR = "2";
-	
-	public static final  String NUEVO_KEY = "NUEVO";
-	public static final String EDITAR_KEY = "EDITAR";
-	public static final String SELECCIONE_LABEL = "--Seleccione--"; 
-	public static final int SELECCIONE_VALUE = 0; 
-	
+    protected String action;
+    protected List<T> list;
+    protected ObjectBean object;
+    private String headerpopup;
+    private boolean disabled = false;
 
-	
-	public static final String TODOS_LABEL = "--Todos--"; 
-	public static final int TODOS_VALUE = 0; 
-	
-	
-	protected  abstract FacesContext getFacesContext();
-	protected  abstract  AbstractSevice getService();
-	
-	/*public abstract ObjectBean getObject();
-	public abstract void setObject(ObjectBean object) ;*/
-	
+    public static final String NUEVO = "1";
+    public static final String EDITAR = "2";
 
-	public void nuevo() {
-		action = NUEVO;
-		disabled =  false;
-	}
+    public static final String NUEVO_KEY = "NUEVO";
+    public static final String EDITAR_KEY = "EDITAR";
+    public static final String SELECCIONE_LABEL = "--Seleccione--";
+    public static final int SELECCIONE_VALUE = 0;
 
-	public void editar(ObjectBean object) {
-		action = EDITAR;
-		disabled =  true;
-		if (object != null && list != null) {
-			int idx = list.indexOf(object);
-			if (idx != -1) {
-				//this.object = (ObjectBean) list.get(idx);
-				setObject((ObjectBean) list.get(idx));
-			}
-		}
-	}
+    public static final String TODOS_LABEL = "--Todos--";
+    public static final int TODOS_VALUE = 0;
 
-	public void grabar() {
-		
-		try {
-			
-			
-			FacesMessage msg = null;
-			Response response = null;
+    protected abstract FacesContext getFacesContext();
 
-			if (object != null) {
-				
-				if (action.equals(NUEVO)) {
-					response = getService().registrar(object);
-				} else if (action.equals(EDITAR)) {
-					response = getService().modificar(object);
-				}
-				
-				if(response!=null && response.getCodigo()==Response.OK){
-					mostrar();
-				}
-				
-				mostrarMensaje(response);
-			} else {
-				mostrarMensaje(new Response(Response.ERROR, "Objeto no válido"));
-			}
+    protected abstract AbstractSevice getService();
 
-		} catch (Exception e) {
+    
+    public void nuevo() {
+        action = NUEVO;
+        disabled = false;
+    }
 
-			e.printStackTrace();
+    public void editar(ObjectBean object) {
+        action = EDITAR;
+        disabled = true;
+        if (object != null && list != null) {
+            int idx = list.indexOf(object);
+            if (idx != -1) {
+                //this.object = (ObjectBean) list.get(idx);
+                setObject((ObjectBean) list.get(idx));
+            }
+        }
+    }
 
-		}
-	}
+    public void grabar() {
 
-	public void eliminar(ObjectBean object) {
+        try {
 
-		if (object != null) {
-			Response response = getService().eliminar(object);
-			if(response!=null && response.getCodigo()==Response.OK){
-				mostrar();
-			}
-			mostrarMensaje(response);
-			
-		} else {
+            FacesMessage msg = null;
+            Response response = null;
 
-			mostrarMensaje(new Response(Response.ERROR, "Objeto no válido"));
-		}
+            if (object != null) {
 
-	}
+                if (action.equals(NUEVO)) {
+                    response = getService().registrar(object);
+                } else if (action.equals(EDITAR)) {
+                    response = getService().modificar(object);
+                }
 
-	public abstract void mostrar();
-	
-	public abstract void reset();
-	
-	public abstract void limpiar();
+                if (response != null && response.getCodigo() == Response.OK) {
+                    mostrar();
+                }
 
-	public void mostrarMensaje(Response response) {
-		FacesMessage msg = new FacesMessage(response.getMensaje());
-		if (response != null && response.getCodigo() == Response.OK) {
-			msg.setSeverity(FacesMessage.SEVERITY_INFO);
-		} else {
-			msg.setSeverity(FacesMessage.SEVERITY_ERROR);
-			
-			RequestContext.getCurrentInstance().
-            addCallbackParam("notValid", true);
-			RequestContext.getCurrentInstance().
-            addCallbackParam("mensaje", response.getMensaje());
-		}
-		getFacesContext().addMessage(null, msg);
-	}
+                mostrarMensaje(response);
+            } else {
+                mostrarMensaje(new Response(Response.ERROR, "Objeto no válido"));
+            }
 
+        } catch (Exception e) {
 
+            e.printStackTrace();
 
-	public List getList() {
-		return list;
-	}
+        }
+    }
 
-	public void setList(List list) {
-		this.list = list;
-	}
+    public void eliminar(ObjectBean object) {
 
-	public ObjectBean getObject() {
-		return object;
-	}
+        if (object != null) {
+            Response response = getService().eliminar(object);
+            if (response != null && response.getCodigo() == Response.OK) {
+                mostrar();
+            }
+            mostrarMensaje(response);
 
-	public void setObject(ObjectBean object) {
-		this.object = object;
-	}
+        } else {
 
-	public String getHeaderpopup() {
-		return headerpopup;
-	}
+            mostrarMensaje(new Response(Response.ERROR, "Objeto no válido"));
+        }
 
-	public void setHeaderpopup(String headerpopup) {
-		this.headerpopup = headerpopup;
-	}
-	public String getAction() {
-		return action;
-	}
-	public void setAction(String action) {
-		this.action = action;
-	}
-	public boolean isDisabled() {
-		return disabled;
-	}
-	public void setDisabled(boolean disabled) {
-		this.disabled = disabled;
-	}
+    }
 
-	
-	
-	
+    public abstract void mostrar();
+
+    public abstract void reset();
+
+    public abstract void limpiar();
+
+    public void mostrarMensaje(Response response) {
+        FacesMessage msg = new FacesMessage(response.getMensaje());
+        if (response != null && response.getCodigo() == Response.OK) {
+            msg.setSeverity(FacesMessage.SEVERITY_INFO);
+        } else {
+            msg.setSeverity(FacesMessage.SEVERITY_ERROR);
+
+            RequestContext.getCurrentInstance().
+                    addCallbackParam("notValid", true);
+            RequestContext.getCurrentInstance().
+                    addCallbackParam("mensaje", response.getMensaje());
+        }
+        getFacesContext().addMessage(null, msg);
+    }
+
+    public List getList() {
+        return list;
+    }
+
+    public void setList(List list) {
+        this.list = list;
+    }
+
+    public ObjectBean getObject() {
+        return object;
+    }
+
+    public void setObject(ObjectBean object) {
+        this.object = object;
+    }
+
+    public String getHeaderpopup() {
+        return headerpopup;
+    }
+
+    public void setHeaderpopup(String headerpopup) {
+        this.headerpopup = headerpopup;
+    }
+
+    public String getAction() {
+        return action;
+    }
+
+    public void setAction(String action) {
+        this.action = action;
+    }
+
+    public boolean isDisabled() {
+        return disabled;
+    }
+
+    public void setDisabled(boolean disabled) {
+        this.disabled = disabled;
+    }
+
 }

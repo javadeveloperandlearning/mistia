@@ -7,133 +7,139 @@ import javax.xml.bind.annotation.XmlTransient;
 import java.sql.Timestamp;
 import java.util.List;
 
-
 /**
  * The persistent class for the departamentos database table.
- * 
+ *
  */
 @Entity
-@Table(name="departamentos")
-@NamedQuery(name="Departamento.findAll", query="SELECT d FROM Departamento d")
+@Table(name = "departamentos")
+@NamedQuery(name = "Departamento.findAll", query = "SELECT d FROM Departamento d")
 public class Departamento implements Serializable {
-	private static final long serialVersionUID = 1L;
 
-	@Id
-	@Column(name="codigo_departamento")
-	private Integer codigoDepartamento;
+    private static final long serialVersionUID = 1L;
 
-	private String descripcion;
+    @Id
+    @Column(name = "codigo_departamento")
+    private Integer codigoDepartamento;
 
-	@Column(name="estacion_creacion")
-	private String estacionCreacion;
+    private String descripcion;
 
-	@Column(name="estacion_modifcion")
-	private String estacionModifcion;
+    @Column(name = "estacion_creacion")
+    private String estacionCreacion;
 
-	@Column(name="fecha_creacion")
-	private Timestamp fechaCreacion;
+    @Column(name = "estacion_modifcion")
+    private String estacionModifcion;
 
-	@Column(name="fecha_modificacion")
-	private Timestamp fechaModificacion;
+    @Column(name = "fecha_creacion")
+    private Timestamp fechaCreacion;
 
-	@Column(name="usuario_creacion")
-	private String usuarioCreacion;
+    @Column(name = "fecha_modificacion")
+    private Timestamp fechaModificacion;
 
-	@Column(name="usuario_modificacion")
-	private String usuarioModificacion;
+    @Column(name = "usuario_creacion")
+    private String usuarioCreacion;
 
-	//bi-directional many-to-one association to Provincia
-	@OneToMany(mappedBy="departamento")
-	private List<Provincia> provincias;
+    @Column(name = "usuario_modificacion")
+    private String usuarioModificacion;
 
-	public Departamento() {
-	}
+    //bi-directional many-to-one association to Provincia
+    @OneToMany(mappedBy = "departamento")
+    private List<Provincia> provincias;
 
-	public Integer getCodigoDepartamento() {
-		return this.codigoDepartamento;
-	}
+    public Departamento() {
 
-	public void setCodigoDepartamento(Integer codigoDepartamento) {
-		this.codigoDepartamento = codigoDepartamento;
-	}
+    }
 
-	public String getDescripcion() {
-		return this.descripcion;
-	}
+    public Departamento(Integer codigoDepartamento, String descripcion) {
+        this.codigoDepartamento = codigoDepartamento;
+        this.descripcion = descripcion;
+    }
 
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
-	}
+    public Integer getCodigoDepartamento() {
+        return this.codigoDepartamento;
+    }
 
-	public String getEstacionCreacion() {
-		return this.estacionCreacion;
-	}
+    public void setCodigoDepartamento(Integer codigoDepartamento) {
+        this.codigoDepartamento = codigoDepartamento;
+    }
 
-	public void setEstacionCreacion(String estacionCreacion) {
-		this.estacionCreacion = estacionCreacion;
-	}
+    public String getDescripcion() {
+        return this.descripcion;
+    }
 
-	public String getEstacionModifcion() {
-		return this.estacionModifcion;
-	}
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
 
-	public void setEstacionModifcion(String estacionModifcion) {
-		this.estacionModifcion = estacionModifcion;
-	}
+    public String getEstacionCreacion() {
+        return this.estacionCreacion;
+    }
 
-	public Timestamp getFechaCreacion() {
-		return this.fechaCreacion;
-	}
+    public void setEstacionCreacion(String estacionCreacion) {
+        this.estacionCreacion = estacionCreacion;
+    }
 
-	public void setFechaCreacion(Timestamp fechaCreacion) {
-		this.fechaCreacion = fechaCreacion;
-	}
+    public String getEstacionModifcion() {
+        return this.estacionModifcion;
+    }
 
-	public Timestamp getFechaModificacion() {
-		return this.fechaModificacion;
-	}
+    public void setEstacionModifcion(String estacionModifcion) {
+        this.estacionModifcion = estacionModifcion;
+    }
 
-	public void setFechaModificacion(Timestamp fechaModificacion) {
-		this.fechaModificacion = fechaModificacion;
-	}
+    public Timestamp getFechaCreacion() {
+        return this.fechaCreacion;
+    }
 
-	public String getUsuarioCreacion() {
-		return this.usuarioCreacion;
-	}
+    public void setFechaCreacion(Timestamp fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
+    }
 
-	public void setUsuarioCreacion(String usuarioCreacion) {
-		this.usuarioCreacion = usuarioCreacion;
-	}
+    public Timestamp getFechaModificacion() {
+        return this.fechaModificacion;
+    }
 
-	public String getUsuarioModificacion() {
-		return this.usuarioModificacion;
-	}
+    public void setFechaModificacion(Timestamp fechaModificacion) {
+        this.fechaModificacion = fechaModificacion;
+    }
 
-	public void setUsuarioModificacion(String usuarioModificacion) {
-		this.usuarioModificacion = usuarioModificacion;
-	}
+    public String getUsuarioCreacion() {
+        return this.usuarioCreacion;
+    }
 
-	@XmlTransient
-	public List<Provincia> getProvincias() {
-		return this.provincias;
-	}
+    public void setUsuarioCreacion(String usuarioCreacion) {
+        this.usuarioCreacion = usuarioCreacion;
+    }
 
-	public void setProvincias(List<Provincia> provincias) {
-		this.provincias = provincias;
-	}
+    public String getUsuarioModificacion() {
+        return this.usuarioModificacion;
+    }
 
-	public Provincia addProvincia(Provincia provincia) {
-		getProvincias().add(provincia);
-		provincia.setDepartamento(this);
+    public void setUsuarioModificacion(String usuarioModificacion) {
+        this.usuarioModificacion = usuarioModificacion;
+    }
 
-		return provincia;
-	}
+    @XmlTransient
+    public List<Provincia> getProvincias() {
+        return this.provincias;
+    }
 
-	public Provincia removeProvincia(Provincia provincia) {
-		getProvincias().remove(provincia);
-		provincia.setDepartamento(null);
+    public void setProvincias(List<Provincia> provincias) {
+        this.provincias = provincias;
+    }
 
-		return provincia;
-	}
+    public Provincia addProvincia(Provincia provincia) {
+        getProvincias().add(provincia);
+        provincia.setDepartamento(this);
+
+        return provincia;
+    }
+
+    public Provincia removeProvincia(Provincia provincia) {
+        getProvincias().remove(provincia);
+        provincia.setDepartamento(null);
+
+        return provincia;
+    }
 
 }

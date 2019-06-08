@@ -15,7 +15,7 @@ import pe.com.cablered.mistia.model.ObjectBean;
 public abstract class  CrudDao <T> {
 	
 	
-	private Class<T> entityClass;
+	private Class<T> entityClass;   
 	
 	public CrudDao() {
 		

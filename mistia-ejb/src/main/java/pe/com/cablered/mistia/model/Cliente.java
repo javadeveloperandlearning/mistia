@@ -5,255 +5,365 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.List;
 
-
 /**
  * The persistent class for the clientes database table.
- * 
+ *
  */
 @Entity
-@Table(name="clientes")
-@NamedQuery(name="Cliente.findAll", query="SELECT c FROM Cliente c")
-public class Cliente implements Serializable {
-	private static final long serialVersionUID = 1L;
+@Table(name = "clientes")
+@NamedQuery(name = "Cliente.findAll", query = "SELECT c FROM Cliente c")
+public class Cliente extends ObjectBean implements Serializable {
 
-	@Id
-	@Column(name="codigo_cliente")
-	private Integer codigoCliente;
+    private static final long serialVersionUID = 1L;
 
-	private String apellidos;
+    @Id
+    @Column(name = "codigo_cliente")
+    private Integer codigoCliente;
 
-	@Column(name="codigo_distrito")
-	private Integer codigoDistrito;
+    //@Column(name = "apellidos")
+    //private String apellidos;
+    
+    @Column(name = "apellido_materno")
+    private String apellidoMaterno;
+    
+    
+    @Column(name = "apellido_paterno")
+    private String apellidoPaterno;
+      
 
-	private String direccion;
+    @Column(name = "codigo_distrito")
+    private Integer codigoDistrito;
 
-	private String dni;
+    @Column(name = "direccion")
+    private String direccion;
 
-	@Column(name="estacion_creacion")
-	private String estacionCreacion;
+    //private String dni;
+    @Column(name = "estacion_creacion")
+    private String estacionCreacion;
 
-	@Column(name="estacion_modifcion")
-	private String estacionModifcion;
+    @Column(name = "estacion_modificacion")
+    private String estacionModificacion;
 
-	@Column(name="fecha_creacion")
-	private Timestamp fechaCreacion;
+    @Column(name = "fecha_creacion")
+    private Timestamp fechaCreacion;
 
-	@Column(name="fecha_modificacion")
-	private Timestamp fechaModificacion;
+    @Column(name = "fecha_modificacion")
+    private Timestamp fechaModificacion;
 
-	private String nombres;
+    @Column(name = "nombres")
+    private String nombres;
 
-	private String telefono;
+    @Column(name = "telefono")
+    private String telefono;
 
-	@Column(name="usuario_creacion")
-	private String usuarioCreacion;
+    @Column(name = "usuario_creacion")
+    private String usuarioCreacion;
 
-	@Column(name="usuario_modificacion")
-	private String usuarioModificacion;
+    @Column(name = "usuario_modificacion")
+    private String usuarioModificacion;
 
-	//bi-directional many-to-one association to ComprobantePago
-	@OneToMany(mappedBy="cliente")
-	private List<ComprobantePago> comprobantePagos;
+    @Column(name = "tipo_documento")
+    private Integer tipoDocumento;
 
-	//bi-directional many-to-one association to DocumentoCompromiso
-	@OneToMany(mappedBy="cliente")
-	private List<DocumentoCompromiso> documentoCompromisos;
-	
-	@OneToMany(mappedBy="cliente")
-	private List<ContratoServicio> contratoServicios;
-	
-	
-	
+    @Column(name = "documento_identidad")
+    private String documentoIdentidad;
 
-	public Cliente() {
-	}
+    @Column(name = "nombre_razon_social")
+    private String nombreRazonSocial;
 
-	public Cliente(Integer codigoCliente) {
-		this.codigoCliente =  codigoCliente;
-	}
+    @Column(name = "telefono_movil")
+    private String telefonoMovil;
 
-	public Integer getCodigoCliente() {
-		return this.codigoCliente;
-	}
+    @Column(name = "sexo")
+    private Integer sexo;
 
-	public void setCodigoCliente(Integer codigoCliente) {
-		this.codigoCliente = codigoCliente;
-	}
+    @Column(name = "email")
+    private String email;
 
-	public String getApellidos() {
-		return this.apellidos;
-	}
+    @Column(name = "numero_ruc")
+    private String numeroRuc;
 
-	public void setApellidos(String apellidos) {
-		this.apellidos = apellidos;
-	}
+    //bi-directional many-to-one association to ComprobantePago
+    @OneToMany(mappedBy = "cliente")
+    private List<ComprobantePago> comprobantePagos;
 
-	public Integer getCodigoDistrito() {
-		return this.codigoDistrito;
-	}
+    //bi-directional many-to-one association to DocumentoCompromiso
+    @OneToMany(mappedBy = "cliente")
+    private List<DocumentoCompromiso> documentoCompromisos;
 
-	public void setCodigoDistrito(Integer codigoDistrito) {
-		this.codigoDistrito = codigoDistrito;
-	}
+    @OneToMany(mappedBy = "cliente")
+    private List<ContratoServicio> contratoServicios;
 
-	public String getDireccion() {
-		return this.direccion;
-	}
+    public Cliente() {
+    }
 
-	public void setDireccion(String direccion) {
-		this.direccion = direccion;
-	}
+    public Cliente(Integer codigoCliente) {
+        this.codigoCliente = codigoCliente;
+    }
 
-	public String getDni() {
+    public Integer getCodigoCliente() {
+        return this.codigoCliente;
+    }
+
+    public void setCodigoCliente(Integer codigoCliente) {
+        this.codigoCliente = codigoCliente;
+    }
+
+    
+    //@Transient
+    public String getApellidos() {
+       return apellidoMaterno +" "+apellidoPaterno;
+               
+    }
+/*
+    public void setApellidos(String apellidos) {
+        this.apellidos = apellidos;
+    }*/
+
+    public Integer getCodigoDistrito() {
+        return this.codigoDistrito;
+    }
+
+    public void setCodigoDistrito(Integer codigoDistrito) {
+        this.codigoDistrito = codigoDistrito;
+    }
+
+    public String getDireccion() {
+        return this.direccion;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
+    }
+
+    /*public String getDni() {
 		return this.dni;
-	}
+    }
 
-	public void setDni(String dni) {
+    public void setDni(String dni) {
 		this.dni = dni;
-	}
+    }
+    */
+    public String getEstacionCreacion() {
+        return this.estacionCreacion;
+    }
 
-	public String getEstacionCreacion() {
-		return this.estacionCreacion;
-	}
+    public void setEstacionCreacion(String estacionCreacion) {
+        this.estacionCreacion = estacionCreacion;
+    }
 
-	public void setEstacionCreacion(String estacionCreacion) {
-		this.estacionCreacion = estacionCreacion;
-	}
+    public String getEstacionModificacion() {
+        return estacionModificacion;
+    }
 
-	public String getEstacionModifcion() {
-		return this.estacionModifcion;
-	}
+    public void setEstacionModificacion(String estacionModificacion) {
+        this.estacionModificacion = estacionModificacion;
+    }
 
-	public void setEstacionModifcion(String estacionModifcion) {
-		this.estacionModifcion = estacionModifcion;
-	}
+    public Timestamp getFechaCreacion() {
+        return this.fechaCreacion;
+    }
 
-	public Timestamp getFechaCreacion() {
-		return this.fechaCreacion;
-	}
+    public void setFechaCreacion(Timestamp fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
+    }
 
-	public void setFechaCreacion(Timestamp fechaCreacion) {
-		this.fechaCreacion = fechaCreacion;
-	}
+    public Timestamp getFechaModificacion() {
+        return this.fechaModificacion;
+    }
 
-	public Timestamp getFechaModificacion() {
-		return this.fechaModificacion;
-	}
+    public void setFechaModificacion(Timestamp fechaModificacion) {
+        this.fechaModificacion = fechaModificacion;
+    }
 
-	public void setFechaModificacion(Timestamp fechaModificacion) {
-		this.fechaModificacion = fechaModificacion;
-	}
+    public String getNombres() {
+        return this.nombres;
+    }
 
-	public String getNombres() {
-		return this.nombres;
-	}
+    public void setNombres(String nombres) {
+        this.nombres = nombres;
+    }
 
-	public void setNombres(String nombres) {
-		this.nombres = nombres;
-	}
+    public String getTelefono() {
+        return this.telefono;
+    }
 
-	public String getTelefono() {
-		return this.telefono;
-	}
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
 
-	public void setTelefono(String telefono) {
-		this.telefono = telefono;
-	}
+    public String getUsuarioCreacion() {
+        return this.usuarioCreacion;
+    }
 
-	public String getUsuarioCreacion() {
-		return this.usuarioCreacion;
-	}
+    public void setUsuarioCreacion(String usuarioCreacion) {
+        this.usuarioCreacion = usuarioCreacion;
+    }
 
-	public void setUsuarioCreacion(String usuarioCreacion) {
-		this.usuarioCreacion = usuarioCreacion;
-	}
+    public String getUsuarioModificacion() {
+        return this.usuarioModificacion;
+    }
 
-	public String getUsuarioModificacion() {
-		return this.usuarioModificacion;
-	}
+    public void setUsuarioModificacion(String usuarioModificacion) {
+        this.usuarioModificacion = usuarioModificacion;
+    }
 
-	public void setUsuarioModificacion(String usuarioModificacion) {
-		this.usuarioModificacion = usuarioModificacion;
-	}
+    public Integer getTipoDocumento() {
+        return tipoDocumento;
+    }
 
-	public List<ComprobantePago> getComprobantePagos() {
-		return this.comprobantePagos;
-	}
+    public void setTipoDocumento(Integer tipoDocumento) {
+        this.tipoDocumento = tipoDocumento;
+    }
 
-	public void setComprobantePagos(List<ComprobantePago> comprobantePagos) {
-		this.comprobantePagos = comprobantePagos;
-	}
+    public String getDocumentoIdentidad() {
+        return documentoIdentidad;
+    }
 
-	public ComprobantePago addComprobantePago(ComprobantePago comprobantePago) {
-		getComprobantePagos().add(comprobantePago);
-		comprobantePago.setCliente(this);
+    public void setDocumentoIdentidad(String documentoIdentidad) {
+        this.documentoIdentidad = documentoIdentidad;
+    }
 
-		return comprobantePago;
-	}
+    public String getNombreRazonSocial() {
+        return nombreRazonSocial;
+    }
 
-	public ComprobantePago removeComprobantePago(ComprobantePago comprobantePago) {
-		getComprobantePagos().remove(comprobantePago);
-		comprobantePago.setCliente(null);
+    public void setNombreRazonSocial(String nombreRazonSocial) {
+        this.nombreRazonSocial = nombreRazonSocial;
+    }
 
-		return comprobantePago;
-	}
+    public String getTelefonoMovil() {
+        return telefonoMovil;
+    }
 
-	public List<DocumentoCompromiso> getDocumentoCompromisos() {
-		return this.documentoCompromisos;
-	}
+    public void setTelefonoMovil(String telefonoMovil) {
+        this.telefonoMovil = telefonoMovil;
+    }
 
-	public void setDocumentoCompromisos(List<DocumentoCompromiso> documentoCompromisos) {
-		this.documentoCompromisos = documentoCompromisos;
-	}
+    public Integer getSexo() {
+        return sexo;
+    }
 
-	public DocumentoCompromiso addDocumentoCompromiso(DocumentoCompromiso documentoCompromiso) {
-		getDocumentoCompromisos().add(documentoCompromiso);
-		documentoCompromiso.setCliente(this);
+    public void setSexo(Integer sexo) {
+        this.sexo = sexo;
+    }
 
-		return documentoCompromiso;
-	}
+    public String getEmail() {
+        return email;
+    }
 
-	public DocumentoCompromiso removeDocumentoCompromiso(DocumentoCompromiso documentoCompromiso) {
-		getDocumentoCompromisos().remove(documentoCompromiso);
-		documentoCompromiso.setCliente(null);
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-		return documentoCompromiso;
-	}
+    public String getNumeroRuc() {
+        return numeroRuc;
+    }
 
-	public List<ContratoServicio> getContratoServicios() {
-		return contratoServicios;
-	}
+    public void setNumeroRuc(String numeroRuc) {
+        this.numeroRuc = numeroRuc;
+    }
 
-	public void setContratoServicios(List<ContratoServicio> contratoServicios) {
-		this.contratoServicios = contratoServicios;
-	}
+    public String getApellidoMaterno() {
+        return apellidoMaterno;
+    }
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((codigoCliente == null) ? 0 : codigoCliente.hashCode());
-		return result;
-	}
+    public void setApellidoMaterno(String apellidoMaterno) {
+        this.apellidoMaterno = apellidoMaterno;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Cliente other = (Cliente) obj;
-		if (codigoCliente == null) {
-			if (other.codigoCliente != null)
-				return false;
-		} else if (!codigoCliente.equals(other.codigoCliente))
-			return false;
-		return true;
-	}
+    public String getApellidoPaterno() {
+        return apellidoPaterno;
+    }
 
-	
-	
-	
+    public void setApellidoPaterno(String apellidoPaterno) {
+        this.apellidoPaterno = apellidoPaterno;
+    }
+    
+    
+    
+    
+
+    public List<ComprobantePago> getComprobantePagos() {
+        return this.comprobantePagos;
+    }
+
+    public void setComprobantePagos(List<ComprobantePago> comprobantePagos) {
+        this.comprobantePagos = comprobantePagos;
+    }
+
+    public ComprobantePago addComprobantePago(ComprobantePago comprobantePago) {
+        getComprobantePagos().add(comprobantePago);
+        comprobantePago.setCliente(this);
+
+        return comprobantePago;
+    }
+
+    public ComprobantePago removeComprobantePago(ComprobantePago comprobantePago) {
+        getComprobantePagos().remove(comprobantePago);
+        comprobantePago.setCliente(null);
+
+        return comprobantePago;
+    }
+
+    public List<DocumentoCompromiso> getDocumentoCompromisos() {
+        return this.documentoCompromisos;
+    }
+
+    public void setDocumentoCompromisos(List<DocumentoCompromiso> documentoCompromisos) {
+        this.documentoCompromisos = documentoCompromisos;
+    }
+
+    public DocumentoCompromiso addDocumentoCompromiso(DocumentoCompromiso documentoCompromiso) {
+        getDocumentoCompromisos().add(documentoCompromiso);
+        documentoCompromiso.setCliente(this);
+
+        return documentoCompromiso;
+    }
+
+    public DocumentoCompromiso removeDocumentoCompromiso(DocumentoCompromiso documentoCompromiso) {
+        getDocumentoCompromisos().remove(documentoCompromiso);
+        documentoCompromiso.setCliente(null);
+
+        return documentoCompromiso;
+    }
+
+    public List<ContratoServicio> getContratoServicios() {
+        return contratoServicios;
+    }
+
+    public void setContratoServicios(List<ContratoServicio> contratoServicios) {
+        this.contratoServicios = contratoServicios;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((codigoCliente == null) ? 0 : codigoCliente.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        Cliente other = (Cliente) obj;
+        if (codigoCliente == null) {
+            if (other.codigoCliente != null) {
+                return false;
+            }
+        } else if (!codigoCliente.equals(other.codigoCliente)) {
+            return false;
+        }
+        return true;
+    }
+
 }
