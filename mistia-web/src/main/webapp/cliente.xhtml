@@ -184,7 +184,7 @@
                     </p:confirmDialog>
                 </h:form>
 
-               
+
                 <p:growl id="messages" widgetVar="messages" />
 
                 <h:form id="formsave"  >
@@ -193,64 +193,93 @@
 
                         <p:panel  header="Datos del cliente">
 
-                            <p:panelGrid id="grid" columns="4"  layout="grid"  styleClass="ui-panelgrid-blank"  >
 
-                                <p:outputLabel>Tipo documento: </p:outputLabel>
-                                <p:selectOneMenu id="cmbtipodocu"  tabindex="1"  value="#{clienteview.cliente.tipoDocumento}"  >
-                                    <f:selectItems value="#{clienteview.tipoList}" 
-                                                   var="tipo" itemValue="#{tipo.codigoTipo}" itemLabel="#{tipo.descripcion}" />
-                                </p:selectOneMenu>
-
-                                <p:outputLabel>Apellido paterno: </p:outputLabel>
-                                <p:inputText id="txtuapellidopaterno"
-                                             value="#{clienteview.cliente.apellidoPaterno}" tabindex="6"
-                                             maxlength="50"  />
-
-                                <p:outputLabel>Número cliente: </p:outputLabel>
-                                <p:inputText id="txtunnumero" disabled="true"  tabindex="2"
-                                             value="#{clienteview.cliente.codigoCliente}" 
-                                             />
-
-                                <p:outputLabel>Apellido materno </p:outputLabel>
-                                <p:inputText id="txtuapellidomaterno" tabindex="7"
-                                             value="#{clienteview.cliente.apellidoMaterno}"
-                                             maxlength="50"  />
+                            <p:panelGrid columns="2"  layout="grid" styleClass="ui-panelgrid-blank"  >
 
 
-                                <p:outputLabel>Razón social </p:outputLabel>
-                                <p:inputText id="txturazonsocial" tabindex="3"
-                                             value="#{clienteview.cliente.nombreRazonSocial}" 
-                                             maxlength="50" 
-                                             />
-
-                                <p:outputLabel>Nombres: </p:outputLabel>
-                                <p:inputText id="txtunombres" tabindex="8"
-                                             value="#{clienteview.cliente.nombres}" 
-                                             maxlength="50" 
-                                             />
-
-                                <p:outputLabel>Teléfono fijo: </p:outputLabel>
-                                <p:inputText id="txttelefono" tabindex="4"
-                                             value="#{clienteview.cliente.telefono}" 
-                                             maxlength="15" 
-                                             />
-
-                                <p:outputLabel>Sexo: </p:outputLabel>
-                                <p:selectOneRadio  id="console" value="#{clienteview.cliente.sexo}" tabindex="9"   >
-                                    <f:selectItem itemLabel="Masculino" itemValue="1"   />
-                                    <f:selectItem itemLabel="Femenino" itemValue="2" />
-                                </p:selectOneRadio>
+                                <p:panelGrid  columns="2" layout="grid"  styleClass="ui-panelgrid-blank"  >
+                                    <p:outputLabel>Tipo documento: </p:outputLabel>
+                                    <p:selectOneMenu id="cmbtipodocu"  tabindex="1"  value="#{clienteview.cliente.tipoDocumento}"  >
+                                        <f:selectItems value="#{clienteview.tipoList}" 
+                                                       var="tipo" itemValue="#{tipo.codigoTipo}" itemLabel="#{tipo.descripcion}" />
+                                    </p:selectOneMenu>
 
 
-                                <p:outputLabel>Telefono móvil: </p:outputLabel>
-                                <p:inputText id="txttelefonomovil" tabindex="5"
-                                             value="#{clienteview.cliente.telefonoMovil}" maxlength="15"  />
+                                    <p:outputLabel>Número cliente: </p:outputLabel>
+                                    <p:inputText id="txtunnumero" disabled="true"  tabindex="2"
+                                                 value="#{clienteview.cliente.codigoCliente}" 
+                                                 />
 
-                                <p:outputLabel>Email: </p:outputLabel>
-                                <p:inputText id="txtemail" tabindex="10"
-                                             value="#{clienteview.cliente.email}" maxlength="50"    />
+                                    <p:outputLabel>Razón social </p:outputLabel>
+                                    <p:inputText id="txturazonsocial" tabindex="3"
+                                                 value="#{clienteview.cliente.nombreRazonSocial}" 
+                                                 maxlength="50" 
+                                                 />
+
+                                    <p:outputLabel>Ruc </p:outputLabel>
+                                    <p:inputText id="txtnumeroruc" tabindex="4"
+                                                 value="#{clienteview.cliente.numeroRuc}" 
+                                                 maxlength="15" 
+                                                 />
+
+                                    <p:outputLabel>Teléfono fijo: </p:outputLabel>
+                                    <p:inputText id="txttelefono" tabindex="5"
+                                                 value="#{clienteview.cliente.telefono}" 
+                                                 maxlength="15" 
+                                                 />
+
+                                    <p:outputLabel>Telefono móvil: </p:outputLabel>
+                                    <p:inputText id="txttelefonomovil" tabindex="6"
+                                                 value="#{clienteview.cliente.telefonoMovil}" maxlength="15"  />
+
+                                </p:panelGrid>
+
+
+
+
+
+                                <p:panelGrid  columns="2" layout="grid"  styleClass="ui-panelgrid-blank"  >
+
+                                    <p:outputLabel>Apellido paterno: </p:outputLabel>
+                                    <p:inputText id="txtuapellidopaterno"
+                                                 value="#{clienteview.cliente.apellidoPaterno}" tabindex="7"
+                                                 maxlength="50"  />
+
+
+
+                                    <p:outputLabel>Apellido materno </p:outputLabel>
+                                    <p:inputText id="txtuapellidomaterno" tabindex="8"
+                                                 value="#{clienteview.cliente.apellidoMaterno}"
+                                                 maxlength="50"  />
+
+
+
+
+                                    <p:outputLabel>Nombres: </p:outputLabel>
+                                    <p:inputText id="txtunombres" tabindex="9"
+                                                 value="#{clienteview.cliente.nombres}" 
+                                                 maxlength="50" 
+                                                 />
+
+
+
+                                    <p:outputLabel>Sexo: </p:outputLabel>
+                                    <p:selectOneRadio  id="console" value="#{clienteview.cliente.sexo}" tabindex="10"   >
+                                        <f:selectItem itemLabel="Masculino" itemValue="1"   />
+                                        <f:selectItem itemLabel="Femenino" itemValue="2" />
+                                    </p:selectOneRadio>
+
+
+
+                                    <p:outputLabel>Email: </p:outputLabel>
+                                    <p:inputText id="txtemail" tabindex="11"
+                                                 value="#{clienteview.cliente.email}" maxlength="50"    />
+                                </p:panelGrid>
 
                             </p:panelGrid>
+
+
+
                         </p:panel> 
 
                         <p:panel  header="Domicilio del cliente">
@@ -261,14 +290,14 @@
                                 <p:panelGrid  columns="2" layout="grid"  styleClass="ui-panelgrid-blank"  >
 
                                     <p:outputLabel>Departamento: </p:outputLabel>
-                                    <p:selectOneMenu id="cmbdepartametnto" value="#{clienteview.codigoDepartamento}"  style="width: 100%" tabindex="11"  >
+                                    <p:selectOneMenu id="cmbdepartametnto" value="#{clienteview.codigoDepartamento}"  style="width: 100%" tabindex="12"  >
                                         <f:selectItems value="#{clienteview.departamentoList}"
                                                        var="depa" itemValue="#{depa.codigoDepartamento}" itemLabel="#{depa.descripcion}" />
                                     </p:selectOneMenu>
 
 
                                     <p:outputLabel>Provincia: </p:outputLabel>
-                                    <p:selectOneMenu id="cmbprovincia"  value="#{clienteview.codigoProvincia}"  style="width: 100%" tabindex="12"  >
+                                    <p:selectOneMenu id="cmbprovincia"  value="#{clienteview.codigoProvincia}"  style="width: 100%" tabindex="13"  >
 
                                         <f:ajax event="valueChange" render="cmbdistrito" listener="#{clienteview.actualizarDistritos()}" />
 
@@ -277,7 +306,7 @@
                                     </p:selectOneMenu>   
 
                                     <p:outputLabel>Distrito: </p:outputLabel>
-                                    <p:selectOneMenu id="cmbdistrito"  value="#{clienteview.cliente.codigoDistrito}"   style="width: 100%" tabindex="13"  >
+                                    <p:selectOneMenu id="cmbdistrito"  value="#{clienteview.cliente.codigoDistrito}"   style="width: 100%" tabindex="14"  >
                                         <f:selectItems value="#{clienteview.distritoList}"
                                                        var="dis" itemValue="#{dis.codigoDistrito}" itemLabel="#{dis.descripcion}" />
                                     </p:selectOneMenu>      
@@ -286,7 +315,7 @@
 
                                 <p:panelGrid  columns="1"   styleClass="ui-panelgrid-blank"  >
                                     <p:outputLabel>Dirección </p:outputLabel>    
-                                    <p:inputTextarea rows="10" cols="50" value="#{clienteview.cliente.direccion}" queryDelay="750" minQueryLength="4" tabindex="14" />
+                                    <p:inputTextarea rows="10" cols="50" value="#{clienteview.cliente.direccion}" queryDelay="750" minQueryLength="4" tabindex="15" />
                                 </p:panelGrid>
 
 
@@ -319,18 +348,18 @@
 
                 <h:outputScript target="head">
                     function handleSaveRequest(xhr, status, args) {
-                        if( args.notValid || args.validationFailed){
-                            if(args.mensaje!=null){
+                    if( args.notValid || args.validationFailed){
+                    if(args.mensaje!=null){
 
-                                //alert("Enviando alertas");
-                                PF('messages').renderMessage({ detail: args.mensaje, severity: 'warm'});
-                            }
-                            return;
-                        }else{
-                            PF('dlgsave').hide();
-                            PF('messages').renderMessage({ detail: 'Operación realizada con éxito', severity: 'info'});
-                            updateDataTable();
-                        }  
+                    //alert("Enviando alertas");
+                    PF('messages').renderMessage({ detail: args.mensaje, severity: 'warm'});
+                    }
+                    return;
+                    }else{
+                    PF('dlgsave').hide();
+                    PF('messages').renderMessage({ detail: 'Operación realizada con éxito', severity: 'info'});
+                    updateDataTable();
+                    }  
                     }  
                 </h:outputScript>
 
