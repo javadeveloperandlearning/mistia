@@ -80,6 +80,7 @@ public class PlanTrabajoDao extends CrudDao<PlanTrabajo> {
     }
 
     public PlanTrabajo getPlanTrabajoPorCualdrilla(Date fecPrgn, Long numeroCuadrilla) {
+        logger.info(" metodo : getPlanTrabajoPorCualdrilla");
 
         Calendar cal = Calendar.getInstance(); // locale-specific
         cal.setTime(fecPrgn);
@@ -91,8 +92,7 @@ public class PlanTrabajoDao extends CrudDao<PlanTrabajo> {
 
         logger.info(" fecprgn : " + fecPrgn);
         logger.info(" numeroCuadrilla : " + numeroCuadrilla);
-
-        logger.info(" metodo : getPlanTrabajo ( fecPrgn.  numeroPlanTrabajo ) ");
+        
 
         PlanTrabajo planTrabajo = null;
 
@@ -104,8 +104,8 @@ public class PlanTrabajoDao extends CrudDao<PlanTrabajo> {
 
             TypedQuery<PlanTrabajo> query = getEntityManager().createQuery(sql, PlanTrabajo.class);
 
-            query.setParameter("pnumeroCuadrilla", 1l);
-            query.setParameter("pfechaProgramacion", fecPrgn, TemporalType.TIMESTAMP);
+            query.setParameter("pnumeroCuadrilla", numeroCuadrilla);
+            query.setParameter("pfechaProgramacion", fecPrgn);
 
             List<PlanTrabajo> planTrabajoList = query.getResultList();
             if (planTrabajoList != null && planTrabajoList.size() > 0) {

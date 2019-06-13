@@ -51,6 +51,8 @@ public class ConstantBusiness {
     // formato de fecha
     public static final String HORA_FORMAT = "HH:mm aaa";
     public static final String FORMAT_DATE_TIME = "dd/MM/yyyy HH:mm:ss";
+    public static final String FORMAT_DATE = "dd/MM/yyyy";
+    
 
     //redes neuronales
     public static final int COD_RED_NEURONAL_PROGRAMACION = 1;

@@ -23,165 +23,160 @@
                 <h:outputStylesheet name="bootstrap/css/bootstrap.min.css" />
 
                 <h:form  id="form" >
+                    <div class="ui-fluid">
+                        <p:growl id="messages" />
+                        <p:remoteCommand name="updateDataTable" update="dataTable" />
+                        <h:panelGroup>
+                            <h4>
 
-                    <p:growl id="messages" />
-                    <p:remoteCommand name="updateDataTable" update="dataTable" />
-                    <h:panelGroup>
-                        <h4>
+                                <p:outputLabel>  Buscar datos del cliente </p:outputLabel>
 
-                            <p:outputLabel>  Buscar datos del cliente </p:outputLabel>
+                            </h4>
+                        </h:panelGroup>
+                        <br></br>
 
-                        </h4>
-                    </h:panelGroup>
-                    <br></br>
+                        <p:panel  header="Criterios de Búsqueda">
 
-                    <p:panel style="width:80%;" header="Criterios de Búsqueda">
+                            <p:panelGrid    columns="1"  layout="grid" styleClass="ui-panelgrid-blank ui-fluid" >
 
-                        <h:panelGrid  style="width:100%;"  columns="1"  border="0" cellspacing="2" cellpadding="2" >
+                                <p:selectOneRadio style="width: 100%" id="console" value="#{clienteview.tipoDocu}" >
+                                    <f:selectItem itemLabel="D.N.I." itemValue="9"   />
+                                    <f:selectItem itemLabel="R.U.C." itemValue="3" />
+                                    <f:selectItem itemLabel="Carné de extrangería" itemValue="10" />
+                                </p:selectOneRadio>
 
-                            <p:selectOneRadio style="width: 100%" id="console" value="#{clienteview.tipoDocu}" >
-                                <f:selectItem itemLabel="D.N.I." itemValue="9"   />
-                                <f:selectItem itemLabel="R.U.C." itemValue="3" />
-                                <f:selectItem itemLabel="Carné de extrangería" itemValue="10" />
-                            </p:selectOneRadio>
-
-                        </h:panelGrid>
-
-
-                        <h:panelGrid style="width:100%;" columns="4" border="0">
+                            </p:panelGrid>
 
 
-                            <p:outputLabel for="txtNumeroCliente"> Número de Cliente:</p:outputLabel>
-                            <p:inputText id="txtNumeroCliente"    value="#{clienteview.codigoCliente}"  maxlength="15" validatorMessage="error"  ></p:inputText>
+                            <p:panelGrid  columns="4" layout="grid" styleClass="ui-panelgrid-blank ui-fluid" >
 
 
-                            <p:outputLabel for="txtRazonSocial">Nombres Razón Social:</p:outputLabel>
-                            <p:inputText id="txtRazonSocial"  value="#{clienteview.nombreRazonSocial}" maxlength="100"  ></p:inputText>
-
-                            <p:outputLabel for="txtApellidoPaterno">Apellido Paterno: </p:outputLabel>
-                            <p:inputText id="txtApellidoPaterno" value="#{clienteview.apellidoPaterno}" maxlength="50"  ></p:inputText>
+                                <p:outputLabel for="txtNumeroCliente"> Número de Cliente:</p:outputLabel>
+                                <p:inputText id="txtNumeroCliente"    value="#{clienteview.codigoCliente}"  maxlength="15" validatorMessage="error"  ></p:inputText>
 
 
-                            <p:outputLabel for="txtApellidoMaterno">Apellido Materno: </p:outputLabel>
-                            <p:inputText id="txtApellidoMaterno"   value="#{clienteview.apellidoMaterno}" maxlength="50"  ></p:inputText>
+                                <p:outputLabel for="txtRazonSocial">Nombres Razón Social:</p:outputLabel>
+                                <p:inputText id="txtRazonSocial"  value="#{clienteview.nombreRazonSocial}" maxlength="100"  ></p:inputText>
 
-                            <p:spacer></p:spacer>
-                            <p:spacer></p:spacer>
-                            <p:spacer></p:spacer>
-                            <p:spacer></p:spacer>
+                                <p:outputLabel for="txtApellidoPaterno">Apellido Paterno: </p:outputLabel>
+                                <p:inputText id="txtApellidoPaterno" value="#{clienteview.apellidoPaterno}" maxlength="50"  ></p:inputText>
 
-                        </h:panelGrid>
+
+                                <p:outputLabel for="txtApellidoMaterno">Apellido Materno: </p:outputLabel>
+                                <p:inputText id="txtApellidoMaterno"   value="#{clienteview.apellidoMaterno}" maxlength="50"  ></p:inputText>
+                            </p:panelGrid>
 
 
 
-                        <div align="center">
-                            <h:panelGrid  columns="3" border="0">
+                            <div align="center">
+                                <p:panelGrid  columns="3" layout="grid" styleClass="ui-panelgrid-blank ui-fluid" >
 
-                                <p:commandButton value="Buscar"  ajax="false" class="btn btn-primary" style="width:100px;"  action="#{clienteview.mostrar()}"  >
+                                    <p:commandButton value="Buscar"  ajax="false" class="btn btn-primary" style="width:100px;"  action="#{clienteview.mostrar()}"  >
+                                    </p:commandButton>
+
+                                    <p:commandButton value="Nuevo"
+                                                     ajax="true"  class="btn btn-primary" style="width: 100px;"  update="formsave:dlgsave" oncomplete="PF('dlgsave').show()"  actionListener="#{clienteview.nuevo()}"  >
+                                    </p:commandButton>
+
+                                    <p:commandButton value="Limpiar" class="btn btn-primary"  style="width: 100px;" action="#{clienteview.limpiar()}"
+                                                     ajax="false">
+                                    </p:commandButton>
+
+                                </p:panelGrid>
+                            </div>
+
+                        </p:panel>
+
+                        <br></br>
+                       
+                            <p:dataTable  id="dataTable"  reflow="true"  var="reg" value="#{clienteview.clienteList}"
+                                          paginator="true" rows="5" 
+                                          paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                          currentPageReportTemplate="( Página : {currentPage} de {totalPages})"
+                                          >
+
+                                <p:column   >
+                                    <f:facet name="header">
+                                        <h:outputText value="Número Cliente" />
+                                    </f:facet>
+                                    <h:outputText value="#{reg.codigoCliente}" >
+
+                                    </h:outputText>
+
+                                </p:column>
+
+
+                                <p:column   >
+                                    <f:facet name="header">
+                                        <h:outputText value="Razo Social" />
+                                    </f:facet>
+
+                                    <h:outputText value="#{reg.nombreRazonSocial}" />
+
+                                </p:column>
+
+
+                                <p:column    >
+                                    <f:facet name="header">
+                                        <h:outputText value="Apellidos y  Nombres" />
+                                    </f:facet>
+                                    <h:outputText value="#{reg.apellidos}, #{reg.nombres}" >
+
+                                    </h:outputText>
+                                </p:column>
+
+                                <p:column    >
+                                    <f:facet name="header">
+                                        <h:outputText value="Teléfonos" />
+                                    </f:facet>
+                                    <h:outputText value="#{reg.telefono}" >
+                                    </h:outputText>
+
+                                </p:column>
+
+
+                                <p:column  >
+                                    <f:facet name="header">
+                                        <h:outputText value="Email" />
+                                    </f:facet>
+                                    <h:outputText value="#{reg.email}" />
+                                </p:column>
+
+                                <p:column   >
+
+                                    <f:facet name="header">
+                                        <h:outputText value="" style="align:center" />
+                                    </f:facet>
+
+                                    <f:attribute name="align" value="center" />
+
+                                    <p:commandButton icon="ui-icon-pencil"   actionListener="#{clienteview.editar(reg)}"   
+                                                     ajax="true"   title="validar" update="formsave:dlgsave" oncomplete="PF('dlgsave').show()"  > 
+
+                                    </p:commandButton>
+
+                                </p:column>
+
+                            </p:dataTable>
+
+                   
+                        <div align="center" style="width:80%;"   >		
+                            <h:panelGrid columns="2"  border="0">
+                                <p:commandButton   style="width: 100px;"  class="btn btn-primary"  value="Salir" action="principal.xhtml?faces-redirect=true"
+                                                   ajax="false">
                                 </p:commandButton>
-
-                                <p:commandButton value="Nuevo"
-                                                 ajax="true"  class="btn btn-primary" style="width: 100px;"  update="formsave:dlgsave" oncomplete="PF('dlgsave').show()"  actionListener="#{clienteview.nuevo()}"  >
-                                </p:commandButton>
-
-                                <p:commandButton value="Limpiar" class="btn btn-primary"  style="width: 100px;" action="#{clienteview.limpiar()}"
-                                                 ajax="false">
-                                </p:commandButton>
-
                             </h:panelGrid>
                         </div>
 
-                    </p:panel>
 
-                    <br></br>
-                    <div style="height: 400px;">
-                        <p:dataTable  style="width:80%;" id="dataTable" var="reg" value="#{clienteview.clienteList}"
-                                      paginator="true" rows="5" 
-                                      paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                      currentPageReportTemplate="( Página : {currentPage} de {totalPages})"
-                                      >
-
-                            <p:column  style="width:10%" >
-                                <f:facet name="header">
-                                    <h:outputText value="Número Cliente" />
-                                </f:facet>
-                                <h:outputText value="#{reg.codigoCliente}" >
-
-                                </h:outputText>
-
-                            </p:column>
-
-
-                            <p:column  style="width:30%" >
-                                <f:facet name="header">
-                                    <h:outputText value="Razo Social" />
-                                </f:facet>
-
-                                <h:outputText value="#{reg.nombreRazonSocial}" />
-
-                            </p:column>
-
-
-                            <p:column   style="width:30%" >
-                                <f:facet name="header">
-                                    <h:outputText value="Apellidos y  Nombres" />
-                                </f:facet>
-                                <h:outputText value="#{reg.apellidos}, #{reg.nombres}" >
-
-                                </h:outputText>
-                            </p:column>
-
-                            <p:column   style="width:10%" >
-                                <f:facet name="header">
-                                    <h:outputText value="Teléfonos" />
-                                </f:facet>
-                                <h:outputText value="#{reg.telefono}" >
-                                </h:outputText>
-
-                            </p:column>
-
-
-                            <p:column  style="width:15%" >
-                                <f:facet name="header">
-                                    <h:outputText value="Email" />
-                                </f:facet>
-                                <h:outputText value="#{reg.email}" />
-                            </p:column>
-
-                            <p:column style="width:5%"  >
-
-                                <f:facet name="header">
-                                    <h:outputText value="" style="align:center" />
-                                </f:facet>
-
-                                <f:attribute name="align" value="center" />
-
-                                <p:commandButton icon="ui-icon-pencil"   actionListener="#{clienteview.editar(reg)}"   
-                                                 ajax="true"   title="validar" update="formsave:dlgsave" oncomplete="PF('dlgsave').show()"  > 
-
-                                </p:commandButton>
-
-                            </p:column>
-
-                        </p:dataTable>
-
-                    </div>
-
-                    <div align="center" style="width:80%;"   >		
-                        <h:panelGrid columns="2"  border="0">
-                            <p:commandButton   style="width: 100px;"  class="btn btn-primary"  value="Salir" action="principal.xhtml?faces-redirect=true"
-                                               ajax="false">
-                            </p:commandButton>
-                        </h:panelGrid>
-                    </div>
-
-
-                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-                        <p:commandButton value="Si" type="button"
-                                         styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
-                        <p:commandButton value="No" type="button"
-                                         styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
-                    </p:confirmDialog>
+                        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                            <p:commandButton value="Si" type="button"
+                                             styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                            <p:commandButton value="No" type="button"
+                                             styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                        </p:confirmDialog>
+                
+                        </div>
                 </h:form>
 
 
@@ -340,7 +335,7 @@
 
 
                     </p:dialog>
-
+                    
                 </h:form>
 
 

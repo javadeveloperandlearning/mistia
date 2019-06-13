@@ -18,9 +18,7 @@ public class SolicitudServicioEstadoService {
 	
 	@Inject
 	private SolicitudServicioEstadoDao solicitudServicioEstadoDao;
-	
-	
-	
+
 	
 	public List<SolicitudServicioEstado> getSolicitudServicioEstadoList(Long numeroSolicitud){
 		

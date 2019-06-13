@@ -11,162 +11,155 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
-
 /**
  * The persistent class for the cuadrillas database table.
  *
- * 
- //@XmlRootElement
+ *
+ * //@XmlRootElement
  */
-
-
 @Entity
-@Table(name="cuadrillas")
-@NamedQuery(name="Cuadrilla.findAll", query="SELECT c FROM Cuadrilla c")
+@Table(name = "cuadrillas")
+@NamedQuery(name = "Cuadrilla.findAll", query = "SELECT c FROM Cuadrilla c")
 @XmlRootElement
 public class Cuadrilla extends ObjectBean implements Serializable {
-	
 
-	@Id
-	@Column(name="numero_cuadrilla")
-	private Long numeroCuadrilla;
-	
-	@Column(name="nombre")
-	private String nombre;
+    @Id
+    @Column(name = "numero_cuadrilla")
+    private Long numeroCuadrilla;
 
+    @Column(name = "nombre")
+    private String nombre;
 
-	@Column(name="grado_asignacion")
-	private BigDecimal gradoAsignacion;
-	
-	@Column(name="fecha_programacion")
-	private Date fechaProgramacion;
-	
-	
+    @Column(name = "grado_asignacion")
+    private BigDecimal gradoAsignacion;
 
-	//bi-directional many-to-one association to Vehiculo
-	@ManyToOne(optional=false)
-	@JoinColumn(name="placa_vehiculo", referencedColumnName = "placa_vehiculo")
-	private Vehiculo vehiculo;
+    @Column(name = "fecha_programacion")
+    private Date fechaProgramacion;
 
-	//bi-directional many-to-one association to CuadrillasDetalle
-	@OneToMany(mappedBy="cuadrilla", cascade = CascadeType.ALL,fetch=FetchType.EAGER)
-	private List<CuadrillasDetalle> cuadrillasDetalles;
-	
-	
-	//bi-directional many-to-one association to PlanTrabajo
-	@OneToMany( mappedBy="cuadrilla")
-	private List<PlanTrabajo> planTrabajos;
+    //bi-directional many-to-one association to Vehiculo
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "placa_vehiculo", referencedColumnName = "placa_vehiculo")
+    private Vehiculo vehiculo;
 
+    //bi-directional many-to-one association to CuadrillasDetalle
+    @OneToMany(mappedBy = "cuadrilla", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<CuadrillasDetalle> cuadrillasDetalles;
 
-	public Cuadrilla() {
-	}
+    //bi-directional many-to-one association to PlanTrabajo
+    @OneToMany(mappedBy = "cuadrilla")
+    private List<PlanTrabajo> planTrabajos;
 
-	public Cuadrilla(Long numeroCuadrilla) {
-		this.numeroCuadrilla =  numeroCuadrilla;
-	}
-	
-	public Long getNumeroCuadrilla() {
-		return this.numeroCuadrilla;
-	}
+    public Cuadrilla() {
+    }
 
-	public void setNumeroCuadrilla(Long numeroCuadrilla) {
-		this.numeroCuadrilla = numeroCuadrilla;
-	}
-	
-	public String getNombre() {
-		return nombre;
-	}
+    public Cuadrilla(Long numeroCuadrilla) {
+        this.numeroCuadrilla = numeroCuadrilla;
+    }
 
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
-	}
+    public Long getNumeroCuadrilla() {
+        return this.numeroCuadrilla;
+    }
 
-	
+    public void setNumeroCuadrilla(Long numeroCuadrilla) {
+        this.numeroCuadrilla = numeroCuadrilla;
+    }
 
-	public Date getFechaProgramacion() {
-		return this.fechaProgramacion;
-	}
+    public String getNombre() {
+        return nombre;
+    }
 
-	public void setFechaProgramacion(Date fechaProgramacion) {
-		this.fechaProgramacion = fechaProgramacion;
-	}
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
 
-	public BigDecimal getGradoAsignacion() {
-		return this.gradoAsignacion;
-	}
+    public Date getFechaProgramacion() {
+        return this.fechaProgramacion;
+    }
 
-	public void setGradoAsignacion(BigDecimal gradoAsignacion) {
-		this.gradoAsignacion = gradoAsignacion;
-	}
+    public void setFechaProgramacion(Date fechaProgramacion) {
+        this.fechaProgramacion = fechaProgramacion;
+    }
 
+    public BigDecimal getGradoAsignacion() {
+        return this.gradoAsignacion;
+    }
 
+    public void setGradoAsignacion(BigDecimal gradoAsignacion) {
+        this.gradoAsignacion = gradoAsignacion;
+    }
 
-	public Vehiculo getVehiculo() {
-		return this.vehiculo;
-	}
+    public Vehiculo getVehiculo() {
+        return this.vehiculo;
+    }
 
-	public void setVehiculo(Vehiculo vehiculo) {
-		this.vehiculo = vehiculo;
-	}
+    public void setVehiculo(Vehiculo vehiculo) {
+        this.vehiculo = vehiculo;
+    }
 
-	@XmlTransient
-	public List<CuadrillasDetalle> getCuadrillasDetalles() {
-		return this.cuadrillasDetalles;
-	}
+    @XmlTransient
+    public List<CuadrillasDetalle> getCuadrillasDetalles() {
+        return this.cuadrillasDetalles;
+    }
 
-	public void setCuadrillasDetalles(List<CuadrillasDetalle> cuadrillasDetalles) {
-		this.cuadrillasDetalles = cuadrillasDetalles;
-	}
+    public void setCuadrillasDetalles(List<CuadrillasDetalle> cuadrillasDetalles) {
+        this.cuadrillasDetalles = cuadrillasDetalles;
+    }
 
-	public CuadrillasDetalle addCuadrillasDetalle(CuadrillasDetalle cuadrillasDetalle) {
-		getCuadrillasDetalles().add(cuadrillasDetalle);
-		cuadrillasDetalle.setCuadrilla(this);
+    public CuadrillasDetalle addCuadrillasDetalle(CuadrillasDetalle cuadrillasDetalle) {
+        getCuadrillasDetalles().add(cuadrillasDetalle);
+        cuadrillasDetalle.setCuadrilla(this);
 
-		return cuadrillasDetalle;
-	}
+        return cuadrillasDetalle;
+    }
 
-	public CuadrillasDetalle removeCuadrillasDetalle(CuadrillasDetalle cuadrillasDetalle) {
-		getCuadrillasDetalles().remove(cuadrillasDetalle);
-		cuadrillasDetalle.setCuadrilla(null);
-		return cuadrillasDetalle;
-	}
+    public CuadrillasDetalle removeCuadrillasDetalle(CuadrillasDetalle cuadrillasDetalle) {
+        getCuadrillasDetalles().remove(cuadrillasDetalle);
+        cuadrillasDetalle.setCuadrilla(null);
+        return cuadrillasDetalle;
+    }
 
-	public void removeCuadrillasDetalle( Integer numeroSecuencia) {
-		getCuadrillasDetalles().remove( new CuadrillasDetalle(this.getNumeroCuadrilla(), numeroSecuencia));
-	}
-	
-	
-	@XmlTransient
-	public List<PlanTrabajo> getPlanTrabajos() {
-		return this.planTrabajos;
-	}
+    public void removeCuadrillasDetalle(Integer numeroSecuencia) {
+        getCuadrillasDetalles().remove(new CuadrillasDetalle(this.getNumeroCuadrilla(), numeroSecuencia));
+    }
 
-	public void setPlanTrabajos(List<PlanTrabajo> planTrabajos) {
-		this.planTrabajos = planTrabajos;
-	}
+    @XmlTransient
+    public List<PlanTrabajo> getPlanTrabajos() {
+        return this.planTrabajos;
+    }
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + (int) (numeroCuadrilla ^ (numeroCuadrilla >>> 32));
-		return result;
-	}
+    public void setPlanTrabajos(List<PlanTrabajo> planTrabajos) {
+        this.planTrabajos = planTrabajos;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Cuadrilla other = (Cuadrilla) obj;
-		if (numeroCuadrilla != other.numeroCuadrilla)
-			return false;
-		return true;
-	}
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + (int) (numeroCuadrilla ^ (numeroCuadrilla >>> 32));
+        return result;
+    }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        Cuadrilla other = (Cuadrilla) obj;
+        if (numeroCuadrilla != other.numeroCuadrilla) {
+            return false;
+        }
+        return true;
+    }
 
+    @Override
+    public String toString() {
+        return "Cuadrilla{" + "numeroCuadrilla=" + numeroCuadrilla + ", nombre=" + nombre + ", gradoAsignacion=" + gradoAsignacion + ", fechaProgramacion=" + fechaProgramacion + ", vehiculo=" + vehiculo + '}';
+    }
 
 }

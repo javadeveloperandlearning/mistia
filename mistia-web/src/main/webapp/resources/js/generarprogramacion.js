@@ -1,4 +1,6 @@
 var solicitudarray = null;
+var arraycuadrilla = [];
+var cantsugeridos  = null;
 
 
 function cargardatos() {
@@ -194,12 +196,7 @@ $(document).ready(function () {
                 $("#dialog").dialog("open");
 
             } else {
-                
-                
-                
                 //console.log("generando solicitudes");
-            
-              
                 // obtener los grupos sugeridos
                 $.ajax({
                     url: "rest/programacion/cantgrupossugeridos.html",
@@ -208,7 +205,7 @@ $(document).ready(function () {
                     datatype: "json",
                     success: function (result) {
 
-                        var cantsugeridos = 0;
+                        cantsugeridos = 0;
                         if (result.codigo == 0) {
                             cantsugeridos = result.data;
                         }
@@ -227,6 +224,14 @@ $(document).ready(function () {
 
 
     $("#btnejecutar").click(function () {
+        
+       // alert(cantsugeridos);
+        
+        if(cantsugeridos==null || cantsugeridos==0){
+            $("#dialog").html("No se han generado grupos sugeridos");
+            $("#dialog").dialog("open");
+            return;
+        }
 
         $("#confirmar").html("¿Está seguro que desea ejecutar programación?");
         $("#confirmar").dialog("open");
@@ -266,7 +271,6 @@ $(document).ready(function () {
             {
                 text: "Si",
                 click: function () {
-
 
                     if (oper == "confirmgrup") {
 
@@ -351,10 +355,6 @@ $(document).ready(function () {
                 text: "Aceptar",
                 click: function () {
                     
-                    
-
-                    //preload("Generando grupos");
-                    //$("#dialog-preload").dialog("open");
                     
                     var numsugegru = $("#txtnumerogrupos").val();
                     var numrealcua = cuadrillasarray.length;
@@ -520,7 +520,7 @@ $(document).ready(function () {
 
     function ejecutarprogramacion() {
 
-        alert(" ejecutando programacion");
+        //alert(" ejecutando programacion");
         var np = $("#numeroprogramacion").val() == "" ? 0 : $("#numeroprogramacion").val();
         $.ajax({
             url: "rest/programacion/ejecutarprogramacion.html",
@@ -722,7 +722,10 @@ $(document).ready(function () {
         type: "POST",
         datatype: "json",
         success: function (data) {
+            
+            arraycuadrilla =  data;
             cuadrillasarray = data;
+            
             var $row = null;
             // clonamos registro por default
             $(".cuadrillas-list").each(function (i, row) {
@@ -749,11 +752,6 @@ $(document).ready(function () {
                     $row.find("div[alt='drgrup']").html(" <p align='center' >" + desgrupo + "</p>");
                     $row.find("div[alt='drdet']").find("a[alt='detaplan']").attr("lkcuad", numeroCuadrilla);
                     $row.find("div[alt='drdet']").find("a[alt='detaplan']").attr("lkdesc", nombreCuadrilla);
-
-
-                    //$(".cuadrillas-list  tr").find("a[alt='detaplan']").attr("lkgrupo",grupoAtencion.numeroGrupoAtencion);
-
-
                     html = html + $row.html();
                 }
             }

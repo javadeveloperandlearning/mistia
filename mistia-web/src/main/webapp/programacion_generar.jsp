@@ -298,7 +298,7 @@
             <tr>
                 <td>
                     <div  style="float:left; width:40%" class="ui-widget-content arrastable"  alt = "cuaasig"      >	
-                        <p    align="center" > Los Magníficossss</p>
+                        <p    align="center" > Los Magníficos</p>
                     </div>
                     <div   style="float:left; width:20%" class="ui-widget-content"  alt = "gruasig">	
                         <p align="center" >&nbsp;</p>
@@ -456,6 +456,9 @@
 <script type="text/javascript" src="resources/js/geometria.js"></script>
 
 <script >
+
+
+    
 
     var map;
     var citymap = new Array();

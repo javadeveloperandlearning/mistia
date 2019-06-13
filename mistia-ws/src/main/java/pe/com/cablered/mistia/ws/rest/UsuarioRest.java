@@ -40,22 +40,6 @@ public class UsuarioRest {
 
     final static Logger logger = Logger.getLogger(UsuarioRest.class);
 
-    @GET
-    @POST
-    @Path("/lista.html")
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<Map> lista() {
-
-        List<Map> lista = new ArrayList<>();
-        Map<String, String> map1 = new HashMap<>();
-        map1.put("1", "test1");
-        map1.put("2", "test2");
-        map1.put("3", "test3");
-        lista.add(map1);
-        return lista;
-
-    }
-
     /**
      * iniciarSession
      *
@@ -69,25 +53,9 @@ public class UsuarioRest {
     @Produces(MediaType.APPLICATION_JSON)
     public Response iniciarSession(Usuario usuario) {
         logger.info(" metodo  iniciarSession ");
-        ResponseSecurity result = usuarioService.loguear(usuario);
-        
+        ResponseSecurity result = usuarioService.loguear(usuario);  
         logger.info(" result : "+result);
-        Response reponse = new Response(Response.ERROR, Response.MSG_ERROR);
-        /*if (result != null && result.getCodigo() == ConstantSecurity.COD_OK) {
-            
-            logger.info(" usuario loguado ");
-            Map<String, Object> mpData = new HashMap();
-            //obtenemos información del usuario 
-            reponse.setCodigo(result.getCodigo());
-            reponse.setMensaje(result.getMessage());
-            reponse.setData(usuarioService.getUsuarioSingle(usuario));
-
-        }else{
-            reponse.setCodigo(result.getCodigo());
-            reponse.setMensaje(result.getMessage());
-             logger.info(" usuario no legueado");
-        }*/
-        
+        Response reponse = new Response();
         reponse.setCodigo(result.getCodigo());
         reponse.setMensaje(result.getMessage());
 
@@ -97,7 +65,7 @@ public class UsuarioRest {
     
     
     
-        
+            
     @GET
     @POST
     @Path("/infousuario.html")
@@ -105,6 +73,7 @@ public class UsuarioRest {
     public Usuario infoUsuario(Usuario usuario) {
         logger.info(" metodo  infoUsuario");
         Usuario _usuario  = usuarioService.getUsuarioSingle(usuario);
+        logger.info( "usuario :"+_usuario.toString());
         return _usuario;
     }
     
