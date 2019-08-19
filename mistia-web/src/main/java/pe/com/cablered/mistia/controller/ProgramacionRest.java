@@ -135,17 +135,15 @@ public class ProgramacionRest implements Serializable {
     @Produces(MediaType.APPLICATION_JSON)
     public List<Map<String, Object>> gruposGenerados(@Context HttpServletRequest request) {
 
+        logger.info(" metodo : gruposgenerados.html");
         HttpSession session = request.getSession(false);
-        logger.info(" accion :  " + session.getAttribute(ACCION_PROGRAMACION));
         Integer accion = (Integer) session.getAttribute(ACCION_PROGRAMACION);
         Long numeroProgramacion = (Long) session.getAttribute("numeroProgramacion");
         numeroProgramacion = numeroProgramacion == null ? 0 : numeroProgramacion;
         Map<Long, GrupoAtencion> mpGrupos = programacionService.getGruposAtentionGenerados(accion, numeroProgramacion);
-
         // pasando a datos a session
         //programacionService.setMpGruposCached(mpGrupos);
         return toFormatMap(mpGrupos);
-
     }
 
     @POST
@@ -215,13 +213,14 @@ public class ProgramacionRest implements Serializable {
                     logger.info("##### codigoDistrito : " + codigoDistrito);
                     logger.info("##### codigoTipoSolicitud : " + codigoTipoSolicitud);
                     solicitudList =  programacionService.getSolicitudList(codigoDistrito, codigoTipoSolicitud);
+                    logger.info(" cant solicitudes : "+solicitudList.size());
 
                 } else {
 
                     numeroProgramacion = (Long) session.getAttribute("numeroProgramacion");
                     numeroProgramacion = numeroProgramacion == null ? 0 : numeroProgramacion;
                     solicitudList =  programacionService.getSolicitudList(numeroProgramacion);
-
+                    logger.info(" cant solicitudes : "+solicitudList.size());
                 }
 
             } catch (Exception e) {
@@ -232,7 +231,7 @@ public class ProgramacionRest implements Serializable {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return solicitudList;
+            return solicitudList;
 
     }
 
@@ -352,13 +351,16 @@ public class ProgramacionRest implements Serializable {
             @FormParam("numerosoli") long numerosoli,
             @FormParam("numerogrup") long numerogrup) {
         logger.info("#### reasignarsolicitud #### ");
-        System.out.println(" ####  numerosoli :" + numerosoli);
-        System.out.println(" ####  numerogrup :" + numerogrup);
+        logger.info(" ####  numerosoli :" + numerosoli);
+        logger.info(" ####  numerogrup :" + numerogrup);
         /*Map<Long, GrupoAtencion> mpGrupos  =  programacionService.getMpGruposCached();
 		mpGrupos =  grupoService.reasignarSolictud(mpGrupos, numerosoli, numerogrup);
 		programacionService.setMpGruposCached(mpGrupos);*/
         // cambio
         Map<Long, GrupoAtencion> mpGrupos = programacionService.reasignarSolictud(numerosoli, numerogrup);
+        
+        
+        
         return toFormatMap(mpGrupos);
 
     }
@@ -465,9 +467,9 @@ public class ProgramacionRest implements Serializable {
 
         }
 
-        logger.info("### mostrando formato ### ");
-        Gson gson = new Gson();
-        logger.info(gson.toJson(grupoList));
+        //logger.info("### mostrando formato ### ");
+       // Gson gson = new Gson();
+        //logger.info(gson.toJson(grupoList));
 
         return grupoList;
     }

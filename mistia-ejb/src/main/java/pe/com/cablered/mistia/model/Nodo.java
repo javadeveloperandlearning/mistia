@@ -43,6 +43,10 @@ public class Nodo extends ObjectBean implements Serializable {
 	
 	}
 
+    public Nodo(Integer codigoNodo) {
+        this.codigoNodo = codigoNodo;
+    }
+
 	
 	
 	

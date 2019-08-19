@@ -23,7 +23,7 @@ public class GrupoAtencion extends ObjectBean  implements Serializable, Cloneabl
 
 	@Id
 	@Column(name="numero_grupo_atencion")
-	private long numeroGrupoAtencion;
+	private Long numeroGrupoAtencion;
 
 	private String descripcion;
 	
@@ -67,7 +67,7 @@ public class GrupoAtencion extends ObjectBean  implements Serializable, Cloneabl
 	}
 	
 	
-	public GrupoAtencion(long numeroGrupoAtencion, String descripcion) {
+	public GrupoAtencion(Long numeroGrupoAtencion, String descripcion) {
 		
 		this.numeroGrupoAtencion =  numeroGrupoAtencion;
 		this.descripcion =  descripcion;
@@ -76,11 +76,11 @@ public class GrupoAtencion extends ObjectBean  implements Serializable, Cloneabl
 
 	
 
-	public long getNumeroGrupoAtencion() {
+	public Long getNumeroGrupoAtencion() {
 		return this.numeroGrupoAtencion;
 	}
 
-	public void setNumeroGrupoAtencion(long numeroGrupoAtencion) {
+	public void setNumeroGrupoAtencion(Long numeroGrupoAtencion) {
 		this.numeroGrupoAtencion = numeroGrupoAtencion;
 	}
 

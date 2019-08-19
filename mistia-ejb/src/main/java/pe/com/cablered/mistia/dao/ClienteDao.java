@@ -56,24 +56,24 @@ public class ClienteDao extends CrudDao<Cliente> {
             apellidoMaterno = (apellidoMaterno != null && apellidoMaterno.trim().equals("") ? null : apellidoMaterno);
             nombreRazonSocial = (nombreRazonSocial != null && nombreRazonSocial.trim().equals("") ? null : nombreRazonSocial);
             
-            
-
             logger.info(" tipoDocu :  " + tipoDocu);
             logger.info(" codigoCliente :  " + codigoCliente);
             logger.info(" nombres :  " + nombres);
             logger.info(" apellidoPaterno :  " + apellidoPaterno);
             logger.info(" apellidoMaterno :  " + apellidoMaterno);
             logger.info(" nombreRazonSocial :  " + nombreRazonSocial);
+                       
 
-            String sql = "Select c from Cliente c  where "
-                    + " (nombres =:pnombres or :pnombres is null)"
-                    + " and (codigoCliente = :pcodigocliente or :pcodigocliente is  null )"
-                    + " and (upper(apellidoPaterno) like :papellidopaterno or :papellidopaterno is null ) "
-                    + " and (upper(apellidoMaterno) like :papellidomaterno or :papellidomaterno is null) "
-                    + " and (upper(nombreRazonSocial) like :pnombrerazonsocial or :pnombrerazonsocial is  null )";
+            String sql = "Select c "
+                    + "from Cliente c  where "
+                    //+ " (nombres =:pnombres or :pnombres is null)"
+                   + "   (codigoCliente = :pcodigocliente or :pcodigocliente is  null )"
+                   + " and  (upper(apellidoPaterno) like :papellidopaterno or :papellidopaterno is null ) "
+                   + " and (upper(apellidoMaterno) like :papellidomaterno or :papellidomaterno is null) "
+                   + " and (upper(nombreRazonSocial) like :pnombrerazonsocial or :pnombrerazonsocial is  null )";;
                         
             
-            switch(tipoDocu){
+            /*switch(tipoDocu){
                 case TIPO_DOCU_DNI:
                     sql = sql+" and tipoDocumento  = "+ TIPO_DOCU_DNI;
                     break;                   
@@ -85,14 +85,14 @@ public class ClienteDao extends CrudDao<Cliente> {
                 case TIPO_DOCU_RUC:
                     sql = sql+" and numeroRuc is not null";
                     break;                    
-            }
+            }*/
 
             sql =  sql+" order by codigoCliente";
             
             
             TypedQuery<Cliente> query = getEntityManager().createQuery(sql, Cliente.class);
             query.setParameter("pcodigocliente", codigoCliente);
-            query.setParameter("pnombres", nombres);
+            //query.setParameter("pnombres", nombres);
             query.setParameter("papellidopaterno",   (apellidoPaterno==null?null: "%"+apellidoPaterno.trim().toUpperCase()+"%") );
             query.setParameter("papellidomaterno",   (apellidoMaterno==null?null: "%"+apellidoMaterno.trim().toUpperCase()+"%") );
             query.setParameter("pnombrerazonsocial", (nombreRazonSocial==null?null: "%"+nombreRazonSocial.trim().toUpperCase()+"%") );

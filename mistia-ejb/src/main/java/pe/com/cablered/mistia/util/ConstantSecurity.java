@@ -19,6 +19,7 @@ public class ConstantSecurity {
 	public static final int TIPO_MENU_EJECUCION = 8;
 	public static final int TIPO_MENU_SEGURIDAD = 9;
 	public static final int TIPO_MENU_ATENCION_CLIENTE = 10;
+        public static final int TIPO_MENU_SALIR = 12;
 	public static final int TIPO_MENU_CLIENTE = 0;
 	
 	

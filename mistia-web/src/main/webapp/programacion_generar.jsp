@@ -120,13 +120,11 @@
         <script type="text/javascript"	src="${pageContext.request.contextPath}/resources/js/jquery-1.7.2.js"></script>
         <link	href="${pageContext.request.contextPath}/resources/jquery-ui/jquery-ui.css" rel="stylesheet" type="text/css" />
         <script type="text/javascript"	src="${pageContext.request.contextPath}/resources/jquery-ui/jquery-ui.js"></script>
-
-
-
         <script type="text/javascript"	src="${pageContext.request.contextPath}/resources/jquery.jqGrid-4.4.3/js/jquery.jqGrid.src.js"></script>
         <script type="text/javascript"	src="${pageContext.request.contextPath}/resources/jquery.jqGrid-4.4.3/js/i18n/grid.locale-es.js"></script>
         <link	href="${pageContext.request.contextPath}/resources/jquery.jqGrid-4.4.3/css/ui.jqgrid.css" rel="stylesheet" type="text/css" />
-
+        <link	href="${pageContext.request.contextPath}/resources/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+        
     </head>
     <body>
 
@@ -138,9 +136,6 @@
     </style>
 
     <div id="content">
-
-
-
     </div>
 
     <div id="map" style="float: left"></div>
@@ -191,7 +186,7 @@
 
                     <tr>
                         <td  align="right" colspan="3" >
-                            <button  id="btnmostrar" type="button" class="ui-button ui-widget ui-corner-all">Consultar</button>
+                            <button  id="btnmostrar" type="button" class="btn btn-primary">Consultar</button>
                         </td>
 
 
@@ -330,7 +325,7 @@
         <table  width="30%" border="0">
 
             <tr>
-                <td><button   class="boton" id="btnGeneGrup">Generar Programación</button> </td>
+                <td><button   class="btn btn-primary" id="btnGeneGrup">Generar Programación</button> </td>
                 <td>
                     <!-- 
                     <button  class="boton" id="btnGuardaProg">Guardar Programación</button>
@@ -338,7 +333,7 @@
                 </td>
 
                 <td>
-                    <button id="btnejecutar">Ejecutar</button> 
+                    <button  class="btn btn-primary"  id="btnejecutar">Ejecutar</button> 
                     <!--  
                     <button  class="boton" id="btnReiniProgra">Reiniciar Programación</button>
                     -->
@@ -400,11 +395,13 @@
             </div>
 
             <div  style="float:left;width:20%;height: 20%" class="ui-widget-content"  >	
-                <a id="btnSalir" title="Salir" href="#"  > 
+                <!--a id="btnSalir" title="Salir" href="#"  > 
                     <p  align="center"   >
                         <img alt="" src="${pageContext.request.contextPath}/resources/images/salir.png"    height="18" width="18">
                     </p>
-                </a>
+                </a-->
+                
+                <button id="btnSalir"   class="btn btn-primary" >Salir</button>
             </div>	
 
         </div>
@@ -482,8 +479,6 @@
         if (accion == ACCION_EDITA_PROGRAMACION) {
             loadMapTemp();
             mostrarPlanesTemp();
-
-
         }
 
     }

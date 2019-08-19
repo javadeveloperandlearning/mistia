@@ -19,6 +19,8 @@ import javax.inject.Inject;
 import org.apache.log4j.Logger;
 
 import pe.com.cablered.mistia.dao.GrupoAtencionDao;
+import pe.com.cablered.mistia.dao.GrupoAtencionDetalleDao;
+import pe.com.cablered.mistia.dao.PlanTrabajoDetalleDao;
 import pe.com.cablered.mistia.geometria.Geometria;
 import pe.com.cablered.mistia.geometria.Punto;
 import pe.com.cablered.mistia.ia.clustering.Clustering;
@@ -46,6 +48,15 @@ public class GrupoService {
 
     @Inject
     private SolicitudServicioService service;
+
+    @Inject
+    private PlanTrabajoDetalleDao planTrabajoDetalleDao;
+
+    @Inject
+    private GrupoAtencionDetalleDao grupoAtencionDetalleDao;
+    
+    @Inject
+    private GrupoAtencionDao grupoAtencionDao;
 
     //private  List<SolicitudServicio>  solicitudesCached;
     final static Logger logger = Logger.getLogger(GrupoService.class);
@@ -78,7 +89,7 @@ public class GrupoService {
     }
 
     /**
-     * Penera los grupos de atencion paora una determinada fecha de un
+     * Genera los grupos de atencion paora una determinada fecha de un
      * determinando grupo de puntos seleccionados y una cantidad de grupos
      * definida. Se utiliza el algoritmo Kmeans
      *
@@ -163,7 +174,7 @@ public class GrupoService {
 											poste.getLongitud().doubleValue(), 
 											0.0   );*/
                 ContratoServicio c = d.getSolicitudServicio().getContratoServicio();
-                Punto punto = new Punto((int) d.getSolicitudServicio().getNumeroSolicitud(),c.getLatitud(),c.getLongitud(),0.0);
+                Punto punto = new Punto((int) d.getSolicitudServicio().getNumeroSolicitud(), c.getLatitud(), c.getLongitud(), 0.0);
 
                 Date fecha = d.getSolicitudServicio().getFechaAtencion();
                 String _fecha = sdf.format(fecha);
@@ -182,7 +193,7 @@ public class GrupoService {
                     int numerSoli = (int) d.getSolicitudServicio().getNumeroSolicitud();
                     if (numerSoli == punto.getNumero()) {
                         d.setGradoPrioridad(new BigDecimal(punto.getOrden() - 1));
-                        System.out.println("detalle prioridad " + d.getGradoPrioridad() + "   el punto " + punto + " solicitud " + d.getSolicitudServicio().getNumeroSolicitud());
+                        //System.out.println("detalle prioridad " + d.getGradoPrioridad() + "   el punto " + punto + " solicitud " + d.getSolicitudServicio().getNumeroSolicitud());
                         break;
                     }
                 }
@@ -209,115 +220,169 @@ public class GrupoService {
 
     /**
      * reasignar solicitud
-	 *
+     *
      */
     public Map<Long, GrupoAtencion> reasignarSolictud(List<PlanTrabajo> planTrabajoList, Map<Long, GrupoAtencion> mpGrupos, long numeroSolicitud, long numeroGrupoAtencion) {
 
-        /*
-		for (PlanTrabajo p : planTrabajoList) {
-			logger.info(" plan "+p.getNumeroPlanTrabajo() +"  "+ p.getGrupoAtencion().getNumeroGrupoAtencion() );
-			for(PlanTrabajoDetalle  d : p.getPlanTrabajoDetalles()){
-				logger.info(d.getSolicitudServicio().getNumeroSolicitud());
-			}
-		}
-         */
         // eliminar del grupo actual  y el plan del detalle actual
         Set<Long> keys = mpGrupos.keySet();
         GrupoAtencionDetalle dfound = null;
         PlanTrabajoDetalle pdfound = null;// detalle de plan de trabajo encontrado 
+        SolicitudServicio solicitudfound = null;
+        try {
+            for (Long numero : keys) {
 
-        for (Long numero : keys) {
+                GrupoAtencion g = mpGrupos.get(numero);
+                //buscar la solcitud en los detalles asignados
+                List<GrupoAtencionDetalle> detalles = g.getGrupoAtencionDetalles();
+                for (GrupoAtencionDetalle d : detalles) {
 
-            GrupoAtencion g = mpGrupos.get(numero);
-            //buscar la solcitud en los detalles asignados
-            List<GrupoAtencionDetalle> detalles = g.getGrupoAtencionDetalles();
-            for (GrupoAtencionDetalle d : detalles) {
-
-                SolicitudServicio s = d.getSolicitudServicio();
-                if (s != null && s.getNumeroSolicitud() == numeroSolicitud) {
-                    dfound = d;
-                    break;
-                }
-            }
-
-            if (dfound != null) {
-                int idx = detalles.indexOf(dfound);
-                if (idx != -1) {
-                    // eliminar el detalle encontrado
-                    //logger.info("###-> eliminando detalle de grupo :"+dfound.getSolicitudServicio().getNumeroSolicitud() +"de grupo "+g.getNumeroGrupoAtencion() + " ID("+dfound.getId().getNumeroGrupoAtencion() +"-"+dfound.getId().getNumeroOrden()+")");
-                    detalles.remove(idx);
-                }
-            }
-
-        }
-
-        for (Long numero : keys) {
-
-            GrupoAtencion g = mpGrupos.get(numero);
-            // eliminando de plan de trabajo
-            for (PlanTrabajo p : planTrabajoList) {
-
-                GrupoAtencion ga = p.getGrupoAtencion();
-
-                if (ga != null && g != null && ga.equals(g)) {
-                    List<PlanTrabajoDetalle> _detalles = p.getPlanTrabajoDetalles();
-                    for (PlanTrabajoDetalle d : _detalles) {
-                        SolicitudServicio s = d.getSolicitudServicio();
-                        if (s != null && s.getNumeroSolicitud() == numeroSolicitud) {
-                            pdfound = d;
-                            break;
-                        }
-                    }
-
-                    if (pdfound != null) {
-                        int idx = _detalles.indexOf(pdfound);
-                        if (idx != -1) {
-                            //logger.info("###-> eliminando detalle de plan :"+dfound.getSolicitudServicio().getNumeroSolicitud() +" de plan "+p.getNumeroPlanTrabajo() +" ID("+dfound.getId().getNumeroGrupoAtencion() +"-"+dfound.getId().getNumeroOrden()+")");
-                            _detalles.remove(idx);
-                        }
-                    }
-
-                }
-
-            }
-
-        }
-
-        // añadir al grupo de destino
-        GrupoAtencion g = mpGrupos.get(numeroGrupoAtencion);
-
-        if (g != null && dfound != null) {
-            List<GrupoAtencionDetalle> detalles = g.getGrupoAtencionDetalles();
-            if (dfound != null) {
-                //logger.info ("###-> añadiendo :"+dfound.getSolicitudServicio().getNumeroSolicitud()+ " a grupo:"+g.getNumeroGrupoAtencion());
-
-                Integer nse = detalles.get(detalles.size() - 1).getId().getNumeroOrden() + 1;
-
-                dfound.setId(new GrupoAtencionDetallePK(dfound.getGrupoAtencion().getNumeroGrupoAtencion(), nse));
-                detalles.add(dfound);
-            }
-        }
-        // añadir plan de trabajo
-        if (pdfound != null) {
-            for (PlanTrabajo p : planTrabajoList) {
-                GrupoAtencion ga = p.getGrupoAtencion();
-                if (ga != null && ga.getNumeroGrupoAtencion() == numeroGrupoAtencion) {
-                    if (p.getPlanTrabajoDetalles() != null) {
-                        List<PlanTrabajoDetalle> detalles = p.getPlanTrabajoDetalles();
-                        //logger.info ("###-> añadiendo :"+pdfound.getSolicitudServicio().getNumeroSolicitud()+ " a plan :"+p.getNumeroPlanTrabajo()); 
-
-                        Integer nse = detalles.get(detalles.size() - 1).getId().getNumeroSecuencial() + 1;
-                        pdfound.setId(new PlanTrabajoDetallePK(p.getNumeroPlanTrabajo(), nse));
-                        p.getPlanTrabajoDetalles().add(pdfound);
+                    SolicitudServicio s = d.getSolicitudServicio();
+                    
+                    if (s != null && s.getNumeroSolicitud() == numeroSolicitud) {
+                        solicitudfound =  s;
+                        dfound = d;
                         break;
                     }
                 }
-            }
-        }
 
-        logger.info("#### mostrando detalle del cambio #### ");
-        mostrarGrupos(mpGrupos);
-        generargraficos(mpGrupos);
+                if (dfound != null) {
+                    int idx = detalles.indexOf(dfound);
+                    if (idx != -1) {
+                        // eliminar el detalle encontrado
+                        //logger.info("###-> eliminando detalle de grupo :"+dfound.getSolicitudServicio().getNumeroSolicitud() +"de grupo "+g.getNumeroGrupoAtencion() + " ID("+dfound.getId().getNumeroGrupoAtencion() +"-"+dfound.getId().getNumeroOrden()+")");
+                        GrupoAtencionDetalle deleted = detalles.remove(idx);
+                        if (deleted != null) {
+                            logger.info("del grupo anterior");
+                            //grupoAtencionDetalleDao.remove(deleted);
+                            Response response =  grupoAtencionDetalleDao.transferir(deleted);
+                            logger.info(" elimando del grupo anterior");
+                        }
+                    }
+                }
+
+            }
+
+            for (Long numero : keys) {
+
+                GrupoAtencion g = mpGrupos.get(numero);
+                // eliminando de plan de trabajo
+                for (PlanTrabajo p : planTrabajoList) {
+
+                    GrupoAtencion ga = p.getGrupoAtencion();
+
+                    if (ga != null && g != null && ga.equals(g)) {
+                        List<PlanTrabajoDetalle> _detalles = p.getPlanTrabajoDetalles();
+                        for (PlanTrabajoDetalle d : _detalles) {
+                            SolicitudServicio s = d.getSolicitudServicio();
+                            if (s != null && s.getNumeroSolicitud() == numeroSolicitud) {
+                                pdfound = d;
+                                break;
+                            }
+                        }
+
+                        if (pdfound != null) {
+                            int idx = _detalles.indexOf(pdfound);
+                            if (idx != -1) {
+                                //logger.info("###-> eliminando detalle de plan :"+dfound.getSolicitudServicio().getNumeroSolicitud() +" de plan "+p.getNumeroPlanTrabajo() +" ID("+dfound.getId().getNumeroGrupoAtencion() +"-"+dfound.getId().getNumeroOrden()+")");
+
+                                PlanTrabajoDetalle pddeleted = _detalles.remove(idx);
+                                if (pddeleted != null) {
+                                    logger.info("del plan detalle anterior");
+                                    //planTrabajoDetalleDao.remove(pdfound);
+                                    Response response =  planTrabajoDetalleDao.transferir(pdfound);
+                                    
+                                    logger.info(" elimnado del plan detalle anterior");
+
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            // añadir al grupo de destino
+            GrupoAtencion g = mpGrupos.get(numeroGrupoAtencion);
+
+            if (g != null && dfound != null) {
+                List<GrupoAtencionDetalle> detalles = g.getGrupoAtencionDetalles();
+                if (dfound != null) {
+
+                    Integer nse = detalles.get(detalles.size() - 1).getId().getNumeroOrden() + 1;
+                    dfound.setId(new GrupoAtencionDetallePK(dfound.getGrupoAtencion().getNumeroGrupoAtencion(), nse));
+                    detalles.add(dfound);
+
+                }
+            }
+            // añadir plan de trabajo
+            if (pdfound != null) {
+
+                for (PlanTrabajo p : planTrabajoList) {
+
+                    GrupoAtencion ga = p.getGrupoAtencion();
+
+                    if (ga != null && ga.getNumeroGrupoAtencion() == numeroGrupoAtencion) {
+
+                        if (p.getPlanTrabajoDetalles() != null) {
+                            List<PlanTrabajoDetalle> detalles = p.getPlanTrabajoDetalles();
+                            List<GrupoAtencionDetalle> gaDetalles = ga.getGrupoAtencionDetalles();
+                            //logger.info ("###-> añadiendo :"+pdfound.getSolicitudServicio().getNumeroSolicitud()+ " a plan :"+p.getNumeroPlanTrabajo()); 
+                            logger.info("cant detalles:  " + detalles.size());
+                            logger.info("cant gaDetalles:  " + gaDetalles.size());
+                            logger.info("sorting ##");
+
+                            detalles.sort((o1, o2) -> o1.getId().getNumeroSecuencial().compareTo(o2.getId().getNumeroSecuencial()));
+                            gaDetalles.sort((o1, o2) -> o1.getId().getNumeroOrden().compareTo(o2.getId().getNumeroOrden()));
+
+                            for (PlanTrabajoDetalle detalle : detalles) {
+                                logger.info(detalle.getId().toString());
+                            }
+                            
+                            
+                            for (GrupoAtencionDetalle detalle : gaDetalles) {
+                                logger.info(detalle.getId().toString());
+                            }
+
+                            
+                            // secuencial para plan de trabajo
+                            Integer nse = detalles.get(detalles.size() - 1).getId().getNumeroSecuencial() + 1;
+                            pdfound.setId(new PlanTrabajoDetallePK(p.getNumeroPlanTrabajo(), nse));
+                            p.getPlanTrabajoDetalles().add(pdfound);
+                            logger.info(" p.getNumeroPlanTrabajo() :  " + p.getNumeroPlanTrabajo());
+                            logger.info(" nse :  " + nse);
+                            
+                            logger.info("nuevo plan detalle");
+                            planTrabajoDetalleDao.create(pdfound);
+                            logger.info("insertado nuevo plan detalle");
+
+                            
+                            // numero de orden para el nuevo detalple de la cuadrilla
+                            GrupoAtencionDetalle  gaDetalle =  (GrupoAtencionDetalle) gaDetalles.get(gaDetalles.size()-1).clone();
+                            Integer numeroOrden  =  gaDetalle.getId().getNumeroOrden()+1;
+                            gaDetalle.setId(new GrupoAtencionDetallePK(ga.getNumeroGrupoAtencion(), numeroOrden));
+                            gaDetalle.setSolicitudServicio(solicitudfound);
+                            gaDetalles.add(gaDetalle);
+                            grupoAtencionDetalleDao.create(gaDetalle);
+                            
+
+                            break;
+
+                        }
+                    }
+                }
+            }
+            logger.info("#### mostrando detalle del cambio #### ");
+            generargraficos(mpGrupos);
+            Set<Long> _keys =  mpGrupos.keySet();
+            for (Long numero : _keys) {
+                //Response response = grupoAtencionDao.actualizarRadio(mpGrupos.get(numero));       
+                logger.info("actualizando grupo ####");
+                grupoAtencionDao.update(mpGrupos.get(numero));
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return mpGrupos;
     }
@@ -330,6 +395,7 @@ public class GrupoService {
      * @param mpGrupos
      */
     private void generargraficos(Map<Long, GrupoAtencion> mpGrupos) {
+        System.out.println("Generando graficos ");
 
         try {
             //ArrayList<Integer> colorsindex = Util.getRandomNonRepeatingIntegers(mpGrupos.size(), 0, Geometria.colors.length-1);
@@ -369,6 +435,8 @@ public class GrupoService {
                     // obtener el radio máximo del grupo
                     double radio = Geometria.getRadioMaximo(puntoCentral, puntos);
                     g.setRadio(radio);
+                    
+                    System.out.println(" radio : "+radio);
 
                     // area del circulo
                     g.setArea(Geometria.getAreaCirculo(radio));
@@ -472,8 +540,8 @@ public class GrupoService {
      * getCantGruposSugeridos
      *
      * @param solicitudesselect ejemplo (1,2,3,4) devuelve la cantidad de
-     * solicitudes sugeridas en banse al tiempo promedio de una jornada 
-	 *
+     * solicitudes sugeridas en banse al tiempo promedio de una jornada
+     *
      */
     public Response getCantGruposSugeridos(String solicitudesselect) {
 

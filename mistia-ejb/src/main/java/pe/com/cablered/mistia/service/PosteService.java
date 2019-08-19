@@ -37,13 +37,13 @@ public class PosteService {
 				return response;
 			}
 			
-			if(poste.getDescripcion()!=null){
+			/*if(poste.getDescripcion()!=null){
 				 Poste _poste =  	posteDao.getPoste(poste.getDescripcion());
 				 if(_poste!=null){
 					 response =  new Response(Response.ERROR, " El nombre del Poste ya existe. Ingrese otro nombre");
-					 return response;
+ 					 return response;
 				 }
-			}
+			}*/
 			
 			
 			int codigoPoste =posteDao.getMax(poste)+1;
@@ -130,6 +130,7 @@ public class PosteService {
 		
 	}
 	
+
 	
 	
 	

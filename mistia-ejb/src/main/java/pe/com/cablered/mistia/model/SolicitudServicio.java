@@ -12,145 +12,159 @@ import java.util.Date;
 import java.sql.Timestamp;
 import java.util.List;
 
-
 /**
  * The persistent class for the solicitud_servicio database table.
- * 
+ *
  */
 @Entity
-@Table(name="solicitud_servicio")
+@Table(name = "solicitud_servicio")
 @XmlRootElement
-@NamedQuery(name="SolicitudServicio.findAll", query="SELECT s FROM SolicitudServicio s")
-public class SolicitudServicio extends ObjectBean  implements Serializable, Cloneable {
-	private static final long serialVersionUID = 1L;
+@NamedQuery(name = "SolicitudServicio.findAll", query = "SELECT s FROM SolicitudServicio s")
+public class SolicitudServicio extends ObjectBean implements Serializable, Cloneable {
 
-	@Id
-	@Column(name="numero_solicitud")
-	private long numeroSolicitud;
-	
-	@Column(name="fecha_atencion")
-	private Date fechaAtencion;
-	
-	@Temporal(TemporalType.DATE)
-	@Column(name="fecha_solicitud")
-	private Date fechaSolicitud;
+    private static final long serialVersionUID = 1L;
 
-	/*@Column(name="numero_contrato")
+    @Id
+    @Column(name = "numero_solicitud")
+    private long numeroSolicitud;
+
+    @Column(name = "fecha_atencion")
+    private Date fechaAtencion;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "fecha_solicitud")
+    private Date fechaSolicitud;
+
+    @ManyToOne
+    @JoinColumn(name = "codigo_cliente")
+    private Cliente cliente;
+
+    /*@Column(name="numero_contrato")
 	private BigDecimal numeroContrato;*/
-	
-	@Column(name="tarifa_atencion")
-	private Double tarifaAtencion;
+    @Column(name = "tarifa_atencion")
+    private Double tarifaAtencion;
 
-	//bi-directional many-to-one association to GrupoAtencionDetalle
-	@OneToMany(mappedBy="solicitudServicio" , cascade=CascadeType.ALL)
-	private List<GrupoAtencionDetalle> grupoAtencionDetalles;
+    /**/
+    @Column(name = "codigo_tipo_domicilio")
+    private Integer codigoTipoDomicilio;
 
-	//bi-directional many-to-one association to PlanTrabajoDetalle
-	
-	@OneToMany(mappedBy="solicitudServicio")
-	private List<PlanTrabajoDetalle> planTrabajoDetalles;
-	
-	
-	
-	@OneToMany(mappedBy="solicitudServicio")
-	private List<SolicitudServicioEstado> solicitudServicioEstados;
-	
-	//
-	@OneToMany(mappedBy="solicitudServicio")
-	private List<EncuestaSolicitudResultado> encuestaSolicitudResultados;
-	
+    @Column(name = "nro_domicilio")
+    private String nroDomicilio;
 
-	//bi-directional many-to-one association to Distrito
-	@ManyToOne
-	@JoinColumn(name="codigo_distrito")
-	private Distrito distrito;
+    @Column(name = "dpto_int_domicilio")
+    private String dptoIntDomicilio;
 
-	//bi-directional many-to-one association to Poste
-	@ManyToOne
-	@JoinColumn(name="codigo_poste")
-	private Poste poste;
+    @Column(name = "referencia")
+    private String referencia;
 
-	//bi-directional many-to-one association to TipoSolicitud
-	@ManyToOne
-	@JoinColumn(name="codigo_tipo_solicitud")
-	private TipoSolicitud tipoSolicitud;
+    @Column(name = "urbanizacion")
+    private String urbanizacion;
 
-	
-	//bi-directional many-to-one association to Estado
-	@ManyToOne
-	@JoinColumn(name="codigo_estado")
-	private Estado estado;
-	
-	
-	@ManyToOne
-	@JoinColumn(name="numero_contrato")
-	private ContratoServicio contratoServicio;
-	
-	
-	@Transient
-	private List<SolicitudServicioHorarioAtencion> solicitudServicioHorarioAtencionList;
-	
-	
-	
+    @Column(name = "direccion")
+    private String direccion;
 
+    @Column(name = "latitud")
+    private Double latitud;
 
-	public SolicitudServicio() {
-	}
-	
-	
-	public SolicitudServicio(long numeroSolicitud) {
-		this.numeroSolicitud  = numeroSolicitud;
-	}
-	
+    @Column(name = "longitud")
+    private Double longitud;
 
-	
-	public SolicitudServicio(long numeroSolicitud, Date fechaAtencion, Date fechaSolicitud, Poste poste,  TipoSolicitud tipoSolicitud, ContratoServicio contratoServicio ) {
-		
-		this.numeroSolicitud =  numeroSolicitud; 
-		this.fechaAtencion =  fechaAtencion;
-		this.fechaSolicitud =  fechaSolicitud;
-		this.poste =  poste;
-		this.tipoSolicitud =  tipoSolicitud;
-		this.contratoServicio =  contratoServicio;
-	
-	} 
-	
-	
-	public SolicitudServicio(long numeroSolicitud,  Poste poste) {
-		
-		this.numeroSolicitud =  numeroSolicitud;
-		this.poste =  poste;
-		
-	}
+    /**/
+    //bi-directional many-to-one association to GrupoAtencionDetalle
+    @OneToMany(mappedBy = "solicitudServicio", cascade = CascadeType.ALL)
+    private List<GrupoAtencionDetalle> grupoAtencionDetalles;
 
-	public long getNumeroSolicitud() {
-		return this.numeroSolicitud;
-	}
+    //bi-directional many-to-one association to PlanTrabajoDetalle
+    @OneToMany(mappedBy = "solicitudServicio")
+    private List<PlanTrabajoDetalle> planTrabajoDetalles;
 
-	public void setNumeroSolicitud(long numeroSolicitud) {
-		this.numeroSolicitud = numeroSolicitud;
-	}
+    @OneToMany(mappedBy = "solicitudServicio")
+    private List<SolicitudServicioEstado> solicitudServicioEstados;
 
+    //
+    @OneToMany(mappedBy = "solicitudServicio")
+    private List<EncuestaSolicitudResultado> encuestaSolicitudResultados;
 
+    //bi-directional many-to-one association to Distrito
+    @ManyToOne
+    @JoinColumn(name = "codigo_distrito")
+    private Distrito distrito;
 
-	public Date getFechaAtencion() {
-		return this.fechaAtencion;
-	}
+    //bi-directional many-to-one association to Poste
+    @ManyToOne
+    @JoinColumn(name = "codigo_poste")
+    private Poste poste;
 
-	public void setFechaAtencion(Date fechaAtencion) {
-		this.fechaAtencion = fechaAtencion;
-	}
+    //bi-directional many-to-one association to TipoSolicitud
+    @ManyToOne
+    @JoinColumn(name = "codigo_tipo_solicitud")
+    private TipoSolicitud tipoSolicitud;
 
+    //bi-directional many-to-one association to Estado
+    @ManyToOne
+    @JoinColumn(name = "codigo_estado")
+    private Estado estado;
 
-	public Date getFechaSolicitud() {
-		return this.fechaSolicitud;
-	}
+    @ManyToOne
+    @JoinColumn(name = "numero_contrato")
+    private ContratoServicio contratoServicio;
 
-	public void setFechaSolicitud(Date fechaSolicitud) {
-		this.fechaSolicitud = fechaSolicitud;
-	}
+    @Transient
+    private List<SolicitudServicioHorarioAtencion> solicitudServicioHorarioAtencionList;
 
-	/*
+    @Transient
+    private List<SolicitudServicioDetalle> solicitudServicioDetalleList;
+
+    public SolicitudServicio() {
+    }
+
+    public SolicitudServicio(long numeroSolicitud) {
+        this.numeroSolicitud = numeroSolicitud;
+    }
+
+    public SolicitudServicio(long numeroSolicitud, Date fechaAtencion, Date fechaSolicitud, Poste poste, TipoSolicitud tipoSolicitud, ContratoServicio contratoServicio) {
+
+        this.numeroSolicitud = numeroSolicitud;
+        this.fechaAtencion = fechaAtencion;
+        this.fechaSolicitud = fechaSolicitud;
+        this.poste = poste;
+        this.tipoSolicitud = tipoSolicitud;
+        this.contratoServicio = contratoServicio;
+
+    }
+
+    public SolicitudServicio(long numeroSolicitud, Poste poste) {
+
+        this.numeroSolicitud = numeroSolicitud;
+        this.poste = poste;
+
+    }
+
+    public long getNumeroSolicitud() {
+        return this.numeroSolicitud;
+    }
+
+    public void setNumeroSolicitud(long numeroSolicitud) {
+        this.numeroSolicitud = numeroSolicitud;
+    }
+
+    public Date getFechaAtencion() {
+        return this.fechaAtencion;
+    }
+
+    public void setFechaAtencion(Date fechaAtencion) {
+        this.fechaAtencion = fechaAtencion;
+    }
+
+    public Date getFechaSolicitud() {
+        return this.fechaSolicitud;
+    }
+
+    public void setFechaSolicitud(Date fechaSolicitud) {
+        this.fechaSolicitud = fechaSolicitud;
+    }
+
+    /*
 	public BigDecimal getNumeroContrato() {
 		return this.numeroContrato;
 	}
@@ -158,190 +172,242 @@ public class SolicitudServicio extends ObjectBean  implements Serializable, Clon
 	public void setNumeroContrato(BigDecimal numeroContrato) {
 		this.numeroContrato = numeroContrato;
 	}
-*/
-	public Double getTarifaAtencion() {
-		return this.tarifaAtencion;
-	}
+     */
+    public Double getTarifaAtencion() {
+        return this.tarifaAtencion;
+    }
 
-	public void setTarifaAtencion(Double tarifaAtencion) {
-		this.tarifaAtencion = tarifaAtencion;
-	}
+    public void setTarifaAtencion(Double tarifaAtencion) {
+        this.tarifaAtencion = tarifaAtencion;
+    }
 
+    public TipoSolicitud getTipoSolicitud() {
+        return tipoSolicitud;
+    }
 
-	
-	public TipoSolicitud getTipoSolicitud() {
-		return tipoSolicitud;
-	}
+    public void setTipoSolicitud(TipoSolicitud tipoSolicitud) {
+        this.tipoSolicitud = tipoSolicitud;
+    }
 
+    @XmlTransient
+    public List<GrupoAtencionDetalle> getGrupoAtencionDetalles() {
+        return this.grupoAtencionDetalles;
+    }
 
+    public void setGrupoAtencionDetalles(List<GrupoAtencionDetalle> grupoAtencionDetalles) {
+        this.grupoAtencionDetalles = grupoAtencionDetalles;
+    }
 
-	public void setTipoSolicitud(TipoSolicitud tipoSolicitud) {
-		this.tipoSolicitud = tipoSolicitud;
-	}
+    public GrupoAtencionDetalle addGrupoAtencionDetalle(GrupoAtencionDetalle grupoAtencionDetalle) {
+        getGrupoAtencionDetalles().add(grupoAtencionDetalle);
+        grupoAtencionDetalle.setSolicitudServicio(this);
 
+        return grupoAtencionDetalle;
+    }
 
+    public GrupoAtencionDetalle removeGrupoAtencionDetalle(GrupoAtencionDetalle grupoAtencionDetalle) {
+        getGrupoAtencionDetalles().remove(grupoAtencionDetalle);
+        grupoAtencionDetalle.setSolicitudServicio(null);
 
-	@XmlTransient
-	public List<GrupoAtencionDetalle> getGrupoAtencionDetalles() {
-		return this.grupoAtencionDetalles;
-	}
+        return grupoAtencionDetalle;
+    }
 
-	public void setGrupoAtencionDetalles(List<GrupoAtencionDetalle> grupoAtencionDetalles) {
-		this.grupoAtencionDetalles = grupoAtencionDetalles;
-	}
+    @XmlTransient
+    public List<PlanTrabajoDetalle> getPlanTrabajoDetalles() {
+        return this.planTrabajoDetalles;
+    }
 
-	public GrupoAtencionDetalle addGrupoAtencionDetalle(GrupoAtencionDetalle grupoAtencionDetalle) {
-		getGrupoAtencionDetalles().add(grupoAtencionDetalle);
-		grupoAtencionDetalle.setSolicitudServicio(this);
+    public void setPlanTrabajoDetalles(List<PlanTrabajoDetalle> planTrabajoDetalles) {
+        this.planTrabajoDetalles = planTrabajoDetalles;
+    }
 
-		return grupoAtencionDetalle;
-	}
+    @XmlTransient
+    public List<SolicitudServicioDetalle> getSolicitudServicioDetalleList() {
+        return solicitudServicioDetalleList;
+    }
 
-	public GrupoAtencionDetalle removeGrupoAtencionDetalle(GrupoAtencionDetalle grupoAtencionDetalle) {
-		getGrupoAtencionDetalles().remove(grupoAtencionDetalle);
-		grupoAtencionDetalle.setSolicitudServicio(null);
+    public void setSolicitudServicioDetalleList(List<SolicitudServicioDetalle> solicitudServicioDetalleList) {
+        this.solicitudServicioDetalleList = solicitudServicioDetalleList;
+    }
 
-		return grupoAtencionDetalle;
-	}
+    public PlanTrabajoDetalle addPlanTrabajoDetalle(PlanTrabajoDetalle planTrabajoDetalle) {
+        getPlanTrabajoDetalles().add(planTrabajoDetalle);
+        planTrabajoDetalle.setSolicitudServicio(this);
 
-	@XmlTransient
-	public List<PlanTrabajoDetalle> getPlanTrabajoDetalles() {
-		return this.planTrabajoDetalles;
-	}
+        return planTrabajoDetalle;
+    }
 
-	public void setPlanTrabajoDetalles(List<PlanTrabajoDetalle> planTrabajoDetalles) {
-		this.planTrabajoDetalles = planTrabajoDetalles;
-	}
+    public PlanTrabajoDetalle removePlanTrabajoDetalle(PlanTrabajoDetalle planTrabajoDetalle) {
+        getPlanTrabajoDetalles().remove(planTrabajoDetalle);
+        planTrabajoDetalle.setSolicitudServicio(null);
 
-	public PlanTrabajoDetalle addPlanTrabajoDetalle(PlanTrabajoDetalle planTrabajoDetalle) {
-		getPlanTrabajoDetalles().add(planTrabajoDetalle);
-		planTrabajoDetalle.setSolicitudServicio(this);
+        return planTrabajoDetalle;
+    }
 
-		return planTrabajoDetalle;
-	}
+    public List<SolicitudServicioEstado> getSolicitudServicioEstados() {
+        return solicitudServicioEstados;
+    }
 
-	public PlanTrabajoDetalle removePlanTrabajoDetalle(PlanTrabajoDetalle planTrabajoDetalle) {
-		getPlanTrabajoDetalles().remove(planTrabajoDetalle);
-		planTrabajoDetalle.setSolicitudServicio(null);
+    public void setSolicitudServicioEstados(List<SolicitudServicioEstado> solicitudServicioEstados) {
+        this.solicitudServicioEstados = solicitudServicioEstados;
+    }
 
-		return planTrabajoDetalle;
-	}
+    public Distrito getDistrito() {
+        return this.distrito;
+    }
 
-	
-	
-	
-	
-	public List<SolicitudServicioEstado> getSolicitudServicioEstados() {
-		return solicitudServicioEstados;
-	}
+    public void setDistrito(Distrito distrito) {
+        this.distrito = distrito;
+    }
 
+    public Poste getPoste() {
+        return this.poste;
+    }
 
-	public void setSolicitudServicioEstados(List<SolicitudServicioEstado> solicitudServicioEstados) {
-		this.solicitudServicioEstados = solicitudServicioEstados;
-	}
+    public void setPoste(Poste poste) {
+        this.poste = poste;
+    }
 
+    public Estado getEstado() {
+        return estado;
+    }
 
-	public Distrito getDistrito() {
-		return this.distrito;
-	}
+    public void setEstado(Estado estado) {
+        this.estado = estado;
+    }
 
-	public void setDistrito(Distrito distrito) {
-		this.distrito = distrito;
-	}
+    public Integer getCodigoTipoDomicilio() {
+        return codigoTipoDomicilio;
+    }
 
-	public Poste getPoste() {
-		return this.poste;
-	}
+    public void setCodigoTipoDomicilio(Integer codigoTipoDomicilio) {
+        this.codigoTipoDomicilio = codigoTipoDomicilio;
+    }
 
-	public void setPoste(Poste poste) {
-		this.poste = poste;
-	}
+    public String getNroDomicilio() {
+        return nroDomicilio;
+    }
 
-	public Estado getEstado() {
-		return estado;
-	}
+    public void setNroDomicilio(String nroDomicilio) {
+        this.nroDomicilio = nroDomicilio;
+    }
 
-	public void setEstado(Estado estado) {
-		this.estado = estado;
-	}
+    public String getDptoIntDomicilio() {
+        return dptoIntDomicilio;
+    }
 
+    public void setDptoIntDomicilio(String dptoIntDomicilio) {
+        this.dptoIntDomicilio = dptoIntDomicilio;
+    }
 
+    public String getReferencia() {
+        return referencia;
+    }
 
-	public ContratoServicio getContratoServicio() {
-		return contratoServicio;
-	}
+    public void setReferencia(String referencia) {
+        this.referencia = referencia;
+    }
 
+    public String getUrbanizacion() {
+        return urbanizacion;
+    }
 
-	public void setContratoServicio(ContratoServicio contratoServicio) {
-		this.contratoServicio = contratoServicio;
-	}
+    public void setUrbanizacion(String urbanizacion) {
+        this.urbanizacion = urbanizacion;
+    }
 
-	
-	
+    public String getDireccion() {
+        return direccion;
+    }
 
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
+    }
 
+    public ContratoServicio getContratoServicio() {
+        return contratoServicio;
+    }
 
-	public List<EncuestaSolicitudResultado> getEncuestaSolicitudResultados() {
-		return encuestaSolicitudResultados;
-	}
+    public void setContratoServicio(ContratoServicio contratoServicio) {
+        this.contratoServicio = contratoServicio;
+    }
 
+    public Cliente getCliente() {
+        return cliente;
+    }
 
-	public void setEncuestaSolicitudResultados(List<EncuestaSolicitudResultado> encuestaSolicitudResultados) {
-		this.encuestaSolicitudResultados = encuestaSolicitudResultados;
-	}
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
 
-	
-	
-	
-	public List<SolicitudServicioHorarioAtencion> getSolicitudServicioHorarioAtencionList() {
-		return solicitudServicioHorarioAtencionList;
-	}
+    public Double getLatitud() {
+        return latitud;
+    }
 
+    public void setLatitud(Double latitud) {
+        this.latitud = latitud;
+    }
 
-	public void setSolicitudServicioHorarioAtencionList(
-			List<SolicitudServicioHorarioAtencion> solicitudServicioHorarioAtencionList) {
-		this.solicitudServicioHorarioAtencionList = solicitudServicioHorarioAtencionList;
-	}
+    public Double getLongitud() {
+        return longitud;
+    }
 
+    public void setLongitud(Double longitud) {
+        this.longitud = longitud;
+    }
 
-	@Override
-	public Object clone(){
-		Object object  = null;
-		try{
-			object = super.clone();
-		}catch(CloneNotSupportedException e ){
-			e.printStackTrace();
-		}
-		return object;
-	}
+    public List<EncuestaSolicitudResultado> getEncuestaSolicitudResultados() {
+        return encuestaSolicitudResultados;
+    }
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + (int) (numeroSolicitud ^ (numeroSolicitud >>> 32));
-		return result;
-	}
+    public void setEncuestaSolicitudResultados(List<EncuestaSolicitudResultado> encuestaSolicitudResultados) {
+        this.encuestaSolicitudResultados = encuestaSolicitudResultados;
+    }
 
+    public List<SolicitudServicioHorarioAtencion> getSolicitudServicioHorarioAtencionList() {
+        return solicitudServicioHorarioAtencionList;
+    }
 
+    public void setSolicitudServicioHorarioAtencionList(
+            List<SolicitudServicioHorarioAtencion> solicitudServicioHorarioAtencionList) {
+        this.solicitudServicioHorarioAtencionList = solicitudServicioHorarioAtencionList;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		SolicitudServicio other = (SolicitudServicio) obj;
-		if (numeroSolicitud != other.numeroSolicitud)
-			return false;
-		return true;
-	}
+    @Override
+    public Object clone() {
+        Object object = null;
+        try {
+            object = super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        return object;
+    }
 
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + (int) (numeroSolicitud ^ (numeroSolicitud >>> 32));
+        return result;
+    }
 
-
-
-
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        SolicitudServicio other = (SolicitudServicio) obj;
+        if (numeroSolicitud != other.numeroSolicitud) {
+            return false;
+        }
+        return true;
+    }
 
 }

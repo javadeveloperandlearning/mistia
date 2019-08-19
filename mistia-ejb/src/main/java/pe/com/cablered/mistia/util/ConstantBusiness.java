@@ -107,5 +107,14 @@ public class ConstantBusiness {
     
     public final static int SM = 1;
     public final static int SF = 2;
+    
+    public final static int COD_TIPO_SERV_CABLE =  1;
+    public final static int COD_TIPO_SERV_INTERNET =  2;
+    
+    public final static String DES_TIPO_SERV_CABLE =  "Cable";
+    public final static String DES_TIPO_SERV_INTERNET =  "Internet";
+    
+    
+    
 
 }

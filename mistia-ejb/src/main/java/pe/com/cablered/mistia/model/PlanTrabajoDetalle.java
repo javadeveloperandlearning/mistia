@@ -9,224 +9,227 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Date;
 
-
 /**
  * The persistent class for the plan_trabajo_detalle database table.
- * 
+ *
  */
 @Entity
-@Table(name="plan_trabajo_detalle")
+@Table(name = "plan_trabajo_detalle")
 @XmlRootElement
 public class PlanTrabajoDetalle extends ObjectBean implements Serializable, Cloneable {
-	
-	
-	private static final long serialVersionUID = 1L;
 
-	@EmbeddedId
-	private PlanTrabajoDetallePK id;
+    private static final long serialVersionUID = 1L;
 
-	@Column(name="cod_motivo")
-	private Integer codMotivo;
-	
-	@Column(name="hora_fin")
-	private Date horaFin;
+    @EmbeddedId
+    private PlanTrabajoDetallePK id;
 
-	@Column(name="hora_inicio")
-	private Date horaInicio;
+    @Column(name = "cod_motivo")
+    private Integer codMotivo;
 
-	private String observacion;
-	
-	@Column(name="grado_prioridad")
-	private BigDecimal gradoPrioridad;
-	
-	
-	@Column(name="ind_atnd")
-	private Integer indAtnd;
-	
-	//codigo_estado
-	@Column(name="codigo_estado")
-	private Integer codigoEstado;
-	
-	@Transient
-	private long numeroPlanTrabajo;
-	
-	@Transient
-	private Integer numeroSecuencial;
-	
-	//bi-directional many-to-one association to PlanTrabajo
-	@ManyToOne
-	@JoinColumn(name="numero_plan_trabajo" , insertable = false, updatable= false)
-	private PlanTrabajo planTrabajo;
+    @Column(name = "hora_fin")
+    private Date horaFin;
 
-	//bi-directional many-to-one association to SolicitudServicio
-	@ManyToOne
-	@JoinColumn(name="numero_solicitud")
-	private SolicitudServicio solicitudServicio;
+    @Column(name = "hora_inicio")
+    private Date horaInicio;
 
-	public PlanTrabajoDetalle() {
-	}
-	
-	public PlanTrabajoDetalle(SolicitudServicio solicitudServicio){
-		this.solicitudServicio = solicitudServicio;
-		
-	}
-	
-	
-	public PlanTrabajoDetalle( long numeroPlanTrabajo,Integer numeroSecuencial ){
-		this.id =  new PlanTrabajoDetallePK(numeroPlanTrabajo, numeroSecuencial);
-	}
+    private String observacion;
 
-	
-	
-	
-	public PlanTrabajoDetalle( long numeroPlanTrabajo,Integer numeroSecuencial ,  SolicitudServicio solicitudServicio){
-		this.id =  new PlanTrabajoDetallePK(numeroPlanTrabajo, numeroSecuencial);
-		this.solicitudServicio = solicitudServicio;
-	}
-	
-	public long getNumeroPlanTrabajo() {
-		return numeroPlanTrabajo;
-	}
+    @Column(name = "grado_prioridad")
+    private BigDecimal gradoPrioridad;
 
-	public void setNumeroPlanTrabajo(long numeroPlanTrabajo) {
-		this.numeroPlanTrabajo = numeroPlanTrabajo;
-	}
+    @Column(name = "ind_atnd")
+    private Integer indAtnd;
 
-	public Integer getNumeroSecuencial() {
-		return numeroSecuencial;
-	}
+    //codigo_estado
+    @Column(name = "codigo_estado")
+    private Integer codigoEstado;
 
-	public void setNumeroSecuencial(Integer numeroSecuencial) {
-		this.numeroSecuencial = numeroSecuencial;
-	}
+    @Transient
+    private long numeroPlanTrabajo;
 
-	public PlanTrabajoDetallePK getId() {
-		return this.id;
-	}
+    @Transient
+    private Integer numeroSecuencial;
 
-	public void setId(PlanTrabajoDetallePK id) {
-		this.id = id;
-	}
-	
-	
+    @Column(name = "ind_trnf")
+    private Integer indTrnf;
 
-	public Integer getCodMotivo() {
-		return this.codMotivo;
-	}
+    //bi-directional many-to-one association to PlanTrabajo
+    @ManyToOne
+    @JoinColumn(name = "numero_plan_trabajo", insertable = false, updatable = false)
+    private PlanTrabajo planTrabajo;
 
-	public void setCodMotivo(Integer codMotivo) {
-		this.codMotivo = codMotivo;
-	}
+    //bi-directional many-to-one association to SolicitudServicio
+    @ManyToOne
+    @JoinColumn(name = "numero_solicitud")
+    private SolicitudServicio solicitudServicio;
 
+    public PlanTrabajoDetalle() {
+    }
 
+    public PlanTrabajoDetalle(SolicitudServicio solicitudServicio) {
+        this.solicitudServicio = solicitudServicio;
 
-	public BigDecimal getGradoPrioridad() {
-		return this.gradoPrioridad;
-	}
+    }
 
-	public void setGradoPrioridad(BigDecimal gradoPrioridad) {
-		this.gradoPrioridad = gradoPrioridad;
-	}
+    public PlanTrabajoDetalle(long numeroPlanTrabajo, Integer numeroSecuencial) {
+        this.id = new PlanTrabajoDetallePK(numeroPlanTrabajo, numeroSecuencial);
+    }
 
-	public Date getHoraFin() {
-		return this.horaFin;
-	}
+    public PlanTrabajoDetalle(long numeroPlanTrabajo, Integer numeroSecuencial, SolicitudServicio solicitudServicio) {
+        this.id = new PlanTrabajoDetallePK(numeroPlanTrabajo, numeroSecuencial);
+        this.solicitudServicio = solicitudServicio;
+    }
 
-	public void setHoraFin(Date horaFin) {
-		this.horaFin = horaFin;
-	}
+    public long getNumeroPlanTrabajo() {
+        return numeroPlanTrabajo;
+    }
 
-	public Date getHoraInicio() {
-		return this.horaInicio;
-	}
+    public void setNumeroPlanTrabajo(long numeroPlanTrabajo) {
+        this.numeroPlanTrabajo = numeroPlanTrabajo;
+    }
 
-	public void setHoraInicio(Date horaInicio) {
-		this.horaInicio = horaInicio;
-	}
+    public Integer getNumeroSecuencial() {
+        return numeroSecuencial;
+    }
 
-	public String getObservacion() {
-		return this.observacion;
-	}
+    public void setNumeroSecuencial(Integer numeroSecuencial) {
+        this.numeroSecuencial = numeroSecuencial;
+    }
 
-	public void setObservacion(String observacion) {
-		this.observacion = observacion;
-	}
+    public PlanTrabajoDetallePK getId() {
+        return this.id;
+    }
 
+    public void setId(PlanTrabajoDetallePK id) {
+        this.id = id;
+    }
 
+    public Integer getCodMotivo() {
+        return this.codMotivo;
+    }
 
-	public PlanTrabajo getPlanTrabajo() {
-		return this.planTrabajo;
-	}
+    public void setCodMotivo(Integer codMotivo) {
+        this.codMotivo = codMotivo;
+    }
 
-	public void setPlanTrabajo(PlanTrabajo planTrabajo) {
-		this.planTrabajo = planTrabajo;
-	}
+    public BigDecimal getGradoPrioridad() {
+        return this.gradoPrioridad;
+    }
 
-	public SolicitudServicio getSolicitudServicio() {
-		return this.solicitudServicio;
-	}
+    public void setGradoPrioridad(BigDecimal gradoPrioridad) {
+        this.gradoPrioridad = gradoPrioridad;
+    }
 
-	public void setSolicitudServicio(SolicitudServicio solicitudServicio) {
-		this.solicitudServicio = solicitudServicio;
-	}
-	
-	
-	
-	public Integer getIndAtnd() {
-		return indAtnd;
-	}
+    public Date getHoraFin() {
+        return this.horaFin;
+    }
 
-	public void setIndAtnd(Integer indAtnd) {
-		this.indAtnd = indAtnd;
-	}
+    public void setHoraFin(Date horaFin) {
+        this.horaFin = horaFin;
+    }
 
-	public Integer getCodigoEstado() {
-		return codigoEstado;
-	}
+    public Date getHoraInicio() {
+        return this.horaInicio;
+    }
 
-	public void setCodigoEstado(Integer codigoEstado) {
-		this.codigoEstado = codigoEstado;
-	}
-	
-	
-	
-	
-	
+    public void setHoraInicio(Date horaInicio) {
+        this.horaInicio = horaInicio;
+    }
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		return result;
-	}
+    public String getObservacion() {
+        return this.observacion;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		PlanTrabajoDetalle other = (PlanTrabajoDetalle) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		return true;
-	}
+    public void setObservacion(String observacion) {
+        this.observacion = observacion;
+    }
 
-	@Override
-	public Object clone(){
-		Object object  = null;
-		try{
-			object = super.clone();
-		}catch(CloneNotSupportedException e ){
-			e.printStackTrace();
-		}
-		return object;
-	}
+    public PlanTrabajo getPlanTrabajo() {
+        return this.planTrabajo;
+    }
+
+    public void setPlanTrabajo(PlanTrabajo planTrabajo) {
+        this.planTrabajo = planTrabajo;
+    }
+
+    public SolicitudServicio getSolicitudServicio() {
+        return this.solicitudServicio;
+    }
+
+    public void setSolicitudServicio(SolicitudServicio solicitudServicio) {
+        this.solicitudServicio = solicitudServicio;
+    }
+
+    public Integer getIndAtnd() {
+        return indAtnd;
+    }
+
+    public void setIndAtnd(Integer indAtnd) {
+        this.indAtnd = indAtnd;
+    }
+
+    public Integer getCodigoEstado() {
+        return codigoEstado;
+    }
+
+    public void setCodigoEstado(Integer codigoEstado) {
+        this.codigoEstado = codigoEstado;
+    }
+
+    public Integer getIndTrnf() {
+        return indTrnf;
+    }
+
+    public void setIndTrnf(Integer indTrnf) {
+        this.indTrnf = indTrnf;
+    }
+    
+    
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((id == null) ? 0 : id.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        PlanTrabajoDetalle other = (PlanTrabajoDetalle) obj;
+        if (id == null) {
+            if (other.id != null) {
+                return false;
+            }
+        } else if (!id.equals(other.id)) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public Object clone() {
+        Object object = null;
+        try {
+            object = super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        return object;
+    }
+
+    @Override
+    public String toString() {
+        return "PlanTrabajoDetalle{" + "id=" + id + ", codMotivo=" + codMotivo + ", horaFin=" + horaFin + ", horaInicio=" + horaInicio + ", observacion=" + observacion + ", gradoPrioridad=" + gradoPrioridad + ", indAtnd=" + indAtnd + ", codigoEstado=" + codigoEstado + '}';
+    }
 
 }

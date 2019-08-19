@@ -25,6 +25,7 @@ import pe.com.cablered.mistia.util.Util;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -68,10 +69,19 @@ public class EjecucionRest {
     public Map getPlanTrabajo(Usuario usuario) {
 
         logger.info(" metodo getPlanTrabajo");
-        logger.info(usuario.toString());
-        PlanTrabajo planTrabajo = ejecucionService.getPlanTrabajo( usuario);
-        logger.info(" mi plan : "+planTrabajo);
-        return RequestUtil.toMap(planTrabajo);
+        Map mpPlanTrabajo = Collections.EMPTY_MAP;
+        try {
+            logger.info(usuario.toString());
+            PlanTrabajo planTrabajo = ejecucionService.getPlanTrabajo(usuario);
+            if (planTrabajo != null) {
+                mpPlanTrabajo = RequestUtil.toMap(planTrabajo);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            mpPlanTrabajo = Collections.EMPTY_MAP;
+        }
+        return mpPlanTrabajo;
     }
 
     @GET
@@ -90,6 +100,12 @@ public class EjecucionRest {
             //Long numeroPlanTrabajo  =  1l;
             Long numeroPlanTrabajo = Long.parseLong(_numeroPlanTrabajo);
             List<PlanTrabajoDetalle> planTrabajoDetalleList = ejecucionService.planTrabajoDetalleList(numeroPlanTrabajo);
+
+            
+            if (planTrabajoDetalleList != null && planTrabajoDetalleList.size() > 0) {
+                logger.info("cant items :" + planTrabajoDetalleList.size());
+            }
+
             List<Map> _planTrabajoDetalleList = new ArrayList();
             SimpleDateFormat sdf = new SimpleDateFormat(ConstantBusiness.FORMAT_DATE_TIME);
 
@@ -168,20 +184,13 @@ public class EjecucionRest {
     @Path("/registrarevidencia.html")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response registrarEvidencia(SolicitudServicioEvidencia  solicitudServicioEvidencia) {
-        
+    public Response registrarEvidencia(SolicitudServicioEvidencia solicitudServicioEvidencia) {
+
         logger.info(" metodo : registrarEvidencia");
 
         Response response = null;
 
         try {
-            /*
-            
-                Long numeroSolicitud = Long.parseLong(request.getParameter("numeroSolicitud"));
-                String file = request.getParameter("file");
-            
-            */
-
             response = ejecucionService.registrarEvidencia(solicitudServicioEvidencia);
 
         } catch (Exception e) {

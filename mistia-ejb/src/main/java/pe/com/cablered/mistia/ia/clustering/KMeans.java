@@ -75,7 +75,7 @@ public class KMeans {
            /* System.out.println("#################");
             System.out.println("Iteration: " + iteration);
             System.out.println("Centroid distances: " + distance);*/
-            plotClusters();
+            //plotClusters();
             if (distance == 0) {
                 finish = true;
             }

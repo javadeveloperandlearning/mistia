@@ -164,9 +164,13 @@ public class ProgramacionService implements Serializable {
         List<Map<String, Object>> solicitudes = new ArrayList<Map<String, Object>>();
         List<SolicitudServicio> solicitudesList = null;
 
-        if (codigoDistrito != null && codigoDistrito == 0) {codigoDistrito = null;}
+        if (codigoDistrito != null && codigoDistrito == 0) {
+            codigoDistrito = null;
+        }
 
-        if (codigoTipoSolicitud != null && codigoTipoSolicitud == 0) {codigoTipoSolicitud = null;}
+        if (codigoTipoSolicitud != null && codigoTipoSolicitud == 0) {
+            codigoTipoSolicitud = null;
+        }
 
         solicitudesList = solicitudServicioDao.getSolicitudList(ConstantBusiness.ESTADO_SOLICITUD_PENDIENTE, codigoDistrito, codigoTipoSolicitud);;
 
@@ -190,17 +194,16 @@ public class ProgramacionService implements Serializable {
 
         return solicitudes;
     }
-    
-    
+
     /**
      * obtiene la lista de solicitudes en base a la programación
+     *
      * @numeroProgramacion
-     * 
+     *
      */
-
     public List<Map<String, Object>> getSolicitudList(Long numeroProgramacion) {
-        
-         logger.info(" método : getSolicitudList(Long numeroProgramacion)");
+
+        logger.info(" método : getSolicitudList(Long numeroProgramacion)");
 
         List<Map<String, Object>> solicitudes = new ArrayList<Map<String, Object>>();
         List<SolicitudServicio> solicitudesList = null;
@@ -221,16 +224,13 @@ public class ProgramacionService implements Serializable {
             solicitudes.add(map);
             solicitudesList.add(s);
 
-   
         }
-        
+
         solicitudesCached = new ArrayList<>();
         solicitudesCached.addAll(solicitudesList);
         return solicitudes;
     }
-    
-    
-    
+
     public List<Map<String, Object>> getSolicitudList(Long numeroProgramacion, int accion, Integer codigoDistrito, Integer codigoTipoSolicitud) {
 
         logger.info(" método : getSolicitudList");
@@ -389,26 +389,24 @@ public class ProgramacionService implements Serializable {
      */
     public List<PlanTrabajo> asignarCuadrillasGrupos(Date fecPrgn, Map<Long, GrupoAtencion> mpGrupos) {
 
-        logger.info("metodo : asignarCuadrillasGrupos !!!!" );
-        
-        Calendar cal = Calendar.getInstance(); 
+        logger.info("metodo : asignarCuadrillasGrupos !!!!");
+
+        Calendar cal = Calendar.getInstance();
         cal.setTime(fecPrgn);
         cal.set(Calendar.HOUR_OF_DAY, 0);
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);
         Date _fecPrgn = cal.getTime();
-        
-        logger.info(" _fecPrgn :"+_fecPrgn);
+
+        logger.info(" _fecPrgn :" + _fecPrgn);
 
         List<Cuadrilla> cuadrillas = cuadrillaDao.getCuadrillaLibresList(_fecPrgn);
-        
+
         for (Cuadrilla cuadrilla : cuadrillas) {
-            logger.info(" cuadrilla : "+cuadrilla.getNumeroCuadrilla());
+            logger.info(" cuadrilla : " + cuadrilla.getNumeroCuadrilla());
         }
-        
-        
-        
+
         //obtenemos combinaciones 
         Collection<GrupoAtencion> grupos = mpGrupos.values();
         List<GrupoAtencion> grupoList = new ArrayList<>();
@@ -416,9 +414,9 @@ public class ProgramacionService implements Serializable {
 
         Map<Integer, Map<String, Object>> combinaciones = getCombinaciones(grupoList, cuadrillas);
         // asignaciones realizadas por la red neuronal
-        
+
         asignaciones = getAsignacionMachineLearning(combinaciones);
-        
+
         List<PlanTrabajo> planTrabajoList = generarPlanesTrabajo(fecPrgn, cuadrillas, mpGrupos, asignaciones);
         planTrabajoCachedList = new ArrayList<PlanTrabajo>();
         planTrabajoCachedList.addAll(planTrabajoList);
@@ -428,8 +426,8 @@ public class ProgramacionService implements Serializable {
     }
 
     /**
-     * genera los pplanes de trabajo a partir de cuadrillas y grupos
-     * asignaciones tiene la relaciones entre las cuadrillas y los grupos
+     * genera los planes de trabajo a partir de cuadrillas y grupos asignaciones
+     * tiene la relaciones entre las cuadrillas y los grupos
      *
      * @param cuadrillas
      * @param mpGrupos
@@ -550,7 +548,6 @@ public class ProgramacionService implements Serializable {
         Collections.sort(combinacionesList, new AsignacionNeuralNetworkSort());
 
         //System.out.println("##### Mostrando combinaciones ###### ");
-
         // proceso de seleccion de cuadrillas con grupos de atencion
         Map<Long, Long> asiganciones = new LinkedHashMap<>();
         //Map<String, Double>  pesosasig = new LinkedHashMap<>();
@@ -914,7 +911,7 @@ public class ProgramacionService implements Serializable {
                 for (PlanTrabajo planTrabajo : planTrabajoCachedList) {
                     // grupo atencion
                     grupoAtencionDao.create(planTrabajo.getGrupoAtencion());
-                    
+
                     int nse = 1;
                     for (GrupoAtencionDetalle gd : planTrabajo.getGrupoAtencion().getGrupoAtencionDetalles()) {
 
@@ -938,6 +935,9 @@ public class ProgramacionService implements Serializable {
                     planTrabajo.setNumeroPlanTrabajo(np);
 
                     int nse = 1;
+
+                    Timestamp timeiniaux = null;
+
                     for (PlanTrabajoDetalle pd : planTrabajo.getPlanTrabajoDetalles()) {
                         pd.setId(new PlanTrabajoDetallePK(planTrabajo.getNumeroPlanTrabajo(), nse));
                         long numeroSolicitud = pd.getSolicitudServicio().getNumeroSolicitud();
@@ -945,10 +945,20 @@ public class ProgramacionService implements Serializable {
                         solicitudServicio = (SolicitudServicio) solicitudServicio.clone();
                         pd.setSolicitudServicio(solicitudServicio);
                         pd.setGradoPrioridad(new BigDecimal(nse));
-                        pd.setHoraInicio(solicitudServicio.getFechaAtencion());
+
+                        Timestamp fechabase = null;
+                        if (timeiniaux == null) {
+                            fechabase = planTrabajo.getFechaProgramacion();
+                        } else {
+                            fechabase = timeiniaux;
+                        }
+                        // hora de inicio
+                        //pd.setHoraInicio(solicitudServicio.getFechaAtencion());
+                        pd.setHoraInicio(fechabase);
                         // calculando hora fin
                         Calendar cal = Calendar.getInstance();
-                        cal.setTime(solicitudServicio.getFechaAtencion());
+                        //cal.setTime(solicitudServicio.getFechaAtencion());
+                        cal.setTime(pd.getHoraInicio());
                         int timeadd = solicitudServicio.getTipoSolicitud().getTiempoEjecucion();
                         cal.add(Calendar.MINUTE, timeadd);
                         pd.setHoraFin(cal.getTime());
@@ -960,6 +970,8 @@ public class ProgramacionService implements Serializable {
                         solicitudServicio.setEstado(new Estado(ESTADO_SOLICITUD_ASIGNADO));
                         //solicitudServicioDao.update(solicitudServicio);
                         solicitudServicioDao.actualizarEstado(solicitudServicio);
+
+                        timeiniaux = new Timestamp(pd.getHoraFin().getTime());
 
                         nse++;
                     }
@@ -1057,7 +1069,6 @@ public class ProgramacionService implements Serializable {
                     }
 
                 }
-
             }
         }
 
@@ -1076,10 +1087,8 @@ public class ProgramacionService implements Serializable {
 
         planTrabajoCachedList = new ArrayList<PlanTrabajo>();
         planTrabajoCachedList.addAll(planTrabajoList);
-
         logger.info("####  reasignaciones finales :" + reasignaciones.toString());
-
-        plotPlanesTrabajo(planTrabajoCachedList);
+        // plotPlanesTrabajo(planTrabajoCachedList);
 
         return planTrabajoList;
     }
@@ -1212,28 +1221,28 @@ public class ProgramacionService implements Serializable {
             } else if (accion != null && accion.equals(ConstantBusiness.ACCION_EDITA_PROGRAMACION)) {
                 mpGrupos = new LinkedHashMap<Long, GrupoAtencion>();
                 logger.info(" mostrando mostrando grupos bd  ");
-                List<GrupoAtencion> grupoAtencionLíst = grupoAtencionDao.getGruposAtencionPorProgramacion(numeroProgramacion);
-                List<GrupoAtencion> _grupoAtencionLíst = new ArrayList<>();
-
+                List<GrupoAtencion> grupoAtencionList = grupoAtencionDao.getGruposAtencionPorProgramacion(numeroProgramacion);
+                grupoAtencionList.sort((o1, o2) -> o1.getNumeroGrupoAtencion().compareTo(o2.getNumeroGrupoAtencion()));
+                List<GrupoAtencion> _grupoAtencionList = new ArrayList<>();
                 List<GrupoAtencionDetalle> _grupoDetalleAtencionLíst = new ArrayList<>();
 
-                for (GrupoAtencion g : grupoAtencionLíst) {
+                for (GrupoAtencion g : grupoAtencionList) {
                     logger.info(" grupo generado :" + g.getDescripcion());
                     //clonando grupos 
                     logger.info(" ### clonando grupo : " + g.getNumeroGrupoAtencion());
                     GrupoAtencion grupoAtencion = (GrupoAtencion) g.clone();
                     for (GrupoAtencionDetalle d : g.getGrupoAtencionDetalles()) {
-
-                        logger.info("### numero de solicitud :" + d.getSolicitudServicio().getNumeroSolicitud());
-
-                        _grupoDetalleAtencionLíst.add((GrupoAtencionDetalle) d.clone());
+                        logger.info("###--> numero de solicitud :" + d.getSolicitudServicio().getNumeroSolicitud() + " indtrnf:" + d.getIndTrnf());
+                        if (d.getIndTrnf() == null) {
+                            _grupoDetalleAtencionLíst.add((GrupoAtencionDetalle) d.clone());
+                        }
                     }
 
-                    _grupoAtencionLíst.add(grupoAtencion);
+                    _grupoAtencionList.add(grupoAtencion);
                 }
 
                 logger.info(" mapeando objetos clonados ");
-                for (GrupoAtencion g : _grupoAtencionLíst) {
+                for (GrupoAtencion g : _grupoAtencionList) {
                     g.setGrupoAtencionDetalles(new ArrayList<GrupoAtencionDetalle>());
                     for (GrupoAtencionDetalle d : _grupoDetalleAtencionLíst) {
                         if (d.getGrupoAtencion() != null
@@ -1321,9 +1330,6 @@ public class ProgramacionService implements Serializable {
         return new Response(Response.OK, Response.MSG_OK);
     }
 
-
-    
-    
     public List<SolicitudServicio> getSolicitudesCached() {
         return solicitudesCached;
     }
@@ -1400,9 +1406,9 @@ public class ProgramacionService implements Serializable {
 
     public Map reasignarSolictud(long numerosoli, long numerogrup) {
         logger.info("#### Planes de trabajo inicial ");
-        plotPlanesTrabajo(planTrabajoCachedList);
+        //plotPlanesTrabajo(planTrabajoCachedList);
         this.mpGruposCached = grupoService.reasignarSolictud(planTrabajoCachedList, mpGruposCached, numerosoli, numerogrup);
-        plotPlanesTrabajo(planTrabajoCachedList);
+        //plotPlanesTrabajo(planTrabajoCachedList);
         return mpGruposCached;
     }
 
@@ -1410,7 +1416,7 @@ public class ProgramacionService implements Serializable {
         Map<Long, GrupoAtencion> mpGrupos = null;
         try {
 
-            mpGrupos = grupoService.generarGruposAtencion( solicitudesselect, _numerogrupos);
+            mpGrupos = grupoService.generarGruposAtencion(solicitudesselect, _numerogrupos);
             this.mpGruposCached = mpGrupos;
         } catch (Exception e) {
             e.printStackTrace();

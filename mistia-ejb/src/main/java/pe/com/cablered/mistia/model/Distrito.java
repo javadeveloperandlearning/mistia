@@ -8,258 +8,261 @@ import javax.xml.bind.annotation.XmlTransient;
 import java.sql.Timestamp;
 import java.util.List;
 
-
 /**
  * The persistent class for the distritos database table.
- * 
+ *
  */
 @Entity
-@Table(name="distritos")
-@NamedQuery(name="Distrito.findAll", query="SELECT d FROM Distrito d")
+@Table(name = "distritos")
+@NamedQuery(name = "Distrito.findAll", query = "SELECT d FROM Distrito d")
 //@JsonInclude(JsonInclude.Include.NON_EMPTY)
 
 @XmlRootElement(name = "distrito")
 public class Distrito implements Serializable {
-	private static final long serialVersionUID = 1L;
 
-	@Id
-	@Column(name="codigo_distrito")
-	private Integer codigoDistrito;
+    private static final long serialVersionUID = 1L;
 
-	private String descripcion;
+    @Id
+    @Column(name = "codigo_distrito")
+    private Integer codigoDistrito;
 
-	@Column(name="estacion_creacion")
-	private String estacionCreacion;
+    private String descripcion;
 
-	@Column(name="estacion_modifcion")
-	private String estacionModifcion;
+    @Column(name = "estacion_creacion")
+    private String estacionCreacion;
 
-	@Column(name="fecha_creacion")
-	private Timestamp fechaCreacion;
+    @Column(name = "estacion_modifcion")
+    private String estacionModifcion;
 
-	@Column(name="fecha_modificacion")
-	private Timestamp fechaModificacion;
+    @Column(name = "fecha_creacion")
+    private Timestamp fechaCreacion;
 
-	@Column(name="usuario_creacion")
-	private String usuarioCreacion;
+    @Column(name = "fecha_modificacion")
+    private Timestamp fechaModificacion;
 
-	@Column(name="usuario_modificacion")
-	private String usuarioModificacion;
+    @Column(name = "usuario_creacion")
+    private String usuarioCreacion;
 
-	//bi-directional many-to-one association to ContratoServicio
-	@OneToMany(mappedBy="distrito")
-	private List<ContratoServicio> contratoServicios;
+    @Column(name = "usuario_modificacion")
+    private String usuarioModificacion;
 
-	//bi-directional many-to-one association to Provincia
-	@ManyToOne
-	@JoinColumn(name="codigo_provincia")
-	private Provincia provincia;
+    //bi-directional many-to-one association to ContratoServicio
+    @OneToMany(mappedBy = "distrito")
+    private List<ContratoServicio> contratoServicios;
 
-	//bi-directional many-to-one association to SolicitudServicio
-	@OneToMany(mappedBy="distrito")
-	private List<SolicitudServicio> solicitudServicios;
+    //bi-directional many-to-one association to Provincia
+    @ManyToOne
+    @JoinColumn(name = "codigo_provincia")
+    private Provincia provincia;
 
-	//bi-directional many-to-one association to Tecnico
-	@OneToMany(mappedBy="distrito")
-	private List<Tecnico> tecnicos;
+    //bi-directional many-to-one association to SolicitudServicio
+    @OneToMany(mappedBy = "distrito")
+    private List<SolicitudServicio> solicitudServicios;
 
-	public Distrito() {
-	}
+    //bi-directional many-to-one association to Tecnico
+    @OneToMany(mappedBy = "distrito")
+    private List<Tecnico> tecnicos;
 
-	
-	public Distrito(Integer codigoDistrito) {
-		super();
-		this.codigoDistrito = codigoDistrito;
-	}
+    @OneToMany(mappedBy = "distrito")
+    private List<ClienteDireccion> clienteDireccions;
 
+    public Distrito() {
+    }
 
+    public Distrito(Integer codigoDistrito) {
+        super();
+        this.codigoDistrito = codigoDistrito;
+    }
 
-	public Distrito(Integer codigoDistrito, String descripcion) {
-		super();
-		this.codigoDistrito = codigoDistrito;
-		this.descripcion = descripcion;
-	}
+    public Distrito(Integer codigoDistrito, String descripcion) {
+        super();
+        this.codigoDistrito = codigoDistrito;
+        this.descripcion = descripcion;
+    }
 
+    public Integer getCodigoDistrito() {
+        return this.codigoDistrito;
+    }
 
+    public void setCodigoDistrito(Integer codigoDistrito) {
+        this.codigoDistrito = codigoDistrito;
+    }
 
+    public String getDescripcion() {
+        return this.descripcion;
+    }
 
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
 
+    public String getEstacionCreacion() {
+        return this.estacionCreacion;
+    }
 
-	public Integer getCodigoDistrito() {
-		return this.codigoDistrito;
-	}
+    public void setEstacionCreacion(String estacionCreacion) {
+        this.estacionCreacion = estacionCreacion;
+    }
 
-	public void setCodigoDistrito(Integer codigoDistrito) {
-		this.codigoDistrito = codigoDistrito;
-	}
+    public String getEstacionModifcion() {
+        return this.estacionModifcion;
+    }
 
-	public String getDescripcion() {
-		return this.descripcion;
-	}
+    public void setEstacionModifcion(String estacionModifcion) {
+        this.estacionModifcion = estacionModifcion;
+    }
 
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
-	}
+    public Timestamp getFechaCreacion() {
+        return this.fechaCreacion;
+    }
 
-	public String getEstacionCreacion() {
-		return this.estacionCreacion;
-	}
+    public void setFechaCreacion(Timestamp fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
+    }
 
-	public void setEstacionCreacion(String estacionCreacion) {
-		this.estacionCreacion = estacionCreacion;
-	}
+    public Timestamp getFechaModificacion() {
+        return this.fechaModificacion;
+    }
 
-	public String getEstacionModifcion() {
-		return this.estacionModifcion;
-	}
+    public void setFechaModificacion(Timestamp fechaModificacion) {
+        this.fechaModificacion = fechaModificacion;
+    }
 
-	public void setEstacionModifcion(String estacionModifcion) {
-		this.estacionModifcion = estacionModifcion;
-	}
+    public String getUsuarioCreacion() {
+        return this.usuarioCreacion;
+    }
 
-	public Timestamp getFechaCreacion() {
-		return this.fechaCreacion;
-	}
+    public void setUsuarioCreacion(String usuarioCreacion) {
+        this.usuarioCreacion = usuarioCreacion;
+    }
 
-	public void setFechaCreacion(Timestamp fechaCreacion) {
-		this.fechaCreacion = fechaCreacion;
-	}
+    public String getUsuarioModificacion() {
+        return this.usuarioModificacion;
+    }
 
-	public Timestamp getFechaModificacion() {
-		return this.fechaModificacion;
-	}
+    public void setUsuarioModificacion(String usuarioModificacion) {
+        this.usuarioModificacion = usuarioModificacion;
+    }
 
-	public void setFechaModificacion(Timestamp fechaModificacion) {
-		this.fechaModificacion = fechaModificacion;
-	}
+    @XmlTransient
+    public List<ContratoServicio> getContratoServicios() {
+        return this.contratoServicios;
+    }
 
-	public String getUsuarioCreacion() {
-		return this.usuarioCreacion;
-	}
+    public void setContratoServicios(List<ContratoServicio> contratoServicios) {
+        this.contratoServicios = contratoServicios;
+    }
 
-	public void setUsuarioCreacion(String usuarioCreacion) {
-		this.usuarioCreacion = usuarioCreacion;
-	}
+    public ContratoServicio addContratoServicio(ContratoServicio contratoServicio) {
+        getContratoServicios().add(contratoServicio);
+        contratoServicio.setDistrito(this);
 
-	public String getUsuarioModificacion() {
-		return this.usuarioModificacion;
-	}
+        return contratoServicio;
+    }
 
-	public void setUsuarioModificacion(String usuarioModificacion) {
-		this.usuarioModificacion = usuarioModificacion;
-	}
+    public ContratoServicio removeContratoServicio(ContratoServicio contratoServicio) {
+        getContratoServicios().remove(contratoServicio);
+        contratoServicio.setDistrito(null);
 
-	@XmlTransient
-	public List<ContratoServicio> getContratoServicios() {
-		return this.contratoServicios;
-	}
+        return contratoServicio;
+    }
 
-	public void setContratoServicios(List<ContratoServicio> contratoServicios) {
-		this.contratoServicios = contratoServicios;
-	}
+    public Provincia getProvincia() {
+        return this.provincia;
+    }
 
-	public ContratoServicio addContratoServicio(ContratoServicio contratoServicio) {
-		getContratoServicios().add(contratoServicio);
-		contratoServicio.setDistrito(this);
+    public void setProvincia(Provincia provincia) {
+        this.provincia = provincia;
+    }
 
-		return contratoServicio;
-	}
+    @XmlTransient
+    public List<SolicitudServicio> getSolicitudServicios() {
+        return this.solicitudServicios;
+    }
 
-	public ContratoServicio removeContratoServicio(ContratoServicio contratoServicio) {
-		getContratoServicios().remove(contratoServicio);
-		contratoServicio.setDistrito(null);
+    public void setSolicitudServicios(List<SolicitudServicio> solicitudServicios) {
+        this.solicitudServicios = solicitudServicios;
+    }
 
-		return contratoServicio;
-	}
+    public SolicitudServicio addSolicitudServicio(SolicitudServicio solicitudServicio) {
+        getSolicitudServicios().add(solicitudServicio);
+        solicitudServicio.setDistrito(this);
 
-	public Provincia getProvincia() {
-		return this.provincia;
-	}
+        return solicitudServicio;
+    }
 
-	public void setProvincia(Provincia provincia) {
-		this.provincia = provincia;
-	}
+    public SolicitudServicio removeSolicitudServicio(SolicitudServicio solicitudServicio) {
+        getSolicitudServicios().remove(solicitudServicio);
+        solicitudServicio.setDistrito(null);
 
-	@XmlTransient
-	public List<SolicitudServicio> getSolicitudServicios() {
-		return this.solicitudServicios;
-	}
+        return solicitudServicio;
+    }
 
-	public void setSolicitudServicios(List<SolicitudServicio> solicitudServicios) {
-		this.solicitudServicios = solicitudServicios;
-	}
+    public List<ClienteDireccion> getClienteDireccions() {
+        return clienteDireccions;
+    }
 
-	public SolicitudServicio addSolicitudServicio(SolicitudServicio solicitudServicio) {
-		getSolicitudServicios().add(solicitudServicio);
-		solicitudServicio.setDistrito(this);
+    public void setClienteDireccions(List<ClienteDireccion> clienteDireccions) {
+        this.clienteDireccions = clienteDireccions;
+    }
 
-		return solicitudServicio;
-	}
+    @XmlTransient
+    public List<Tecnico> getTecnicos() {
+        return this.tecnicos;
+    }
 
-	public SolicitudServicio removeSolicitudServicio(SolicitudServicio solicitudServicio) {
-		getSolicitudServicios().remove(solicitudServicio);
-		solicitudServicio.setDistrito(null);
+    public void setTecnicos(List<Tecnico> tecnicos) {
+        this.tecnicos = tecnicos;
+    }
 
-		return solicitudServicio;
-	}
+    public Tecnico addTecnico(Tecnico tecnico) {
+        getTecnicos().add(tecnico);
+        tecnico.setDistrito(this);
 
-	@XmlTransient
-	public List<Tecnico> getTecnicos() {
-		return this.tecnicos;
-	}
+        return tecnico;
+    }
 
-	public void setTecnicos(List<Tecnico> tecnicos) {
-		this.tecnicos = tecnicos;
-	}
+    @XmlTransient
+    public Tecnico removeTecnico(Tecnico tecnico) {
+        getTecnicos().remove(tecnico);
+        tecnico.setDistrito(null);
 
-	public Tecnico addTecnico(Tecnico tecnico) {
-		getTecnicos().add(tecnico);
-		tecnico.setDistrito(this);
+        return tecnico;
+    }
 
-		return tecnico;
-	}
+    @Override
+    public String toString() {
+        return this.getDescripcion();
+    }
 
-	@XmlTransient
-	public Tecnico removeTecnico(Tecnico tecnico) {
-		getTecnicos().remove(tecnico);
-		tecnico.setDistrito(null);
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((codigoDistrito == null) ? 0 : codigoDistrito.hashCode());
+        return result;
+    }
 
-		return tecnico;
-	}
-	
-	@Override
-	public String toString() {
-		return this.getDescripcion();
-	}
-
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((codigoDistrito == null) ? 0 : codigoDistrito.hashCode());
-		return result;
-	}
-
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Distrito other = (Distrito) obj;
-		if (codigoDistrito == null) {
-			if (other.codigoDistrito != null)
-				return false;
-		} else if (!codigoDistrito.equals(other.codigoDistrito))
-			return false;
-		return true;
-	}
-	
-	
-	
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        Distrito other = (Distrito) obj;
+        if (codigoDistrito == null) {
+            if (other.codigoDistrito != null) {
+                return false;
+            }
+        } else if (!codigoDistrito.equals(other.codigoDistrito)) {
+            return false;
+        }
+        return true;
+    }
 
 }

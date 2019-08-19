@@ -6,159 +6,179 @@ import javax.xml.bind.annotation.XmlTransient;
 
 import java.sql.Timestamp;
 import java.util.List;
-
+import java.util.Objects;
 
 /**
  * The persistent class for the provincias database table.
- * 
+ *
  */
 @Entity
-@Table(name="provincias")
-@NamedQuery(name="Provincia.findAll", query="SELECT p FROM Provincia p")
+@Table(name = "provincias")
+@NamedQuery(name = "Provincia.findAll", query = "SELECT p FROM Provincia p")
 public class Provincia implements Serializable {
-	private static final long serialVersionUID = 1L;
 
-	@Id
-	@Column(name="codigo_provincia")
-	private Integer codigoProvincia;
+    private static final long serialVersionUID = 1L;
 
-	private String descripcion;
+    @Id
+    @Column(name = "codigo_provincia")
+    private Integer codigoProvincia;
 
-	@Column(name="estacion_creacion")
-	private String estacionCreacion;
+    private String descripcion;
 
-	@Column(name="estacion_modifcion")
-	private String estacionModifcion;
+    @Column(name = "estacion_creacion")
+    private String estacionCreacion;
 
-	@Column(name="fecha_creacion")
-	private Timestamp fechaCreacion;
+    @Column(name = "estacion_modifcion")
+    private String estacionModifcion;
 
-	@Column(name="fecha_modificacion")
-	private Timestamp fechaModificacion;
+    @Column(name = "fecha_creacion")
+    private Timestamp fechaCreacion;
 
-	@Column(name="usuario_creacion")
-	private String usuarioCreacion;
+    @Column(name = "fecha_modificacion")
+    private Timestamp fechaModificacion;
 
-	@Column(name="usuario_modificacion")
-	private String usuarioModificacion;
+    @Column(name = "usuario_creacion")
+    private String usuarioCreacion;
 
-	//bi-directional many-to-one association to Distrito
-	@OneToMany(mappedBy="provincia")
-	private List<Distrito> distritos;
+    @Column(name = "usuario_modificacion")
+    private String usuarioModificacion;
 
-	//bi-directional many-to-one association to Departamento
-	@ManyToOne
-	@JoinColumn(name="codigo_departamento")
-	private Departamento departamento;
+    //bi-directional many-to-one association to Distrito
+    @OneToMany(mappedBy = "provincia")
+    private List<Distrito> distritos;
 
-	public Provincia() {
-	}
-	
-	
-	
+    //bi-directional many-to-one association to Departamento
+    @ManyToOne
+    @JoinColumn(name = "codigo_departamento")
+    private Departamento departamento;
 
-	public Provincia(Integer codigoProvincia, String descripcion) {
-		super();
-		this.codigoProvincia = codigoProvincia;
-		this.descripcion = descripcion;
-	}
+    public Provincia() {
+    }
 
+    public Provincia(Integer codigoProvincia, String descripcion) {
+        super();
+        this.codigoProvincia = codigoProvincia;
+        this.descripcion = descripcion;
+    }
 
+    public Integer getCodigoProvincia() {
+        return this.codigoProvincia;
+    }
 
+    public void setCodigoProvincia(Integer codigoProvincia) {
+        this.codigoProvincia = codigoProvincia;
+    }
 
-	public Integer getCodigoProvincia() {
-		return this.codigoProvincia;
-	}
+    public String getDescripcion() {
+        return this.descripcion;
+    }
 
-	public void setCodigoProvincia(Integer codigoProvincia) {
-		this.codigoProvincia = codigoProvincia;
-	}
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
 
-	public String getDescripcion() {
-		return this.descripcion;
-	}
+    public String getEstacionCreacion() {
+        return this.estacionCreacion;
+    }
 
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
-	}
+    public void setEstacionCreacion(String estacionCreacion) {
+        this.estacionCreacion = estacionCreacion;
+    }
 
-	public String getEstacionCreacion() {
-		return this.estacionCreacion;
-	}
+    public String getEstacionModifcion() {
+        return this.estacionModifcion;
+    }
 
-	public void setEstacionCreacion(String estacionCreacion) {
-		this.estacionCreacion = estacionCreacion;
-	}
+    public void setEstacionModifcion(String estacionModifcion) {
+        this.estacionModifcion = estacionModifcion;
+    }
 
-	public String getEstacionModifcion() {
-		return this.estacionModifcion;
-	}
+    public Timestamp getFechaCreacion() {
+        return this.fechaCreacion;
+    }
 
-	public void setEstacionModifcion(String estacionModifcion) {
-		this.estacionModifcion = estacionModifcion;
-	}
+    public void setFechaCreacion(Timestamp fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
+    }
 
-	public Timestamp getFechaCreacion() {
-		return this.fechaCreacion;
-	}
+    public Timestamp getFechaModificacion() {
+        return this.fechaModificacion;
+    }
 
-	public void setFechaCreacion(Timestamp fechaCreacion) {
-		this.fechaCreacion = fechaCreacion;
-	}
+    public void setFechaModificacion(Timestamp fechaModificacion) {
+        this.fechaModificacion = fechaModificacion;
+    }
 
-	public Timestamp getFechaModificacion() {
-		return this.fechaModificacion;
-	}
+    public String getUsuarioCreacion() {
+        return this.usuarioCreacion;
+    }
 
-	public void setFechaModificacion(Timestamp fechaModificacion) {
-		this.fechaModificacion = fechaModificacion;
-	}
+    public void setUsuarioCreacion(String usuarioCreacion) {
+        this.usuarioCreacion = usuarioCreacion;
+    }
 
-	public String getUsuarioCreacion() {
-		return this.usuarioCreacion;
-	}
+    public String getUsuarioModificacion() {
+        return this.usuarioModificacion;
+    }
 
-	public void setUsuarioCreacion(String usuarioCreacion) {
-		this.usuarioCreacion = usuarioCreacion;
-	}
+    public void setUsuarioModificacion(String usuarioModificacion) {
+        this.usuarioModificacion = usuarioModificacion;
+    }
 
-	public String getUsuarioModificacion() {
-		return this.usuarioModificacion;
-	}
+    @XmlTransient
+    public List<Distrito> getDistritos() {
+        return this.distritos;
+    }
 
-	public void setUsuarioModificacion(String usuarioModificacion) {
-		this.usuarioModificacion = usuarioModificacion;
-	}
+    public void setDistritos(List<Distrito> distritos) {
+        this.distritos = distritos;
+    }
 
-	@XmlTransient
-	public List<Distrito> getDistritos() {
-		return this.distritos;
-	}
+    public Distrito addDistrito(Distrito distrito) {
+        getDistritos().add(distrito);
+        distrito.setProvincia(this);
 
-	public void setDistritos(List<Distrito> distritos) {
-		this.distritos = distritos;
-	}
+        return distrito;
+    }
 
-	public Distrito addDistrito(Distrito distrito) {
-		getDistritos().add(distrito);
-		distrito.setProvincia(this);
+    public Distrito removeDistrito(Distrito distrito) {
+        getDistritos().remove(distrito);
+        distrito.setProvincia(null);
 
-		return distrito;
-	}
+        return distrito;
+    }
 
-	public Distrito removeDistrito(Distrito distrito) {
-		getDistritos().remove(distrito);
-		distrito.setProvincia(null);
+    public Departamento getDepartamento() {
+        return this.departamento;
+    }
 
-		return distrito;
-	}
+    public void setDepartamento(Departamento departamento) {
+        this.departamento = departamento;
+    }
 
-	public Departamento getDepartamento() {
-		return this.departamento;
-	}
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 61 * hash + Objects.hashCode(this.codigoProvincia);
+        return hash;
+    }
 
-	public void setDepartamento(Departamento departamento) {
-		this.departamento = departamento;
-	}
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Provincia other = (Provincia) obj;
+        if (!Objects.equals(this.codigoProvincia, other.codigoProvincia)) {
+            return false;
+        }
+        return true;
+    }
 
 }

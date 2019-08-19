@@ -171,4 +171,19 @@ public class PosteDao extends CrudDao<Poste> {
 	}
 
 
+        
+        
+        public List<Poste> getPostesCobertura(){
+		List<Poste> list =  Collections.EMPTY_LIST;
+		try{
+			String sql =  "Select distinct d from Poste d where d.cobertura is not null order by d.cobertura";
+			TypedQuery<Poste> query =  getEntityManager().createQuery(sql, Poste.class);	
+			list =  query.getResultList();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+        
 }

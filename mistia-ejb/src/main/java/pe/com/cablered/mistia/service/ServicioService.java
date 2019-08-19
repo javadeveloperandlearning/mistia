@@ -1,5 +1,6 @@
 package pe.com.cablered.mistia.service;
 
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
@@ -8,18 +9,22 @@ import pe.com.cablered.mistia.model.Servicio;
 
 @Stateless
 public class ServicioService {
-	
-	@Inject
-	private ServicioDao servicioDao;
 
-	public Servicio getServicioPorPaquete(Integer codigoTipoPaquete, Integer codigoCantTele) {
+    @Inject
+    private ServicioDao servicioDao;
 
-		return servicioDao.getServicioPorPaquete(codigoTipoPaquete, codigoCantTele);
-	}
+    public Servicio getServicioPorPaquete(Integer codigoTipoPaquete, Integer codigoCantTele) {
 
-	public Servicio getServicioPorVelocidad(Integer codigoTipoVeloInternet) {
-		// TODO Auto-generated method stub
-		return servicioDao.getServicioPorVelocidad(codigoTipoVeloInternet);
-	}
+        return servicioDao.getServicioPorPaquete(codigoTipoPaquete, codigoCantTele);
+    }
+
+    public Servicio getServicioPorVelocidad(Integer codigoTipoVeloInternet) {
+        // TODO Auto-generated method stub
+        return servicioDao.getServicioPorVelocidad(codigoTipoVeloInternet);
+    }
+
+    public List<Servicio> getServicioList() {
+        return servicioDao.getServicioList();
+    }
 
 }

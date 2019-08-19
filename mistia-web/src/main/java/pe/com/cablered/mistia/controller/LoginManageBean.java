@@ -72,7 +72,7 @@ public class LoginManageBean {
 			user.setClave(clave);
 			
 		
-			/*if(user.getCodUsua()==null || (user.getCodUsua()!=null && user.getCodUsua().trim().equals(""))){
+			if(user.getCodUsua()==null || (user.getCodUsua()!=null && user.getCodUsua().trim().equals(""))){
 				
 				FacesMessage msg = new FacesMessage("Ingrese Nombre de Usuario");
 				msg.setSeverity(FacesMessage.SEVERITY_ERROR);
@@ -85,7 +85,7 @@ public class LoginManageBean {
 				msg.setSeverity(FacesMessage.SEVERITY_ERROR);
 				facesContext.addMessage("claveError", msg);
 				
-			}else{*/
+			}else{
 		
 				ResponseSecurity response = usuarioManager.loguear(user);
 				ExternalContext ec = facesContext.getExternalContext();
@@ -105,7 +105,7 @@ public class LoginManageBean {
 					ec.redirect(ec.getRequestContextPath() + ConstansView.PRINCIPAL_VIEW);
 				}
 				
-			//}
+			}
 
 		} catch (IOException e) {
 

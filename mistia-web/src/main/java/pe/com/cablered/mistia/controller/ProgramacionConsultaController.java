@@ -73,7 +73,7 @@ public class ProgramacionConsultaController {
 		long _time = fechaFin.getTime() - fechaInicio.getTime();
 		
 		if (_time < 0) {
-			FacesMessage msg = new FacesMessage("Ingrese un rango de fecha no válido");
+			FacesMessage msg = new FacesMessage("Ingrese un rango de fecha válido");
 			msg.setSeverity(FacesMessage.SEVERITY_ERROR);
 			facesContext.addMessage(null, msg);
 			

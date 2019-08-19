@@ -4,6 +4,7 @@ import java.io.Serializable;
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.List;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * The persistent class for the clientes database table.
@@ -20,22 +21,20 @@ public class Cliente extends ObjectBean implements Serializable {
     @Column(name = "codigo_cliente")
     private Integer codigoCliente;
 
-    //@Column(name = "apellidos")
-    //private String apellidos;
-    
     @Column(name = "apellido_materno")
     private String apellidoMaterno;
-    
-    
+
     @Column(name = "apellido_paterno")
     private String apellidoPaterno;
-      
 
     @Column(name = "codigo_distrito")
     private Integer codigoDistrito;
 
     @Column(name = "direccion")
     private String direccion;
+
+    @Column(name = "referencia")
+    private String referencia;
 
     //private String dni;
     @Column(name = "estacion_creacion")
@@ -94,8 +93,39 @@ public class Cliente extends ObjectBean implements Serializable {
     @OneToMany(mappedBy = "cliente")
     private List<ContratoServicio> contratoServicios;
 
+   //@OneToMany(mappedBy = "cliente")
+    @Transient
+    private List<ClienteDireccion> clienteDireccions;
+
     public Cliente() {
     }
+
+    public Cliente(Integer codigoCliente, String apellidoMaterno, String apellidoPaterno, Integer codigoDistrito, String direccion, String referencia, String estacionCreacion, String estacionModificacion, Timestamp fechaCreacion, Timestamp fechaModificacion, String nombres, String telefono, String usuarioCreacion, String usuarioModificacion, Integer tipoDocumento, String documentoIdentidad, String nombreRazonSocial, String telefonoMovil, Integer sexo, String email, String numeroRuc) {
+        this.codigoCliente = codigoCliente;
+        this.apellidoMaterno = apellidoMaterno;
+        this.apellidoPaterno = apellidoPaterno;
+        this.codigoDistrito = codigoDistrito;
+        this.direccion = direccion;
+        this.referencia = referencia;
+        this.estacionCreacion = estacionCreacion;
+        this.estacionModificacion = estacionModificacion;
+        this.fechaCreacion = fechaCreacion;
+        this.fechaModificacion = fechaModificacion;
+        this.nombres = nombres;
+        this.telefono = telefono;
+        this.usuarioCreacion = usuarioCreacion;
+        this.usuarioModificacion = usuarioModificacion;
+        this.tipoDocumento = tipoDocumento;
+        this.documentoIdentidad = documentoIdentidad;
+        this.nombreRazonSocial = nombreRazonSocial;
+        this.telefonoMovil = telefonoMovil;
+        this.sexo = sexo;
+        this.email = email;
+        this.numeroRuc = numeroRuc;
+    }
+    
+    
+    
 
     public Cliente(Integer codigoCliente) {
         this.codigoCliente = codigoCliente;
@@ -109,13 +139,13 @@ public class Cliente extends ObjectBean implements Serializable {
         this.codigoCliente = codigoCliente;
     }
 
-    
     //@Transient
     public String getApellidos() {
-       return apellidoMaterno +" "+apellidoPaterno;
-               
+        return apellidoPaterno + " " + apellidoMaterno;
+
     }
-/*
+
+    /*
     public void setApellidos(String apellidos) {
         this.apellidos = apellidos;
     }*/
@@ -143,7 +173,7 @@ public class Cliente extends ObjectBean implements Serializable {
     public void setDni(String dni) {
 		this.dni = dni;
     }
-    */
+     */
     public String getEstacionCreacion() {
         return this.estacionCreacion;
     }
@@ -279,10 +309,14 @@ public class Cliente extends ObjectBean implements Serializable {
     public void setApellidoPaterno(String apellidoPaterno) {
         this.apellidoPaterno = apellidoPaterno;
     }
-    
-    
-    
-    
+
+    public String getReferencia() {
+        return referencia;
+    }
+
+    public void setReferencia(String referencia) {
+        this.referencia = referencia;
+    }
 
     public List<ComprobantePago> getComprobantePagos() {
         return this.comprobantePagos;
@@ -334,6 +368,15 @@ public class Cliente extends ObjectBean implements Serializable {
 
     public void setContratoServicios(List<ContratoServicio> contratoServicios) {
         this.contratoServicios = contratoServicios;
+    }
+    
+    //@XmlTransient
+    public List<ClienteDireccion> getClienteDireccions() {
+        return clienteDireccions;
+    }
+
+    public void setClienteDireccions(List<ClienteDireccion> clienteDireccions) {
+        this.clienteDireccions = clienteDireccions;
     }
 
     @Override

@@ -12,12 +12,14 @@ import javax.annotation.PostConstruct;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import org.apache.log4j.Logger;
 import pe.com.cablered.mistia.controller.form.ClienteForm;
 import pe.com.cablered.mistia.dao.DepartamentoDao;
 import pe.com.cablered.mistia.model.Cliente;
+import pe.com.cablered.mistia.model.ClienteDireccion;
 import pe.com.cablered.mistia.model.Departamento;
 import pe.com.cablered.mistia.model.Distrito;
 import pe.com.cablered.mistia.model.ObjectBean;
@@ -39,7 +41,7 @@ import static pe.com.cablered.mistia.util.ConstantBusiness.*;
  * @author javadeveloper
  */
 @ManagedBean(name = "clienteview")
-@SessionScoped
+@ViewScoped
 public class ClienteController extends BaseController<Cliente> implements Serializable {
 
     private List<Cliente> clienteList;
@@ -60,6 +62,7 @@ public class ClienteController extends BaseController<Cliente> implements Serial
     private List<Departamento> departamentoList;
     private List<Distrito> distritoList;
     private List<Provincia> provinciaList;
+    private List<ClienteDireccion> clienteDireccionList;
 
     @Inject
     private ClienteService clienteService;
@@ -107,11 +110,16 @@ public class ClienteController extends BaseController<Cliente> implements Serial
         this.clienteList = clienteList;
     }
 
-    /* public String editar(Integer codigoCliente) {
+    public void editar(Cliente cliente) {
         logger.info("metodo :  editar ");
-        return null;
+        super.editar(cliente);
+
+        List<ClienteDireccion> clienteDireccionList = clienteService.getClienteDireccionList(cliente);
+        cliente.setClienteDireccions(clienteDireccionList);
+
     }
-   
+
+    /*
     public void guardar(){
         Response response  =  clienteService.registrar((Cliente)cliente);
     }*/
@@ -123,6 +131,7 @@ public class ClienteController extends BaseController<Cliente> implements Serial
         apellidoMaterno = null;
         nombreRazonSocial = null;
         clienteList = Collections.EMPTY_LIST;
+        cliente.setClienteDireccions(new ArrayList<>());
 
     }
 
@@ -153,13 +162,14 @@ public class ClienteController extends BaseController<Cliente> implements Serial
     public void nuevo() {
         super.nuevo();
         this.cliente = new Cliente();
+        this.cliente.setClienteDireccions(new ArrayList<>());
         setCodigoDepartamento(COD_DEPARTAMENTO_JUNIN);
         setDepartamentoList(departamentoService.getDepartamentoList());
         setProvinciaList(provinciaService.getProvinciaList(COD_DEPARTAMENTO_JUNIN));
         setDistritoList(distritoService.getDistritoList(COD_DEPARTAMENTO_HUANACAYO));
         this.cliente.setTipoDocumento(TIPO_DOCU_DNI);
         this.cliente.setSexo(SM);
-        
+
         setObject(cliente);
 
     }
@@ -167,10 +177,17 @@ public class ClienteController extends BaseController<Cliente> implements Serial
     @Override
     public void grabar() {
 
-        if (action.equals(NUEVO)){
+        if (action.equals(NUEVO)) {
             cliente.setCodigoCliente(clienteService.getMax());
+        } else {
+             
+            Response response =  clienteService.actualizarDireccionesList(cliente);
+            
+            
+            
+            
         }
-        
+
         setObject(cliente);
         super.grabar();
     }
@@ -178,6 +195,37 @@ public class ClienteController extends BaseController<Cliente> implements Serial
     @Override
     public void reset() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void agregarDireccion() {
+
+        logger.info(" metodo :  agregarDireccion  ");
+        logger.info(" cliente.getDireccion(): ." + cliente.getDireccion() + ".");
+        if (cliente.getDireccion() == null || (cliente.getDireccion() != null && cliente.getDireccion().trim().equals(""))) {
+            mostrarMensaje(new Response(Response.ERROR, "Debe ingresar una dirección Válida"));
+            return;
+        }
+
+        Integer numeroDIreccion = cliente.getClienteDireccions().size() + 1;
+        ClienteDireccion clienteDireccion = new ClienteDireccion(0, numeroDIreccion);
+        clienteDireccion.setDireccion(cliente.getDireccion());
+        clienteDireccion.setReferencia(cliente.getReferencia());
+        clienteDireccion.setDistrito(distritoService.getDistrito(cliente.getCodigoDistrito()));
+        cliente.getClienteDireccions().add(clienteDireccion);
+        cliente.setDireccion("");
+        cliente.setReferencia("");
+
+    }
+
+    public void eliminarDireccion(ClienteDireccion clienteDireccion) {
+        logger.info(" metodo :  eliminarDireccion ");
+        try {
+            int idx = cliente.getClienteDireccions().indexOf(clienteDireccion);
+            cliente.getClienteDireccions().remove(idx);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     public int getTipoDocu() {
@@ -308,6 +356,14 @@ public class ClienteController extends BaseController<Cliente> implements Serial
 
     public void setDistritoService(DistritoService distritoService) {
         this.distritoService = distritoService;
+    }
+
+    public List<ClienteDireccion> getClienteDireccionList() {
+        return clienteDireccionList;
+    }
+
+    public void setClienteDireccionList(List<ClienteDireccion> clienteDireccionList) {
+        this.clienteDireccionList = clienteDireccionList;
     }
 
 }

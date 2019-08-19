@@ -28,6 +28,8 @@ package pe.com.cablered.mistia.controller;
 	protected static final String CUADRILLAS_VIEW = "cuadrillas.jsf";
 	protected static final String VEHICULOS_VIEW =  "vehiculos.jsf";
 	protected static final String RECLAMOS_VIEW =  "reclamos.jsf";
+        
+        protected static final String LOGOUT_VIEW =  "salir.jsf";
 	
 	
 }

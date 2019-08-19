@@ -21,47 +21,44 @@ import pe.com.cablered.mistia.model.HorarioAtencionDetalle;
 
 @Stateless
 public class HorarioAtencionDetalleService {
-	
-	
-	@Inject
-	HorarioAtencionDetalleDao horarioAtencionDetalleDao;
 
-	
-	public List<HorarioAtencionDetalle> getHorarioAtencionDetalleList(Integer numeroHorario){
-		
-		return horarioAtencionDetalleDao.getHorarioAtencionDetalleList(numeroHorario);
-	}
-	
-	
-	
-	
-	public List<Map> getHorarioAtencionList(Integer numeroHorario) {
-		List<Map> horarioList  =  new ArrayList<>();
-		
-		 List<HorarioAtencionDetalle>  horarios  =  horarioAtencionDetalleDao.getHorarioAtencionDetalleList(numeroHorario);
-		 for (HorarioAtencionDetalle d : horarios) {				
-				horarioList.add(createhorario(d));
-		}	
-		return horarioList;
-	}
-	
-	
-	
-	private Map createhorario(HorarioAtencionDetalle d){
-		Map mp =  new LinkedHashMap<>();
-		mp.put("rango", d.getRango());
-		mp.put("nse", d.getId().getNumeroSecuencial());
-		mp.put("horainicio", d.getHoraInicio());
-		mp.put("horafin", d.getHoraFin());
-		Map checkdias = new LinkedHashMap<>();
-		for (int i = 1; i <  7 ; i++) {
-			checkdias.put(i, false);
-		}
-		mp.put("checkdias", checkdias);
-		return mp;
-		
-	}
-	
-	
-	
+    @Inject
+    HorarioAtencionDetalleDao horarioAtencionDetalleDao;
+
+    public List<HorarioAtencionDetalle> getHorarioAtencionDetalleList(Integer numeroHorario) {
+
+        return horarioAtencionDetalleDao.getHorarioAtencionDetalleList(numeroHorario);
+    }
+
+    public List<Map> getHorarioAtencionList(Integer numeroHorario) {
+        List<Map> horarioList = new ArrayList<>();
+
+        List<HorarioAtencionDetalle> horarios = horarioAtencionDetalleDao.getHorarioAtencionDetalleList(numeroHorario);
+        for (HorarioAtencionDetalle d : horarios) {
+            horarioList.add(createhorario(d));
+        }
+        return horarioList;
+    }
+
+    private Map createhorario(HorarioAtencionDetalle d) {
+        Map mp = new LinkedHashMap<>();
+        mp.put("rango", d.getRango());
+        mp.put("nse", d.getId().getNumeroSecuencial());
+        mp.put("horainicio", d.getHoraInicio());
+        mp.put("horafin", d.getHoraFin());
+        Map checkdias = new LinkedHashMap<>();
+        for (int i = 1; i <= 7; i++) {
+            checkdias.put(i, false);
+        }
+        mp.put("checkdias", checkdias);
+        
+        Map checkdias1 = new LinkedHashMap<>();
+        for (int i = 1; i <= 7; i++) {
+            checkdias1.put(i+"", false);
+        }
+        mp.put("checkdias1", checkdias1);
+        return mp;
+
+    }
+
 }

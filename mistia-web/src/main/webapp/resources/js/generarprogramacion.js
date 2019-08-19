@@ -69,10 +69,6 @@ function preload(titulo) {
             }
         ]
     });
-
-
-
-
 }
 
 
@@ -156,8 +152,8 @@ $(document).ready(function () {
 
     $(".boton").button().css({width: "200"});
     $("#btnEnvia").button().css({width: "100"});
-    $("#btnejecutar").button().css({width: "100"});
-    $("#btnejecutar").addClass("ui-state-error");
+    $("#btnejecutar").css({width: "100"});
+   // $("#btnejecutar").addClass("btn btn-primary");
     //$("#btnSalir").button().css({width:"100"});
 
     //$("#btnGuardaProg").attr("disabled","disabled");
@@ -306,7 +302,7 @@ $(document).ready(function () {
                     } else if (oper == "reiniprogra") {
 
                         $.ajax({
-                            url: "re	st/programacion/reiniciarprogramacion.html",
+                            url: "rest/programacion/reiniciarprogramacion.html",
                             type: "POST",
                             datatype: "json",
                             success: function (data) {
@@ -458,9 +454,9 @@ $(document).ready(function () {
         oper = "guardarasig";
         if (accion == ACCION_NUEVA_PROGRAMACION) {
             $("#confirmar").html("Se realizará la generación de una nueva programación. ¿Desea continuar?");
-        } else if (accion == ACCION_EDITA_PROGRAMACION) {
+        } /*else if (accion == ACCION_EDITA_PROGRAMACION) {
             $("#confirmar").html("Se registraran los cambios realizados. ¿Desea continuar?");
-        }
+        }*/
         $("#confirmar").dialog("open");
 
 
@@ -480,12 +476,14 @@ $(document).ready(function () {
 
     $("#btnSalir").live("click", function () {
 
-        if ($("#progeditada").val() == 'true') {
+        /*if ($("#progeditada").val() == 'true') {
             oper = "salir";
             $("#confirmar").html("Se realizaron cambios en la programación. ¿Desea guardar?");
             $("#confirmar").dialog("open");
 
-        } else if ($("#proggenerada").val() == 'true') {
+        } else */
+        
+        if ($("#proggenerada").val() == 'true') {
             oper = "salir";
             $("#confirmar").html("Existe una programación generarada. ¿Desea guardar?");
             $("#confirmar").dialog("open");

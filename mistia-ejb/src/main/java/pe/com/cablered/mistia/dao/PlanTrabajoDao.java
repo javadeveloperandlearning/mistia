@@ -144,7 +144,7 @@ public class PlanTrabajoDao extends CrudDao<PlanTrabajo> {
     }
 
     public PlanTrabajo getPlanTrabajo(Usuario usuario) {
-
+        logger.info("### metodo : getPlanTrabajo ####");
         Date fecPrgn =  new Date();
         Calendar cal = Calendar.getInstance(); // locale-specific
         cal.setTime(fecPrgn);
@@ -156,8 +156,9 @@ public class PlanTrabajoDao extends CrudDao<PlanTrabajo> {
         Integer  codPers = usuario.getCodPers();
 
         logger.info(" fecprgn : " + fecPrgn);
-        logger.info(" metodo : getPlanTrabajo ( fecPrgn.  numeroPlanTrabajo )!!!! ");
-
+        logger.info(" codPers : " + codPers);
+        
+        logger.info("Iniciando consulta");
         PlanTrabajo planTrabajo = null;
 
         try {
@@ -173,10 +174,13 @@ public class PlanTrabajoDao extends CrudDao<PlanTrabajo> {
             query.setParameter("pfechaProgramacion", fecPrgn);
             query.setParameter("pcodigoTecnico",codPers);
            
-
+            logger.info("mostrando resultados");
             List<PlanTrabajo> planTrabajoList = query.getResultList();
             if (planTrabajoList != null && planTrabajoList.size() > 0) {
                 planTrabajo = planTrabajoList.get(0);
+                logger.info("cant resultados: "+planTrabajoList.size());
+            }else{
+                logger.info("consulta sin resultados");
             }
 
         } catch (Exception e) {

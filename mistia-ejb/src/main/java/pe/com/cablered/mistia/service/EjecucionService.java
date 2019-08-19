@@ -116,17 +116,17 @@ public class EjecucionService {
 
 
 	public Response registrarEvidencia(SolicitudServicioEvidencia s) {
+            
                 logger.info("metodo :  registrarEvidencia ");
-                
                 Response response =   new Response(Response.OK, Response.MSG_OK);
 		try {
                     
                         s.setId(s.getSolicitudServicio().getNumeroSolicitud(),  s.getNumeroSecuencial());
                         String ruta =  "/home/javadeveloper/proyectos/imgs/"+s.getNombre();
                         s.setRuta(ruta);
+                        logger.info("registrando  ruta");
                         solicitudServicioEvidenciaDao.create(s);
-                       
-                        logger.info(" file : "+s.getFile());
+                        //logger.info(" file : "+s.getFile());
 			byte[] bytes = Base64.getDecoder().decode(s.getFile());
 			File f =  new File(ruta);		
 			FileOutputStream fos  =  new FileOutputStream(f);

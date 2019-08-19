@@ -104,10 +104,6 @@
             #text {
                 z-index: 10;
             }
-
-
-
-
             /* Optional: Makes the sample page fill the window. */
             html, body {
                 font-size: 12px;
@@ -131,48 +127,46 @@
     </div>
 
     <div id="botonera-div-top"    align="center">
-        <input id="txtdireccion" style="width: 30%" type="text"   >
-        <button   class="boton" id="btnbuscar">Buscar</button>
-        <button   class="boton" id="btnlimpiar">Limpiar</button>
+        <input id="txtdireccion" style="width: 30%" type="text" class="controls"  placeholder="Ingrese dirección a buscar"   >
+        <button   class="boton" id="btnbuscar">Buscar</button>       
+        <button   class="boton" id="btnsalir">Volver</button>    
     </div>
-
-
-
-
-
-    <div id="botonera-div" align="right" >
-
-        <button   class="boton" id="btnsalir">Salir</button>
-
-    </div>
+    
     <script type="text/javascript" src="resources/js/geometria.js"></script>
-
     <script >
 
         var map;
         var citymap = new Array();
-
         var infoWindow;
         var polygontarget;
         var markers = [];
-        var markers_around =  [];
+        var markers_around = [];
         var circles = [];
         var gruposgenerados = [];
         var markerselect = null;
-        var bermudaTriangle = null;
+        var coberturaPolygon = null;
         var direcciones = ['mid1', 'mid2', 'mid3'];
-
+        var posteservicio = {};
+        var puntoservicio = {};
 
         $(".boton").button().css({width: "200"});
-
         $("#btnsalir").live("click", function () {
-            window.location.href = "principal.xhtml";
+            window.location.href = "solicitud_servicio_generar.xhtml";
         });
-
         $("#btnlimpiar").live("click", function () {
             window.location.href = "principal.xhtml";
         });
 
+        function preload(titulo) {
+            var html = "<div id='dialog-preload' title='" + titulo + "'>" + "<div  align='center' ><img src='/mistia-web/resources/images/preloader.gif'/></div>" + "</div>";
+            $("#content").html(html);
+            // alert($("#dialog-preload").attr('title'));
+            $("#dialog-preload").dialog({
+                autoOpen: false,
+                width: 400,
+                modal: true
+            });
+        }
 
 
         $("#btnbuscar").live("click", function () {
@@ -186,53 +180,54 @@
                 return false;
             }
 
+
             var Pais = 'Peru';
             var Provincia = 'Huancayo';
             var address = Pais + '+' + Provincia + '+' + $("#txtdireccion").val();
-            console.log(address);
+            preload("Buscando cobertura");
+            $("#dialog-preload").dialog("open");
+
             $.ajax({
                 url: 'https://maps.googleapis.com/maps/api/geocode/json?address=' + address + ',+CA&key=AIzaSyChk5fjsxbMDJmHbDA1Ap8fO34fplNvbDE',
                 type: 'GET',
                 dataType: 'json',
                 success: function (data) {
-                    //console.log(data);
-                    console.log(data['results']);
-                    var results = data['results'];
 
+                    var results = data['results'];
                     var long_name = results[0].address_components[0].long_name;
                     var myLatLng = results[0].geometry.location;
-                    console.log('my location');
-                    console.log(myLatLng);
                     if (long_name != null && long_name == Provincia) {
-
                         $("#pmensaje").css({color: 'red'})
                         $("#pmensaje").html("<span class='ui-icon ui-icon-circle-close' style='float:left;'></span>La dirección no existe");
                         $("#mensaje").dialog("open");
+                        $("#dialog-preload").dialog("close");
                         return false;
                     }
-                    
-                    var formatted_address =  results[0].formatted_address;
 
+                    var formatted_address = results[0].formatted_address;
                     removeAllMark();
-
                     var mensaje = '';
                     var pinColor = '446600';
                     var cirColor = '446600';
-
                     // validacion de cobertura 
+                    puntoservicio = myLatLng;
+
+
                     $.ajax({
                         url: "rest/cobertura/validarcobertura.html",
                         data: {latitud: myLatLng.lat, longitud: myLatLng.lng},
                         type: "POST",
                         datatype: "json",
                         success: function (data) {
+                            $("#dialog-preload").dialog("close");
                             postescercanos = data['postesceranos'];
-                            console.log(postescercanos);
+                            //console.log(postescercanos);
                             //console.log(data);
                             if (postescercanos != null && postescercanos.length > 0) {
                                 $("#pmensaje").css({color: 'black'})
                                 mensaje = 'La dirección tiene cobertura '
                                 pinColor = '446600';
+                                posteservicio = postescercanos[0];
 
                             } else {
                                 $("#pmensaje").css({color: 'red'})
@@ -241,13 +236,8 @@
                             }
                             $("#pmensaje").css({color: 'balck'})
                             // respuesta exitosa de busqueda
-                            console.log("long_name" + results[0].address_components[0].long_name);
-                            console.log(results[0].geometry.location);
-
                             $("#pmensaje").html("<span class='ui-icon ui-icon-circle-close' style='float:left;'></span>" + mensaje);
                             $("#mensaje").dialog("open");
-
-
                             var pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + pinColor,
                                     new google.maps.Size(21, 34),
                                     new google.maps.Point(0, 0),
@@ -257,32 +247,29 @@
                                     new google.maps.Point(0, 0),
                                     new google.maps.Point(12, 35));
 
-                            //var myLatLng = {lat: -12.069051679036212, lng: -75.20355835952567};
-                            //console.log('generando circulo');
-                            
                             // ciruclo de ubicacion 
-                            var cityCircle = new google.maps.Circle({
-                                strokeOpacity: 0.8,
-                                strokeWeight: 2,
-                                fillColor: '#' + pinColor,
-                                fillOpacity: 0.35,
-                                map: map,
-                                radius: 100.307937047031,
-                                center: myLatLng,
-                                label: 'Tiene Cobertura'
-                            });
+                            /* var cityCircle = new google.maps.Circle({
+                             strokeOpacity: 0.8,
+                             strokeWeight: 2,
+                             fillColor: '#' + pinColor,
+                             fillOpacity: 0.35,
+                             map: map,
+                             radius: 100.307937047031,
+                             center: myLatLng,
+                             label: 'Tiene Cobertura'
+                             });*/
 
                             var marker = new google.maps.Marker({
                                 position: myLatLng,
                                 map: map,
-                                descripcion: '<p><strong> Dirección '+formatted_address+'</strong> </p>',
+                                descripcion: '<p><strong>' + formatted_address + '</strong> </p>',
                                 draggable: true,
                                 icon: pinImage,
                                 shadow: pinShadow,
                                 editable: true,
                                 animation: google.maps.Animation.DROP
                             });
-                            
+
                             var infowindow = new google.maps.InfoWindow({
                                 content: marker.descripcion
                             });
@@ -294,103 +281,50 @@
                             marker.addListener('mouseout', function () {
                                 infowindow.close();
                             });
+
+
+                            marker.addListener('click', function (event) {
+                                puntoservicio.lat = this.position.lat();
+                                puntoservicio.lng = this.position.lng();
+                                $("#dialog-confirm").dialog("open");
+
+                            });
                             
                             
+                            try{
+                                // removiendo marcador 
+                                for (var i = 0; i < markers.length; i++) {
+                                        markers[i].setMap(null);
+                                }
+                                //removiendo puntos mas cercanos
+                                for (var i = 0; i < markers_around.length; i++) {
+                                    markers_around[i].setMap(null);
+                                }
+                            }catch(err){
                             
+                            }
+
                             markers.push(marker);
-                            circles.push(cityCircle);
-                            
-                            
                             map.setCenter(myLatLng);
                             map.setZoom(17);
-              
                             
-                            for (var i = 0; i < postescercanos.length; i++) {
-                                
+
+                             // postes cercanos   
+                            /*for (var i = 0; i < postescercanos.length; i++) {
                                 var g = postescercanos[i];
-                                console.log('añadiendo poste');
-                                console.log(postescercanos[i]);
-                                
-                                var  tag  =  '<p>'+g.descripcion +' ('+g.latitudcentral+','+g.longitudcentral+')</p>';
-                                
-                                addMark(tag, g.numero, g.latitudcentral, g.longitudcentral) ;
-                                /*var _color = '#446600';
-                                var pColor = _color.substring(1, _color.length);
-                                var pImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + pColor,
-                                        new google.maps.Size(21, 34),
-                                        new google.maps.Point(0, 0),
-                                        new google.maps.Point(10, 34));
+                                var tag = '<p>' + g.descripcion + ' (' + g.latitudcentral + ',' + g.longitudcentral + ')</p>';
+                                addMark(tag, g.numero, g.latitudcentral, g.longitudcentral);
 
-                                var pShadow = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_shadow",
-                                        new google.maps.Size(40, 37),
-                                        new google.maps.Point(0, 0),
-                                        new google.maps.Point(12, 35));
-                                
-
-                                // poste 
-                                var _marker = new google.maps.Marker({
-                                    position: {lat: g.latitudcentral, lng: g.longitudcentral},
-                                    map: map,
-                                    descripcion: '<p>'+g.latitudcentral+','+g.longitudcentral+'</p>',
-                                    icon: pImage,
-                                    shadow: pShadow,
-                                    fillColor: "blue",
-                                    fillOpacity: .2,
-                                    strokeColor: 'white',
-                                    strokeWeight: .5,
-                                    scale: 10
-                                });
-                                
-                                
-                                var _infowindow = new google.maps.InfoWindow({
-                                    content: _marker.descripcion
-                                });
-
-                                _marker.addListener('mouseover', function () {
-                                    _infowindow.open(map, _marker);
-                                });
-
-                                _marker.addListener('mouseout', function () {
-                                    _infowindow.close();
-                                });
-                                
-                                markers_around.push(_marker);*/
-     
-    
-                            }
-              
-              
-              
-              
+                            }*/
                         }});
-
-
-                    /*if(false){
-                     $("#pmensaje").css({color:'black'})
-                     mensaje = 'La dirección tiene cobertura '
-                     pinColor =  '446600';
-                     
-                     }else{
-                     $("#pmensaje").css({color:'red'})
-                     mensaje = 'La dirección no tiene cobertura '
-                     pinColor = 'ff0000';
-                     }*/
-
-
-
-
-
                 }
             });
-
-
-            //<span class="ui-icon ui-icon-check" style="float:left;"></span>La dirección tiene cobertura
 
         });
 
 
 
-        $("#txtdireccion").keypress(function (event) {
+       /* $("#txtdireccion").keypress(function (event) {
             console.log('onkeypress');
         });
 
@@ -403,20 +337,7 @@
             change: function (event, ui) {
                 console.log('algorimos');
             }
-
-        });
-
-
-        function initMap() {
-            map = new google.maps.Map(document.getElementById('map'), {
-                zoom: 13,
-                //zoom: 13,
-                center: {lat: -12.055224, lng: -75.195773}//,
-                //mapTypeId: 'terrain'
-            });
-        }
-
-
+        });*/
 
 
         function loadMap() {
@@ -430,8 +351,7 @@
                 }});
 
 
-
-
+            // mensaje
             $("#mensaje").dialog({
                 autoOpen: false,
                 width: 400,
@@ -439,15 +359,76 @@
                     {
                         text: "Aceptar",
                         click: function () {
+
+                            /*
+                             alert("test");
+                             var _posteservicio = {codigoPoste: posteservicio.codigoPoste,
+                             latitud: posteservicio.latitudcentral,
+                             longitud: posteservicio.longitudcentral
+                             };
+                             var _puntoservicio = {latitud: puntoservicio.lat, longitud: puntoservicio.lng};
+                             sendRequest("rest/cobertura/selecionarposteservicio.html", _posteservicio); // enviando posite mas cercano
+                             sendRequest("rest/cobertura/selecionarpuntoservcio.html", _puntoservicio); // enviando punto de servicio seleccionado o encontrado en el mapa
+                             posteservicio = {};
+                             puntoservicio = {};
+                             
+                             */
                             $(this).dialog("close");
                         }
                     }
                 ]
             });
 
+            // confimacion
+
+            $("#dialog-confirm").dialog({
+                resizable: false,
+                autoOpen: false,
+                height: "auto",
+                width: 400,
+                modal: true,
+                buttons: {
+                    Aceptar: function () {
+
+
+                        var _puntoservicio = {latitud: puntoservicio.lat, longitud: puntoservicio.lng};
+                        console.log("punto seleccionado :");
+                        console.log(_puntoservicio);
+                        //sendRequest("rest/cobertura/selecionarpuntoservcio.html", _puntoservicio); // enviando punto de servicio seleccionado o encontrado en el mapa
+                    
+                         $.ajax({
+                            url: "rest/cobertura/selecionarpuntoservcio.html",
+                            data: _puntoservicio,
+                            type: "POST",
+                            datatype: "json",
+                            success: function (data) {
+                                puntoservicio = {};
+                                window.location.href = "solicitud_servicio_generar.xhtml";
+                         }});
+
+
+                        $(this).dialog("close");
+                    },
+                    Cancelar: function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
 
 
         }
+
+        function sendRequest(myurl, mydata) {
+            $.ajax({
+                url: myurl,
+                data: mydata,
+                type: "POST",
+                datatype: "json",
+                success: function (data) {
+                    console.log(data);
+                }});
+        }
+
 
 
 
@@ -458,108 +439,92 @@
                 center: {lat: -12.055224, lng: -75.195773}//,
             });
 
-            //console.log(nodos);
-
-            var _color = '#446600';
-            var pColor = _color.substring(1, _color.length);
-            var pImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + pColor,
-                    new google.maps.Size(21, 34),
-                    new google.maps.Point(0, 0),
-                    new google.maps.Point(10, 34));
-
-            var pShadow = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_shadow",
-                    new google.maps.Size(40, 37),
-                    new google.maps.Point(0, 0),
-                    new google.maps.Point(12, 35));
-
-          
-            /*var idx = 0;
+            flightPlanCoordinates = [];
+            circles = [];
+            var triangleCoords = [];
+            var idx = 0;
             for (var i = 0; i < nodos.length; i++) {
                 var g = nodos[i];
-                citymap[idx] = {
-                    idx: g.numero,
-                    name: g.descripcion,
-                    center: {lat: g.latitudcentral, lng: g.longitudcentral},
-                    population: 50,
-                    color: g.color,
-                    radio: g.radio,
-                    area: g.area
-                };
-                // nodo 
-                new google.maps.Marker({
-                    position: {lat: g.latitudcentral, lng: g.longitudcentral},
-                    map: map,
-                    icon: pImage,
-                    shadow: pShadow,
-                    fillColor: "blue",
-                    fillOpacity: .2,
-                    strokeColor: 'white',
-                    strokeWeight: .5,
-                    scale: 10
-                });
+                var coor = {lat: g.latitudcentral, lng: g.longitudcentral};
+                triangleCoords.push(coor);
+                var tag = g.longitudcentral + ', ' + g.longitudcentral;
+
                 idx++;
-            }*/
-        
+            }
 
-
-            // Define the LatLng coordinates for the polygon's path.
-            var triangleCoords = [
-                {lat: -12.009472, lng: -75.172256},
-                {lat: -12.021729, lng: -75.173629},
-                {lat: -12.031970, lng: -75.185130},
-                {lat: -12.037847, lng: -75.179294},
-                {lat: -12.061853, lng: -75.180495},
-                {lat: -12.076970, lng: -75.206165},
-                {lat: -12.087368, lng: -75.230792},
-                {lat: -12.079434, lng: -75.232029},
-                {lat: -12.071658, lng: -75.233997},
-                {lat: -12.070616, lng: -75.219422},
-                {lat: -12.060875, lng: -75.209870},
-                {lat: -12.051055, lng: -75.203948},
-                {lat: -12.030713, lng: -75.198347},
-                {lat: -12.009781, lng: -75.181023},
-                {lat: -12.009472, lng: -75.172256}
-            ];
-
-            // Construct the polygon.
-            bermudaTriangle = new google.maps.Polygon({
+            coberturaPolygon = new google.maps.Polygon({
                 paths: triangleCoords,
-                strokeColor: '#FF0000',
+                strokeColor: '#0000FF',
                 strokeOpacity: 0.4,
-                strokeWeight: 2,
-                fillColor: '#FF0000',
-                fillOpacity: 0.1
+                strokeWeight: 0,
+                fillColor: '#0000FF',
+                fillOpacity: 0.35
             });
-            bermudaTriangle.setMap(map);
-            // addListenersOnPolygon(bermudaTriangle);
-
-            /*  google.maps.event.addListener(map, 'click', function(e) {
-             
-             alert(" añadiendo marcador ");
-             var resultColor =
-             google.maps.geometry.poly.containsLocation(e.latLng, bermudaTriangle) ?
-             'blue' :
-             'green';
-             
-             new google.maps.Marker({
-             position: e.latLng,
-             map: map,
-             icon: {
-             path: google.maps.SymbolPath.CIRCLE,
-             fillColor: resultColor,
-             fillOpacity: .2,
-             strokeColor: 'white',
-             strokeWeight: .5,
-             scale: 10
-             }
-             });
-             
-             
-             });*/
-
-
+            coberturaPolygon.setMap(map);
+            
+            loadSearcher();
         }
 
+        function loadSearcher() {
+            // Create the search box and link it to the UI element.
+            var input = document.getElementById('txtdireccion');
+            var searchBox = new google.maps.places.SearchBox(input);
+            map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+            // Bias the SearchBox results towards current map's viewport.
+            map.addListener('bounds_changed', function () {
+                searchBox.setBounds(map.getBounds());
+            });
+
+            var markers = [];
+            // Listen for the event fired when the user selects a prediction and retrieve
+            // more details for that place.
+            searchBox.addListener('places_changed', function () {
+                var places = searchBox.getPlaces();
+
+                if (places.length == 0) {
+                    return;
+                }
+
+                // Clear out the old markers.
+                markers.forEach(function (marker) {
+                    marker.setMap(null);
+                });
+                markers = [];
+
+                // For each place, get the icon, name and location.
+               /* var bounds = new google.maps.LatLngBounds();
+                places.forEach(function (place) {
+                    if (!place.geometry) {
+                        console.log("Returned place contains no geometry");
+                        return;
+                    }
+                    var icon = {
+                        url: place.icon,
+                        size: new google.maps.Size(71, 71),
+                        origin: new google.maps.Point(0, 0),
+                        anchor: new google.maps.Point(17, 34),
+                        scaledSize: new google.maps.Size(25, 25)
+                    };
+
+                    // Create a marker for each place.
+                    markers.push(new google.maps.Marker({
+                        map: map,
+                        icon: icon,
+                        title: place.name,
+                        position: place.geometry.location
+                    }));
+
+                    if (place.geometry.viewport) {
+                        // Only geocodes have viewport.
+                        bounds.union(place.geometry.viewport);
+                    } else {
+                        bounds.extend(place.geometry.location);
+                    }
+                });
+                map.fitBounds(bounds);*/
+            });
+        }
 
 
 
@@ -572,8 +537,8 @@
                     new google.maps.Size(21, 34),
                     new google.maps.Point(0, 0),
                     new google.maps.Point(10, 34));
-                    
-             var iconBase = 'https://developers.google.com/maps/documentation/javascript/examples/full/images/';
+
+            var iconBase = 'https://developers.google.com/maps/documentation/javascript/examples/full/images/';
 
             var pShadow = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_shadow",
                     new google.maps.Size(40, 37),
@@ -585,7 +550,7 @@
                 map: map,
                 numero: numero,
                 descripcion: tag,
-                draggable: true,
+                draggable: false,
                 icon: iconBase + 'info-i_maps.png',
                 shadow: pShadow,
                 editable: true,
@@ -598,13 +563,13 @@
             });
 
             marker.addListener('mouseover', function () {
+                //console.log('numero: ' + marker.numero);
                 infowindow.open(map, marker);
             });
 
             marker.addListener('mouseout', function () {
                 infowindow.close();
             });
-
             markers_around.push(marker);
         }
 
@@ -619,14 +584,12 @@
             for (var i = 0; i < circles.length; i++) {
                 circles[i].setMap(null);
             }
-
         }
 
 
         var addListenersOnPolygon = function (polygon) {
 
             google.maps.event.addListener(polygon, 'click', function (e) {
-
 
                 if (markerselect != null) {
 
@@ -656,8 +619,6 @@
                     strokeWeight: .5,
                     scale: 10
                 });
-
-
             });
         }
 
@@ -665,12 +626,18 @@
 
     </script>
     <script async defer
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyChk5fjsxbMDJmHbDA1Ap8fO34fplNvbDE&callback=loadMap">
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyChk5fjsxbMDJmHbDA1Ap8fO34fplNvbDE&libraries=places&callback=loadMap">
     </script>
 
     <div id="mensaje" title="Mensaje">	
         <p id="pmensaje"  > <span class="ui-icon ui-icon-check" style="float:left;"></span>La dirección tiene cobertura <p>
 
+    </div>
+    <div id="dialog-confirm" title="Confimación">
+        <p><span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>¿Esta seguro de seleccionar el punto?</p>
+    </div>
+
+    <div id="content">
     </div>
 </body>
 </html>

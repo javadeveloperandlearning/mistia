@@ -14,240 +14,284 @@ import javax.ejb.LocalBean;
 import javax.ejb.Stateful;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-
+import org.apache.log4j.Logger;
 
 import pe.com.cablered.mistia.dao.GrupoAtencionDao;
+import pe.com.cablered.mistia.dao.PlanTrabajoDetalleDao;
 import pe.com.cablered.mistia.dao.SolicitudServicioDao;
+import pe.com.cablered.mistia.dao.SolicitudServicioDetalleDao;
 import pe.com.cablered.mistia.dao.SolicitudServicioEstadoDao;
 import pe.com.cablered.mistia.dao.SolicitudServicioHorarioAtencionDao;
 import pe.com.cablered.mistia.model.Estado;
 import pe.com.cablered.mistia.model.GrupoAtencion;
 import pe.com.cablered.mistia.model.GrupoAtencionDetalle;
 import pe.com.cablered.mistia.model.SolicitudServicio;
+import pe.com.cablered.mistia.model.SolicitudServicioDetalle;
 import pe.com.cablered.mistia.model.SolicitudServicioHorarioAtencion;
 import pe.com.cablered.mistia.util.Util;
 
 import static pe.com.cablered.mistia.util.ConstantBusiness.*;
 
-
 @Stateless
 @LocalBean
 public class SolicitudServicioService {
 
-	@Inject
-	private SolicitudServicioDao solicitudServicioDao;
-	
+    @Inject
+    private SolicitudServicioDao solicitudServicioDao;
 
-	@Inject
-	private GrupoAtencionDao grupoAtencionDao;
-	
-	
-	@Inject
-	private SolicitudServicioHorarioAtencionDao horarioDau;
-	
-	
-	@Inject
-	private SolicitudServicioEstadoDao solicitudServicioEstadoDao;
-	
-	// lista de grupos en session
-	private  Map<Long, GrupoAtencion> mpGruposCached ;
-	
+    @Inject
+    private GrupoAtencionDao grupoAtencionDao;
 
-	
-	/**
-	 * obtiene las lista de solicitudes pendientes, grupos a los cuales estan asigandos y sus respectivas prioridades
-	 * 
-	 * */
-	public List<Map<String, Object>> getSolicitudList( Date fecprgn,   int codigoTipoSolicitud) {
+    @Inject
+    private SolicitudServicioHorarioAtencionDao horarioDao;
 
-		List<Map<String, Object>> pendientes = new ArrayList<Map<String, Object>>();
-		List<SolicitudServicio> ssList = solicitudServicioDao.getSolicitudList(codigoTipoSolicitud);
-		for (SolicitudServicio s : ssList) {
-			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("numeroSolicitud", s.getNumeroSolicitud());
-			GrupoAtencion g =  getGrupoAtencion(fecprgn, s);
-			map.put("descripcionGrupo", g==null?"":g.getDescripcion());
-			map.put("prioridad", getPriortidad(s));
-			pendientes.add(map);
-		}
-		return pendientes;
-	}
-	
-	public List<SolicitudServicio> getSolicitudList(   int codigoTipoSolicitud) {
-		return solicitudServicioDao.getSolicitudList(codigoTipoSolicitud);
-	}
+    @Inject
+    private SolicitudServicioEstadoDao solicitudServicioEstadoDao;
 
-	public List<SolicitudServicio> getSolicitudListPorEstado(   int codigoEstado) {
+    @Inject
+    private SolicitudServicioDetalleDao solicitudServicioDetalleDao;
 
-		return solicitudServicioDao.getSolicitudListPorEstado(codigoEstado);
+    // lista de grupos en session
+    private Map<Long, GrupoAtencion> mpGruposCached;
 
-	}
-	
+    final static Logger logger = Logger.getLogger(SolicitudServicioService.class);
 
-	private String  getPriortidad( SolicitudServicio s ){
-		/*if(s.getTipoSolicitudServicio()!=null &&  s.getTipoSolicitudServicio().getCodigoTipo()==1){
+    /**
+     * obtiene las lista de solicitudes pendientes, grupos a los cuales estan
+     * asigandos y sus respectivas prioridades
+     *
+     *
+     */
+    public List<Map<String, Object>> getSolicitudList(Date fecprgn, int codigoTipoSolicitud) {
+
+        List<Map<String, Object>> pendientes = new ArrayList<Map<String, Object>>();
+        List<SolicitudServicio> ssList = solicitudServicioDao.getSolicitudList(codigoTipoSolicitud);
+        for (SolicitudServicio s : ssList) {
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("numeroSolicitud", s.getNumeroSolicitud());
+            GrupoAtencion g = getGrupoAtencion(fecprgn, s);
+            map.put("descripcionGrupo", g == null ? "" : g.getDescripcion());
+            map.put("prioridad", getPriortidad(s));
+            pendientes.add(map);
+        }
+        return pendientes;
+    }
+
+    public List<SolicitudServicio> getSolicitudList(int codigoTipoSolicitud) {
+        return solicitudServicioDao.getSolicitudList(codigoTipoSolicitud);
+    }
+
+    public List<SolicitudServicio> getSolicitudListPorEstado(int codigoEstado) {
+
+        return solicitudServicioDao.getSolicitudListPorEstado(codigoEstado);
+
+    }
+
+    public List<SolicitudServicioDetalle> getListSolicitudServicioDetalle(Long numeroSolicitud) {
+
+        List<SolicitudServicioDetalle> solicitudServicioDetalleList =  solicitudServicioDetalleDao.getListSolicitudServicioDetalle(numeroSolicitud);
+        for (SolicitudServicioDetalle detalle : solicitudServicioDetalleList) {
+            detalle.setCantTelevisor(detalle.getCantidad().intValue());
+            
+        }
+        return solicitudServicioDetalleList;
+    }
+
+    public List<SolicitudServicioHorarioAtencion> getListSolicitudServicioHorarioAtencion(Long numeroSolicitud) {
+
+        return horarioDao.getListSolicitudServicioHorarioAtencion(numeroSolicitud);
+
+    }
+
+    private String getPriortidad(SolicitudServicio s) {
+        /*if(s.getTipoSolicitudServicio()!=null &&  s.getTipoSolicitudServicio().getCodigoTipo()==1){
 		}*/
-		return "ALTA";
-	}
-	
-	/***
-	 * getGrupoAtencion obtiene el grupo solicitud asociado a un grupo de atencion ya se de cache o de bd
-	 * 
-	 * */
-	
-	private GrupoAtencion getGrupoAtencion(Date fecPrgn, SolicitudServicio solicitudServicio){
-		
-		GrupoAtencion g =  null;		
-		List<GrupoAtencionDetalle>  detalles =  Collections.EMPTY_LIST;
-		
-		if(mpGruposCached!=null && mpGruposCached.size()> 0){
+        return "ALTA";
+    }
 
-			detalles  =  new ArrayList<GrupoAtencionDetalle>();
-			Iterator<Long> it =  mpGruposCached.keySet().iterator();
-			while(it.hasNext()){
-			Long numerogrupo = 	it.next();
-				
-			List<GrupoAtencionDetalle>  _detalles =    mpGruposCached.get(numerogrupo).getGrupoAtencionDetalles();
-			detalles.addAll(_detalles);
-				
-			}
-			
-		}else{			
-			
-			detalles =  grupoAtencionDao.getDetallesGrupoAtencion(fecPrgn);
-	
-		}
+    /**
+     * *
+     * getGrupoAtencion obtiene el grupo solicitud asociado a un grupo de
+     * atencion ya se de cache o de bd
+     *
+     *
+     */
+    private GrupoAtencion getGrupoAtencion(Date fecPrgn, SolicitudServicio solicitudServicio) {
 
-		
-		if(detalles!=null){
-			for (GrupoAtencionDetalle d : detalles) {
-				if(  d.getSolicitudServicio().equals(solicitudServicio)){
-					g =  d.getGrupoAtencion();
-					break;
-					
-				};		
-			}
-		}
-		
-		return g;
-	}
+        GrupoAtencion g = null;
+        List<GrupoAtencionDetalle> detalles = Collections.EMPTY_LIST;
 
-	
-	
-	public List<Map> getSolicitudList(Integer codigoCliente, Long numeroCuadrilla, Integer codigoDistrito, Date fechaIni, Date fechaFin ) {
-		
-		
-		return solicitudServicioDao.getSolicitudList(codigoCliente, numeroCuadrilla, codigoDistrito, fechaIni, fechaFin, ESTADO_SOLICITUD_CERRADO);
-	}
-	
-	
-	
-	
-	
-	public Map<Long, GrupoAtencion> getMpGruposCached() {
-		return mpGruposCached;
-	}
+        if (mpGruposCached != null && mpGruposCached.size() > 0) {
 
-	public void setMpGruposCached(Map<Long, GrupoAtencion> mpGruposCached) {
-		this.mpGruposCached = mpGruposCached;
-	}
+            detalles = new ArrayList<GrupoAtencionDetalle>();
+            Iterator<Long> it = mpGruposCached.keySet().iterator();
+            while (it.hasNext()) {
+                Long numerogrupo = it.next();
 
-	public SolicitudServicio getSolicitudServicio(Long  numeroSolicitud) {
-		try{
-			return solicitudServicioDao.find(numeroSolicitud);
-		}catch(Exception e ){
-			e.printStackTrace();
-			return null;
-		}
-	}
+                List<GrupoAtencionDetalle> _detalles = mpGruposCached.get(numerogrupo).getGrupoAtencionDetalles();
+                detalles.addAll(_detalles);
 
-	public List<Map> getSolicitudList(Integer codigoCliente, Integer codigoTipoSolicitud, Integer codigoEstado,
-			Date fechaInicio, Date fechaFin) {
-		List<Map>  list =  solicitudServicioDao.getSolicitudList(codigoCliente, codigoTipoSolicitud, codigoEstado, fechaInicio, fechaFin);
-		return list;
-	}
-	
-	
-	
-	
-	public Response insertar(SolicitudServicio solicitudServicio) {
-		
-		Response response =  new  Response(Response.OK, Response.MSG_OK) ;
-		try{
-			
-			
-			solicitudServicio.setEstado(new Estado(ESTADO_SOLICITUD_PENDIENTE));
-			
-			// insertando la solicitud 
-			 response =    solicitudServicioDao.insert(solicitudServicio);
-			
-			 Long ns =  (Long) response.getData();
-		
-			//actualizacion de tracking
-			solicitudServicioEstadoDao.insert(ns, 
-												solicitudServicio.getEstado().getCodigoEstado());
-			
-			// insertando horario de atencion 
-			int  nse  = 1;			
-			for(SolicitudServicioHorarioAtencion h: solicitudServicio.getSolicitudServicioHorarioAtencionList()){
-				h.setId(solicitudServicio.getNumeroSolicitud(), nse );
-				nse++;
-				horarioDau.create(h);
-			}			
-			
-			
-		}catch (Exception e) {
-			e.printStackTrace();
-			response =  new  Response(Response.ERROR, Response.MSG_ERROR) ;
-		}
-		return response;
-	}
-	
-	
-	
-	
-	
-	
-	
+            }
 
-	public List<Map> getCantidadTelevisoresList(){
-		List<Map> mpList  =  new ArrayList<>();
-		int cant =  4;
-		for (int i = 1; i < cant; i++) {
-			Map<String, Object> mp =  new HashMap<>();
-			mp.put("codigo",i);
-			mp.put("descripcion","0"+i+" ("+Util.getNombreNumero(i)+")");
-			mp.put("cantidad",2);
-			mpList.add(mp);
-		}
-		return mpList;
-	}
+        } else {
 
-	
-	
-	public List<Map> getHorarioAtencionList() {
-		List<Map> horarioList  =  new ArrayList<>();
-		horarioList.add(createhorario("08:00-10:00", LUN,MAR,MIE,JUE,VIE,SAB,DOM) );
-		horarioList.add(createhorario("10:00-12:00", LUN,MAR,MIE,JUE,VIE,SAB,DOM) );
-		horarioList.add(createhorario("12:00-14:00", LUN,MAR,MIE,JUE,VIE,SAB,DOM) );
-		horarioList.add(createhorario("14:00-16:00", LUN,MAR,MIE,JUE,VIE,SAB,DOM) );
-		horarioList.add(createhorario("16:00-18:00", LUN,MAR,MIE,JUE,VIE,SAB,DOM) );	
-		return horarioList;
-	}
+            detalles = grupoAtencionDao.getDetallesGrupoAtencion(fecPrgn);
 
-	
-	private Map createhorario(String hora, int ...dia ){
-		
-		Map mp =  new LinkedHashMap<>();
-		mp.put("horario", hora);
-		for (int i : dia) {
-			mp.put(i, null);
-		}
-		return mp;
-		
-	}
+        }
+
+        if (detalles != null) {
+            for (GrupoAtencionDetalle d : detalles) {
+                if (d.getSolicitudServicio().equals(solicitudServicio)) {
+                    g = d.getGrupoAtencion();
+                    break;
+
+                };
+            }
+        }
+
+        return g;
+    }
+
+//	
+    public List<Map> getSolicitudList(Integer codigoCliente, Long numeroCuadrilla, Integer codigoDistrito, Date fechaIni, Date fechaFin) {
+
+        return solicitudServicioDao.getSolicitudList(codigoCliente, numeroCuadrilla, codigoDistrito, fechaIni, fechaFin, ESTADO_SOLICITUD_CERRADO);
+    }
+
+    public Map<Long, GrupoAtencion> getMpGruposCached() {
+        return mpGruposCached;
+    }
+
+    public void setMpGruposCached(Map<Long, GrupoAtencion> mpGruposCached) {
+        this.mpGruposCached = mpGruposCached;
+    }
+
+    public SolicitudServicio getSolicitudServicio(Long numeroSolicitud) {
+        try {
+            return solicitudServicioDao.find(numeroSolicitud);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public List<Map> getSolicitudList(Integer codigoCliente, Integer codigoTipoSolicitud, Integer codigoEstado,
+            Date fechaInicio, Date fechaFin) {
+        List<Map> list = solicitudServicioDao.getSolicitudList(codigoCliente, codigoTipoSolicitud, codigoEstado, fechaInicio, fechaFin);
+        return list;
+    }
+
+    public Response insertar(SolicitudServicio solicitudServicio) {
+
+        Response response = new Response(Response.OK, Response.MSG_OK);
+        try {
+
+            solicitudServicio.setEstado(new Estado(ESTADO_SOLICITUD_PENDIENTE));
+
+            // insertando la solicitud 
+            response = solicitudServicioDao.insert(solicitudServicio);
+
+            Long ns = (Long) response.getData();
+
+            //actualizacion de tracking
+            solicitudServicioEstadoDao.insert(ns, solicitudServicio.getEstado().getCodigoEstado());
+
+            // insertando horario de atencion 
+            int nse = 1;
+            for (SolicitudServicioHorarioAtencion h : solicitudServicio.getSolicitudServicioHorarioAtencionList()) {
+                h.setId(solicitudServicio.getNumeroSolicitud(), nse);
+                nse++;
+                horarioDao.create(h);
+            }
+
+            logger.info(" registrando detalle del servicio ");
+            //registrando  detalle de servicio
+            for (SolicitudServicioDetalle detalle : solicitudServicio.getSolicitudServicioDetalleList()) {
+                detalle.setId(ns, detalle.getServicio().getCodigoServicio());
+                solicitudServicioDetalleDao.create(detalle);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            response = new Response(Response.ERROR, Response.MSG_ERROR);
+        }
+        return response;
+    }
+
+    public List<Map> getCantidadTelevisoresList() {
+        List<Map> mpList = new ArrayList<>();
+        int cant = 4;
+        for (int i = 1; i < cant; i++) {
+            Map<String, Object> mp = new HashMap<>();
+            mp.put("codigo", i);
+            mp.put("descripcion", "0" + i + " (" + Util.getNombreNumero(i) + ")");
+            mp.put("cantidad", 2);
+            mpList.add(mp);
+        }
+        return mpList;
+    }
+
+    public List<Map> getHorarioAtencionList() {
+        List<Map> horarioList = new ArrayList<>();
+        horarioList.add(createhorario("08:00-10:00", LUN, MAR, MIE, JUE, VIE, SAB, DOM));
+        horarioList.add(createhorario("10:00-12:00", LUN, MAR, MIE, JUE, VIE, SAB, DOM));
+        horarioList.add(createhorario("12:00-14:00", LUN, MAR, MIE, JUE, VIE, SAB, DOM));
+        horarioList.add(createhorario("14:00-16:00", LUN, MAR, MIE, JUE, VIE, SAB, DOM));
+        horarioList.add(createhorario("16:00-18:00", LUN, MAR, MIE, JUE, VIE, SAB, DOM));
+        return horarioList;
+    }
+
+    private Map createhorario(String hora, int... dia) {
+
+        Map mp = new LinkedHashMap<>();
+        mp.put("horario", hora);
+        for (int i : dia) {
+            mp.put(i, null);
+        }
+        return mp;
+
+    }
+
+    public Response actualizar(SolicitudServicio solicitudServicio) {
+
+        logger.info(" metodo : actualizar ");
+
+        Response response = new Response(Response.OK, Response.MSG_OK);
+        try {
+            solicitudServicio.setEstado(new Estado(ESTADO_SOLICITUD_PENDIENTE));
+            // actualizando la solicitud 
+            solicitudServicioDao.update(solicitudServicio);
 
 
+            // eliminando los anteriores horarios
+            horarioDao.deleteBySolicitudServicio(solicitudServicio.getNumeroSolicitud());
+            // insertando horario de atencion 
+            int nse = 1;
+            for (SolicitudServicioHorarioAtencion h : solicitudServicio.getSolicitudServicioHorarioAtencionList()) {
+                h.setId(solicitudServicio.getNumeroSolicitud(), nse);
+                nse++;
+                horarioDao.create(h);
+            }
 
+            logger.info(" registrando detalle del servicio ");
+            // eliminando los anteriores detalles
+            solicitudServicioDetalleDao.deleteBySolicitudServicio(solicitudServicio.getNumeroSolicitud());
+            //registrando  detalle de servicio
+            for (SolicitudServicioDetalle detalle : solicitudServicio.getSolicitudServicioDetalleList()) {
+                detalle.setId(solicitudServicio.getNumeroSolicitud(), detalle.getServicio().getCodigoServicio());
+                solicitudServicioDetalleDao.create(detalle);
+            }
+
+        } catch (Exception e) {
+
+            logger.info(e);
+            e.printStackTrace();
+            response = new Response(Response.ERROR, Response.MSG_ERROR);
+
+        }
+
+        return response;
+
+    }
 
 }

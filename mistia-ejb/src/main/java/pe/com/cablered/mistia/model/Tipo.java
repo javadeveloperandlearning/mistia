@@ -56,8 +56,17 @@ public class Tipo implements Serializable {
     private List<TipoSolicitudCompetenciaDetalle> tipoSolicitudCompetenciaDetalles;
 
     public Tipo() {
+    
     }
 
+    public Tipo(Integer codigoTipo, String descripcion) {
+        this.codigoTipo = codigoTipo;
+        this.descripcion = descripcion;
+    }
+
+    
+    
+    
     public Integer getCodigoTipo() {
         return this.codigoTipo;
     }

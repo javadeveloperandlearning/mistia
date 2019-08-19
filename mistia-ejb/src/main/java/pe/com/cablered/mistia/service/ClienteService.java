@@ -8,7 +8,9 @@ import javax.inject.Inject;
 import org.apache.log4j.Logger;
 
 import pe.com.cablered.mistia.dao.ClienteDao;
+import pe.com.cablered.mistia.dao.ClienteDireccionDao;
 import pe.com.cablered.mistia.model.Cliente;
+import pe.com.cablered.mistia.model.ClienteDireccion;
 import static pe.com.cablered.mistia.service.VehiculoService.logger;
 import static pe.com.cablered.mistia.util.Util.*;
 
@@ -18,6 +20,9 @@ public class ClienteService extends AbstractSevice<Cliente> {
 
     @Inject
     private ClienteDao clienteDao;
+
+    @Inject
+    private ClienteDireccionDao clienteDireccionDao;
 
     final static Logger logger = Logger.getLogger(ClienteService.class);
 
@@ -38,6 +43,13 @@ public class ClienteService extends AbstractSevice<Cliente> {
 
             if (response.getCodigo() == Response.OK) {
                 clienteDao.create(cliente);
+                List<ClienteDireccion> clienteDireccionList = cliente.getClienteDireccions();
+                if (clienteDireccionList != null && !clienteDireccionList.isEmpty()) {
+                    for (ClienteDireccion clienteDireccion : clienteDireccionList) {
+                        clienteDireccion.getId().setCodigoCliente(cliente.getCodigoCliente());
+                        clienteDireccionDao.create(clienteDireccion);
+                    }
+                }
             }
 
         } catch (Exception e) {
@@ -122,6 +134,11 @@ public class ClienteService extends AbstractSevice<Cliente> {
             return response;
         }
 
+        if (cliente.getClienteDireccions() == null || (cliente.getClienteDireccions() != null && cliente.getClienteDireccions().isEmpty())) {
+            response = new Response(Response.ERROR, "Agregue por los menos una dirección");
+            return response;
+        }
+
         return response;
     }
 
@@ -131,8 +148,33 @@ public class ClienteService extends AbstractSevice<Cliente> {
     }
 
     public int getMax() {
-        int numeroCuadrilla = clienteDao.getMax() + 1;
-        return numeroCuadrilla;
+        int numeroCliente = clienteDao.getMax() + 1;
+        return numeroCliente;
+    }
+
+    public List<ClienteDireccion> getClienteDireccionList(Cliente cliente) {
+        return clienteDireccionDao.getClienteDireccionList(cliente);
+    }
+
+    public Response actualizarDireccionesList(Cliente cliente) {
+
+        logger.info(" metodo :  actualizarDireccionesList");
+        Response response = new Response();
+
+        try {
+            response = clienteDireccionDao.eliminarDirecciones(cliente);
+            List<ClienteDireccion> clisClienteDireccionList = cliente.getClienteDireccions();
+            for (ClienteDireccion clienteDireccion : clisClienteDireccionList) {
+                clienteDireccion.getId().setCodigoCliente(cliente.getCodigoCliente());
+               
+                logger.info(" pk : "+clienteDireccion.toString());
+                clienteDireccionDao.create(clienteDireccion);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            response = new Response(Response.ERROR, Response.MSG_ERROR);
+        }
+        return response;
     }
 
 }

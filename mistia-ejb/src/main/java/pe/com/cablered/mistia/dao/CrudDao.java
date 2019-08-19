@@ -8,7 +8,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import org.apache.log4j.Logger;
 import pe.com.cablered.mistia.model.ObjectBean;
+import pe.com.cablered.mistia.service.ClienteService;
 
 
 
@@ -16,6 +18,8 @@ public abstract class  CrudDao <T> {
 	
 	
 	private Class<T> entityClass;   
+        
+        final static Logger logger = Logger.getLogger(CrudDao.class);
 	
 	public CrudDao() {
 		
@@ -32,13 +36,21 @@ public abstract class  CrudDao <T> {
 	protected abstract EntityManager getEntityManager();
 	
 	public void create(T t) {
-		
+		logger.info(" metodo : create ");
 		Calendar cal = Calendar.getInstance();
-                
 		
 		try {
-			((ObjectBean)t).setEstacionCreacion(InetAddress.getLocalHost().getHostName());
-			((ObjectBean)t).setEstacionModificacion(InetAddress.getLocalHost().getHostName());
+                        
+                        String hostname  =  InetAddress.getLocalHost().getHostName().trim();
+                        if(hostname.length()>15){
+                            hostname =  InetAddress.getLocalHost().getHostName().trim().substring(0, 14);
+                        }
+                        logger.info("IP Server: "+InetAddress.getLocalHost().getHostName());
+                        logger.info("hostname :  "+hostname);
+                        logger.info("Fecha tiempo : "+cal.getTime());
+                    
+			((ObjectBean)t).setEstacionCreacion(hostname);
+			((ObjectBean)t).setEstacionModificacion(hostname);
 			((ObjectBean)t).setFechaCreacion(cal.getTime());
 			((ObjectBean)t).setFechaModificacion(cal.getTime());
 			

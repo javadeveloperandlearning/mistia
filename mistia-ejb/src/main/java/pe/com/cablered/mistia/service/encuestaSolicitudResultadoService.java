@@ -1,5 +1,6 @@
 package pe.com.cablered.mistia.service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.ejb.LocalBean;
@@ -8,67 +9,83 @@ import javax.inject.Inject;
 
 import org.apache.log4j.Logger;
 import pe.com.cablered.mistia.dao.EncuestaSolicitudResultadoDao;
+import pe.com.cablered.mistia.dao.TecnicoCompetenciaDetalleDao;
+import pe.com.cablered.mistia.dao.TecnicoDao;
 import pe.com.cablered.mistia.model.Encuesta;
 import pe.com.cablered.mistia.model.EncuestaPregunta;
 
 import pe.com.cablered.mistia.model.EncuestaRespuesta;
 import pe.com.cablered.mistia.model.EncuestaSolicitudResultado;
+import pe.com.cablered.mistia.model.Tecnico;
+import pe.com.cablered.mistia.model.TecnicoCompetenciaDetalle;
 
 @Stateless
 @LocalBean
 public class encuestaSolicitudResultadoService {
-	
-	
-	final static Logger logger = Logger.getLogger(encuestaSolicitudResultadoService.class);
-	
-	@Inject
-	private EncuestaSolicitudResultadoDao encuestaSolicitudResultadoDao;
 
-	
-	@Inject
-	private EncuestaRespuestaService encuestaRespuestaService;
+    final static Logger logger = Logger.getLogger(encuestaSolicitudResultadoService.class);
 
-	public Response calificar(Integer numeroEncuesta, Long numeroSolicitud, Integer numeroPregunta , String respuesta) {
-	
-		Response response = new Response(Response.OK, Response.MSG_OK);
-		try{
+    @Inject
+    private EncuestaSolicitudResultadoDao encuestaSolicitudResultadoDao;
 
-	
-				EncuestaRespuesta er =  encuestaRespuestaService.getEncuestaRespuesta(numeroEncuesta, respuesta );
-				logger.info(" respuesta encontrada : "+respuesta);
-						
-				Double factor =   er.getFactor();
-				Double peso  =    er.getPeso();
-				Double puntaje =  peso * factor;
-				Integer numeroRespuesta =  er.getId().getNumeroRespuesta();
-				EncuestaSolicitudResultado  esr = new EncuestaSolicitudResultado(numeroEncuesta,numeroSolicitud,numeroPregunta,numeroRespuesta );
-				esr.setPeso(peso);
-				esr.setFactor(factor);
-				esr.setPuntaje(puntaje);
-						 
-				if(encuestaSolicitudResultadoDao.find(esr.getId())==null){
-					logger.info(" registrando : "+respuesta);
-					encuestaSolicitudResultadoDao.create(esr);
-				}
-						 
+    @Inject
+    private TecnicoDao tecnicoDao;
 
-		}catch(Exception e){
-			
-			response = new Response(Response.ERROR, Response.MSG_ERROR);
-			logger.info(e);
-			e.printStackTrace();
-			
-		}
+    @Inject
+    private TecnicoCompetenciaDetalleDao tecnicoCompetenciaDetalleDao;
 
-		
-		return response;
-	}
-	
-	
-	
-	
-	
-	
-	
+    @Inject
+    private EncuestaRespuestaService encuestaRespuestaService;
+
+    public Response calificar(Integer numeroEncuesta, Long numeroSolicitud, EncuestaPregunta encuestaPregunta, String respuesta) {
+
+        Response response = new Response(Response.OK, Response.MSG_OK);
+        try {
+
+            EncuestaRespuesta er = encuestaRespuestaService.getEncuestaRespuesta(numeroEncuesta, respuesta);
+            logger.info(" respuesta encontrada : " + respuesta);
+
+            Double factor = er.getFactor();
+            Double peso = er.getPeso();
+            Double puntaje = peso * factor;
+            Integer numeroRespuesta = er.getId().getNumeroRespuesta();
+            EncuestaSolicitudResultado esr = new EncuestaSolicitudResultado(numeroEncuesta, numeroSolicitud, encuestaPregunta.getId().getNumeroPregunta(), numeroRespuesta);
+            esr.setPeso(peso);
+            esr.setFactor(factor);
+            esr.setPuntaje(puntaje);
+
+            if (encuestaSolicitudResultadoDao.find(esr.getId()) == null) {
+                logger.info(" registrando : " + respuesta);
+                encuestaSolicitudResultadoDao.create(esr);
+            }
+
+            //actualizand las competencias de los usuarios
+            List<Tecnico> tecnicoList = tecnicoDao.getTecnicoList(numeroSolicitud);
+            for (Tecnico tecnico : tecnicoList) {
+                List<TecnicoCompetenciaDetalle> detalles = tecnicoCompetenciaDetalleDao.getTecnicoCompetenciaDetalleList(tecnico.getCodigoTecnico());
+                if (detalles != null && !detalles.isEmpty()) {
+                    for (TecnicoCompetenciaDetalle detalle : detalles) {
+                        if (detalle.getCompetencia().getCodigoCompetencia() == encuestaPregunta.getCodigoCompetencia()) {
+                            detalle.getGradoCompetencia().add(new BigDecimal(puntaje));
+                            tecnicoCompetenciaDetalleDao.update(detalle);
+                            break;
+                        }
+                    }
+                } else {
+
+                    
+                }
+            }
+
+        } catch (Exception e) {
+
+            response = new Response(Response.ERROR, Response.MSG_ERROR);
+            logger.info(e);
+            e.printStackTrace();
+
+        }
+
+        return response;
+    }
 
 }

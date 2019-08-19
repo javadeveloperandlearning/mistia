@@ -43,275 +43,278 @@ import static pe.com.cablered.mistia.controller.ConstansView.*;
 @RequestScoped
 public class CalidadAtencionRegistrarController {
 
-	
-	private Long numeroSolicitud;
-	
-	private List<String> preguntas;
-	private List<String> respuestas;
-	private String respuesta1;
-	private String respuesta2;
-	 
-	final static Logger logger = Logger.getLogger(CalidadAtencionRegistrarController.class);
-		
-	@Inject
-	private SolicitudServicioService SolicitudServicioService;
-	
-	@Inject
-	private SolicitudServicioEstadoService solicitudServicioEstadoService;
-	
-	@Inject
-	private EncuestaPreguntaService encuestaPreguntaService;
-	
-	@Inject
-	private encuestaSolicitudResultadoService encuestaPreguntaSolicitudService;
-	
-	@Inject
-	private EncuestaRespuestaService encuestaRespuestaService;
+    private Long numeroSolicitud;
 
-	@Inject
-	private FacesContext facesContext;
-	
-	private Map solicitud;
-	
-	private List<Map> estados;
+    private List<String> preguntas;
+    private List<String> respuestas;
+    private String respuesta1;
+    private String respuesta2;
 
-	@ManagedProperty("#{caliatencon}")
-	private CalidadAtencionConsultaController consulta;;
-	
-	
-	
-	@PostConstruct
-	public void init(){
-		
-		try{
-		
-			ExternalContext ec  =  facesContext.getExternalContext();	
-			//Long numerosolicitud = Long.parseLong(ec.getRequestParameterMap().get("numerosolicitud"));
-			HttpServletRequest request = (HttpServletRequest)ec.getRequest();
-			Long numerosolicitud    =  (Long)request.getAttribute("numerosolicitud");
-			setNumeroSolicitud(numerosolicitud);
-			
-			preguntas = new ArrayList<String>();
+    final static Logger logger = Logger.getLogger(CalidadAtencionRegistrarController.class);
 
-					
-			// detalle de solicitud
-			SolicitudServicio solicitudServicio =  SolicitudServicioService.getSolicitudServicio(numerosolicitud);			
-			solicitud = new HashMap<>();
-			if(solicitudServicio!=null){
-				
-				Cliente  c = solicitudServicio.getContratoServicio().getCliente();
-				solicitud.put("cliente",c.getNombres()+" - "+c.getApellidos());
-				solicitud.put("direccion",solicitudServicio.getContratoServicio().getDireccion());
-				solicitud.put("tiposolicitud",solicitudServicio.getTipoSolicitud().getDescripcion());
-				solicitud.put("distrito", solicitudServicio.getContratoServicio().getDistrito().getDescripcion());
-				//solicitud.put("servicio", solicitudServicio.getContratoServicio().getServicio().getDescripcion());
-				solicitud.put("tarifa", solicitudServicio.getContratoServicio().getTarifa());
-				
-			}
-			
-			// estados 
-			List<SolicitudServicioEstado> solicitudEstadoList =  solicitudServicioEstadoService.getSolicitudServicioEstadoList(numerosolicitud);
-			estados = new ArrayList<>();
-			respuestas =  new ArrayList<>();
-			
-			int acumulado = 0;
-			SimpleDateFormat sdf =  new SimpleDateFormat(FORMAT_DATE_TIME);
-			Date fechante  =  null;
-			for (SolicitudServicioEstado e : solicitudEstadoList) {
-				
-				Map map = new HashMap<String, Object>();
-				
-				map.put("desestado", e.getEstado().getDescripcion());
-				
-				map.put("fechahora", e.getFechaHora());
-				
-				String _acumulado =  "";
-				if(fechante == null){
-					_acumulado = "";
-				}else{
-				
-					Calendar cal = Calendar.getInstance(); // locale-specific
-					cal.setTime(new Date());
-					cal.set(Calendar.HOUR_OF_DAY, 0);
-					cal.set(Calendar.MINUTE, 0);
-					cal.set(Calendar.SECOND, 0);
-					cal.set(Calendar.MILLISECOND, 0);
-					Long  time = e.getFechaHora().getTime()-fechante.getTime();
-					cal.set(Calendar.MILLISECOND, time.intValue());
-					
-					int hora =  cal.get(Calendar.HOUR);
-					int minu =  cal.get(Calendar.MINUTE);
-					
-					if(hora>0){
-						_acumulado = ""+hora +"h ";
-					}
-					
-					if(minu>0){
-						_acumulado+= ""+minu+" min";
-					}
-				}
-				
-				map.put("acumulado", _acumulado);
-				estados.add(map);
-				fechante =  e.getFechaHora();
-				
-			}
-			
-			// preguntas 
-			List<EncuestaPregunta> preguntaList= encuestaPreguntaService.getEncuestaPreguntaList(new Encuesta(CONSTANTE_ENCUESTA_CALIDAD_ATENCION));
-			for (EncuestaPregunta p : preguntaList) {
-				preguntas.add(p.getDescripcion());
-			}
-		
-			// respuestas 
-			List<EncuestaRespuesta> respuestaList =  encuestaRespuestaService.getEncuestaRespuestaList(new Encuesta(CONSTANTE_ENCUESTA_CALIDAD_ATENCION));
-			for (EncuestaRespuesta e : respuestaList) {
-				respuestas.add(e.getDescripcion());
-			}
-			
-			
-		}catch(Exception e ){
-			
-			e.printStackTrace();
-			logger.info(e);
-		}
-		
-      
-	}
+    @Inject
+    private SolicitudServicioService SolicitudServicioService;
 
+    @Inject
+    private SolicitudServicioEstadoService solicitudServicioEstadoService;
 
-	public List<String> getPreguntas() {
-		return preguntas;
-	}
+    @Inject
+    private EncuestaPreguntaService encuestaPreguntaService;
 
+    @Inject
+    private encuestaSolicitudResultadoService encuestaPreguntaSolicitudService;
 
-	public void setPreguntas(List<String> preguntas) {
-		this.preguntas = preguntas;
-	}
+    @Inject
+    private EncuestaRespuestaService encuestaRespuestaService;
 
-	
-	public List<String> getRespuestas() {
-		return respuestas;
-	}
+    @Inject
+    private FacesContext facesContext;
 
+    private Map solicitud;
 
-	public void setRespuestas(List<String> respuestas) {
-		this.respuestas = respuestas;
-	}
+    private List<Map> estados;
 
+    @ManagedProperty("#{caliatencon}")
+    private CalidadAtencionConsultaController consulta;
 
+    private String[] arrayrespuestas;
+    
+    private  List<EncuestaRespuesta> respuestaList;
+    
+    private List<EncuestaPregunta> preguntaList;
 
+    @PostConstruct
+    public void init() {
 
-	public List<Map> getEstados() {
-		return estados;
-	}
+        try {
 
+            ExternalContext ec = facesContext.getExternalContext();
+            //Long numerosolicitud = Long.parseLong(ec.getRequestParameterMap().get("numerosolicitud"));
+            HttpServletRequest request = (HttpServletRequest) ec.getRequest();
+            Long numerosolicitud = (Long) request.getAttribute("numerosolicitud");
+            setNumeroSolicitud(numerosolicitud);
 
-	public void setEstados(List<Map> estados) {
-		this.estados = estados;
-	}
+            preguntas = new ArrayList<String>();
 
+            // detalle de solicitud
+            SolicitudServicio solicitudServicio = SolicitudServicioService.getSolicitudServicio(numerosolicitud);
+            solicitud = new HashMap<>();
+            if (solicitudServicio != null) {
 
-	public  String  guardar(){	
-		
-		logger.info(" numeroSolicitud "+numeroSolicitud);
-		logger.info(" respuesta 1 "+respuesta1);
-		logger.info(" respuesta 2 "+respuesta2);
-		String mg1 = "Debe seleccionar una opción para calificar el trato recibido ";
-		String mg2 = "Debe seleccionar una opción para calificar la calidad del servicio instalado ";
-		
-		if(respuesta1==null || (respuesta1!=null && respuesta1.trim().equals(""))){
-			mostrarMensaje(mg1);
-			return null;
-		}
-		
-		if(respuesta2==null || (respuesta2!=null && respuesta2.trim().equals(""))){
-			mostrarMensaje(mg2);
-			return null;
-		}	
-		
-	
-		Response response =  encuestaPreguntaSolicitudService.calificar(CONSTANTE_ENCUESTA_CALIDAD_ATENCION, numeroSolicitud,CONSTANTE_ṔREGUNTA_CALIDAD_ATENCION_1, respuesta1 );
-				 response =  encuestaPreguntaSolicitudService.calificar(CONSTANTE_ENCUESTA_CALIDAD_ATENCION, numeroSolicitud,CONSTANTE_ṔREGUNTA_CALIDAD_ATENCION_2, respuesta2 );
-				 
-		if(response!=null && response.getCodigo()== Response.OK && consulta!=null){
-			consulta.buscar();
-		}
-	
-		return CALIDA_ATENCION_CONSULTA_VIEW;
-	}
-	
-	
-	private void mostrarMensaje(String texto){
-		
-		FacesMessage msg = new FacesMessage(texto);
-		msg.setSeverity(FacesMessage.SEVERITY_ERROR);
-		facesContext.addMessage(null, msg);
-		
-		
-	}
+                Cliente c = solicitudServicio.getContratoServicio().getCliente();
+                solicitud.put("cliente", c.getNombres() + " - " + c.getApellidos());
+                solicitud.put("direccion", solicitudServicio.getContratoServicio().getDireccion());
+                solicitud.put("tiposolicitud", solicitudServicio.getTipoSolicitud().getDescripcion());
+                solicitud.put("distrito", solicitudServicio.getContratoServicio().getDistrito().getDescripcion());
+                //solicitud.put("servicio", solicitudServicio.getContratoServicio().getServicio().getDescripcion());
+                solicitud.put("tarifa", solicitudServicio.getContratoServicio().getTarifa());
 
-	
-	public Long getNumeroSolicitud() {
-		return numeroSolicitud;
-	}
+            }
 
+            // estados 
+            List<SolicitudServicioEstado> solicitudEstadoList = solicitudServicioEstadoService.getSolicitudServicioEstadoList(numerosolicitud);
+            estados = new ArrayList<>();
+            respuestas = new ArrayList<>();
 
-	public void setNumeroSolicitud(Long numeroSolicitud) {
-		this.numeroSolicitud = numeroSolicitud;
-	}
+            int acumulado = 0;
+            SimpleDateFormat sdf = new SimpleDateFormat(FORMAT_DATE_TIME);
+            Date fechante = null;
+            logger.info(" moestrando estados de la solicitud");
+            for (SolicitudServicioEstado e : solicitudEstadoList) {
+                logger.info(e.getFechaHora());
+                Map map = new HashMap<String, Object>();
 
+                map.put("desestado", e.getEstado().getDescripcion());
 
-	public void salir(){
-	
-		logger.info("metodo: salir");
-		
-		try {
-			ExternalContext ec = facesContext.getExternalContext();
-			ec.redirect(ec.getRequestContextPath()+ ConstansView.PRINCIPAL_VIEW);
-		} catch (IOException e) {
-			logger.error(e);
-			e.printStackTrace();
-		}
-	}
+                map.put("fechahora", e.getFechaHora());
+                map.put("fechahora1", sdf.format(e.getFechaHora()));
 
+                String _acumulado = "";
+                if (fechante == null) {
+                    _acumulado = "";
+                } else {
 
-	public Map getSolicitud() {
-		return solicitud;
-	}
+                    Calendar cal = Calendar.getInstance(); // locale-specific
+                    cal.setTime(new Date());
+                    cal.set(Calendar.HOUR_OF_DAY, 0);
+                    cal.set(Calendar.MINUTE, 0);
+                    cal.set(Calendar.SECOND, 0);
+                    cal.set(Calendar.MILLISECOND, 0);
+                    Long time = e.getFechaHora().getTime() - fechante.getTime();
+                    cal.set(Calendar.MILLISECOND, time.intValue());
 
+                    int hora = cal.get(Calendar.HOUR);
+                    int minu = cal.get(Calendar.MINUTE);
 
-	public void setSolicitud(Map solicitud) {
-		this.solicitud = solicitud;
-	}
+                    if (hora > 0) {
+                        _acumulado = "" + hora + "h ";
+                    }
 
+                    if (minu > 0) {
+                        _acumulado += "" + minu + " min";
+                    }
+                }
 
-	public void setConsulta(CalidadAtencionConsultaController consulta) {
-		this.consulta = consulta;
-	}
+                map.put("acumulado", _acumulado);
+                estados.add(map);
+                fechante = e.getFechaHora();
 
+            }
 
-	public String getRespuesta1() {
-		return respuesta1;
-	}
+            // preguntas 
+            preguntaList = encuestaPreguntaService.getEncuestaPreguntaList(new Encuesta(CONSTANTE_ENCUESTA_CALIDAD_ATENCION));
+            for (EncuestaPregunta p : preguntaList) {
+                preguntas.add(p.getDescripcion());
+            }
 
+            // respuestas 
+            respuestaList = encuestaRespuestaService.getEncuestaRespuestaList(new Encuesta(CONSTANTE_ENCUESTA_CALIDAD_ATENCION));
+            for (EncuestaRespuesta e : respuestaList) {
+                respuestas.add(e.getDescripcion());
+            }
 
-	public void setRespuesta1(String respuesta1) {
-		this.respuesta1 = respuesta1;
-	}
+            arrayrespuestas = new String[respuestaList.size()];
 
+        } catch (Exception e) {
 
-	public String getRespuesta2() {
-		return respuesta2;
-	}
+            e.printStackTrace();
+            logger.info(e);
+        }
 
+    }
 
-	public void setRespuesta2(String respuesta2) {
-		this.respuesta2 = respuesta2;
-	}
+    public List<String> getPreguntas() {
+        return preguntas;
+    }
 
+    public void setPreguntas(List<String> preguntas) {
+        this.preguntas = preguntas;
+    }
 
-	
-	
-	
+    public List<String> getRespuestas() {
+        return respuestas;
+    }
+
+    public void setRespuestas(List<String> respuestas) {
+        this.respuestas = respuestas;
+    }
+
+    public List<Map> getEstados() {
+        return estados;
+    }
+
+    public void setEstados(List<Map> estados) {
+        this.estados = estados;
+    }
+
+    public String guardar() {
+
+        logger.info(" numeroSolicitud " + numeroSolicitud);
+        //logger.info(" respuesta 1 " + respuesta1);
+        //logger.info(" respuesta 2 " + respuesta2);
+        String mg1 = "Debe seleccionar una opción para calificar el trato recibido ";
+        String mg2 = "Debe seleccionar una opción para calificar la calidad del servicio instalado ";
+
+        /*if (respuesta1 == null || (respuesta1 != null && respuesta1.trim().equals(""))) {
+            mostrarMensaje(mg1);
+            return null;
+        }
+
+        if (respuesta2 == null || (respuesta2 != null && respuesta2.trim().equals(""))) {
+            mostrarMensaje(mg2);
+            return null;
+        }
+
+        Response response = encuestaPreguntaSolicitudService.calificar(CONSTANTE_ENCUESTA_CALIDAD_ATENCION, numeroSolicitud, CONSTANTE_ṔREGUNTA_CALIDAD_ATENCION_1, respuesta1);
+        response = encuestaPreguntaSolicitudService.calificar(CONSTANTE_ENCUESTA_CALIDAD_ATENCION, numeroSolicitud, CONSTANTE_ṔREGUNTA_CALIDAD_ATENCION_2, respuesta2);
+
+        if (response != null && response.getCodigo() == Response.OK && consulta != null) {
+            consulta.buscar();
+        }*/
+        Response response = null;
+        
+        for (String respuesta : arrayrespuestas) {
+            EncuestaPregunta _encuestaPregunta = null;
+            for (EncuestaPregunta encuestaPregunta : preguntaList) {
+                if(encuestaPregunta.getDescripcion().equals(respuesta)){
+                    _encuestaPregunta =  encuestaPregunta;
+                    break;
+                }
+            }
+
+            response = encuestaPreguntaSolicitudService.calificar(CONSTANTE_ENCUESTA_CALIDAD_ATENCION, numeroSolicitud, _encuestaPregunta, respuesta);
+        }
+
+        if (response != null && response.getCodigo() == Response.OK && consulta != null) {
+            consulta.buscar();
+        }
+
+        return CALIDA_ATENCION_CONSULTA_VIEW;
+    }
+
+    private void mostrarMensaje(String texto) {
+
+        FacesMessage msg = new FacesMessage(texto);
+        msg.setSeverity(FacesMessage.SEVERITY_ERROR);
+        facesContext.addMessage(null, msg);
+
+    }
+
+    public Long getNumeroSolicitud() {
+        return numeroSolicitud;
+    }
+
+    public void setNumeroSolicitud(Long numeroSolicitud) {
+        this.numeroSolicitud = numeroSolicitud;
+    }
+
+    public void salir() {
+
+        logger.info("metodo: salir");
+
+        try {
+            ExternalContext ec = facesContext.getExternalContext();
+            ec.redirect(ec.getRequestContextPath() + ConstansView.CALIDA_ATENCION_CONSULTA_VIEW);
+        } catch (IOException e) {
+            logger.error(e);
+            e.printStackTrace();
+        }
+    }
+
+    public Map getSolicitud() {
+        return solicitud;
+    }
+
+    public void setSolicitud(Map solicitud) {
+        this.solicitud = solicitud;
+    }
+
+    public void setConsulta(CalidadAtencionConsultaController consulta) {
+        this.consulta = consulta;
+    }
+
+    public String getRespuesta1() {
+        return respuesta1;
+    }
+
+    public void setRespuesta1(String respuesta1) {
+        this.respuesta1 = respuesta1;
+    }
+
+    public String getRespuesta2() {
+        return respuesta2;
+    }
+
+    public void setRespuesta2(String respuesta2) {
+        this.respuesta2 = respuesta2;
+    }
+
+    public String[] getArrayrespuestas() {
+        return arrayrespuestas;
+    }
+
+    public void setArrayrespuestas(String[] arrayrespuestas) {
+        this.arrayrespuestas = arrayrespuestas;
+    }
+
 }

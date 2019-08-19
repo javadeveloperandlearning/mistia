@@ -197,42 +197,58 @@ public class SolicitudServicioDao extends CrudDao<SolicitudServicio>{
 	
 	
 	public List<Map> getSolicitudList(Integer codigoCliente, Long numeroCuadrilla, Integer codigoDistrito, Date fechaIni, Date fechaFin, Integer codigoEstado  ) {
-		
+		logger.info("metodo : getSolicitudList ");
+                
+                logger.info(" codigoCliente   :  "+codigoCliente);
+                logger.info(" numeroCuadrilla :  "+numeroCuadrilla);
+                logger.info(" codigoDistrito  :  "+codigoDistrito);
+                logger.info(" fechaIni        :  "+fechaIni);
+                logger.info(" fechaFin        :  "+fechaFin);
+                logger.info(" codigoEstado    :  "+codigoEstado);
+                
+                
 		List<Map> lista = new ArrayList<>();
 		try {
 			String sql = "Select  s.numeroSolicitud, "
 					+ "   e.descripcion  as desEstado,"
 					+ "   se.fechaHora as cambioestado, "
 					+ "   s.fechaCreacion as fecharegistro, "
-					+ "   c.codigoCliente,"
+					+ "   '0001' as codigoCliente,"
 					+ " cu.nombre as  desCuadrilla, "
-					+ " (select  count(1) from s.encuestaSolicitudResultados esr ) as cantencuestas"
+					+ " (select  count(1) from s.encuestaSolicitudResultados esr ) as cantencuestas,"
+                                        + " '' as nombres,"
+                                        + " '' as apellidoPaterno,"
+                                        + " '' as apellidoMaterno"
+                                
+                                
 					+ " from SolicitudServicio s  "
 					+ " join s.estado e  "
-					+ " join s.contratoServicio cs  "
+					//+ " join s.contratoServicio cs  "
 					+ " join s.planTrabajoDetalles pd"
 					+ " join s.solicitudServicioEstados se"
 					+ " join pd.planTrabajo p"
 					+ " join p.cuadrilla cu "
-					+ " join cs.cliente c  "
-					+ "	join s.distrito  d"
+					//+ " join s.cliente c  "
+					//+ " join s.distrito  d"
 					+ " where "
 					+ " s.estado =  se.estado	"
 					+ " and s.estado.codigoEstado = :pcodigoestado"
-					+ " and (cu.numeroCuadrilla = :pnumerocuadrilla or :pnumerocuadrilla is null)"
-					+ " and (d.codigoDistrito = :pcodigodistrito or :pcodigodistrito is null)"
-					+ " and date_trunc('day',s.fechaSolicitud)   between  :paramfecIni and  :paramfecFin"
+					//+ " and (cu.numeroCuadrilla = :pnumerocuadrilla or :pnumerocuadrilla is null)"
+					//+ " and (d.codigoDistrito = :pcodigodistrito or :pcodigodistrito is null)"
+					//+ " and date_trunc('day',s.fechaSolicitud)   between  :paramfecIni and  :paramfecFin"
 					+ "";
 					;
 						
 			Query  query = getEntityManager().createQuery(sql);
 			query.setParameter("pcodigoestado",codigoEstado);
-			query.setParameter("pnumerocuadrilla",numeroCuadrilla);
-			query.setParameter("pcodigodistrito",codigoDistrito);
-			query.setParameter("paramfecIni", fechaIni, TemporalType.TIMESTAMP);
-			query.setParameter("paramfecFin", fechaFin, TemporalType.TIMESTAMP);
+			//query.setParameter("pnumerocuadrilla",numeroCuadrilla);
+			//query.setParameter("pcodigodistrito",codigoDistrito);
+			//query.setParameter("paramfecIni", fechaIni, TemporalType.TIMESTAMP);
+			//query.setParameter("paramfecFin", fechaFin, TemporalType.TIMESTAMP);
 			List<Object[]> list = query.getResultList();
 			
+                        logger.info(" cant list :"+list.size());
+                       
 			for (Object[] result : list) {
 				Map<String, Object> map=new HashMap<String, Object>();
 				map.put("numeroSolicitud", result[0]);
@@ -242,6 +258,8 @@ public class SolicitudServicioDao extends CrudDao<SolicitudServicio>{
 				map.put("codigoCliente", result[4]);
 				map.put("desCuadrilla", result[5]);
 				map.put("cantencuestas", result[6]);
+                                map.put("nombreCliente", result[7]+" "+result[8]+" "+result[9]);
+                                
 				lista.add(map);
 			}
 		} catch (Exception e) {
@@ -279,14 +297,14 @@ public class SolicitudServicioDao extends CrudDao<SolicitudServicio>{
 					+ "   se.fechaHora as cambioestado, "
 					+ "   s.fechaCreacion as fecharegistro, "
 					+ "   c.codigoCliente, "
-					+ "   concat(c.apellidos,' ', c.nombres ) as nomcliente,  "
+					+ "   concat(c.apellidoPaterno,' ',c.apellidoMaterno,' ', c.nombres ) as nomcliente,  "
 					+ "   s   "
 				
 					+ " from SolicitudServicio s  "
 					+ " join s.estado e  "
-					+ " join s.contratoServicio cs  "
+					//+ " join s.contratoServicio cs  "
 					+ " left join s.solicitudServicioEstados se"
-					+ " join cs.cliente c  "
+					+ " join s.cliente c  "
 					+ " where "
 					+ " "
 					+ "   (s.estado.codigoEstado = :pcodigoestado or :pcodigoestado is null )"

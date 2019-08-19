@@ -41,5 +41,12 @@ public class DistritoService {
 	}
 	
 	
+        
+        public Distrito getDistrito(Integer codigoDistrito) {
+		return distritoDao.getDistrito(codigoDistrito);
+	}
+	
+        
+        
 
 }
