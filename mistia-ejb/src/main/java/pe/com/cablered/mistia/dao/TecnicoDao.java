@@ -147,7 +147,7 @@ public class TecnicoDao extends CrudDao<Tecnico> {
                     + " join s.planTrabajoDetalles pd"
                     + " join pd.planTrabajo p"
                     + " join p.cuadrilla cu "
-                    + " join p.cuadrillaDetalle cud "
+                    + " join cu.cuadrillasDetalles cud "
                     + " join cud.tecnico t "
                     + " where "
                     + " s.numeroSolicitud = :pnumerosolicitud";

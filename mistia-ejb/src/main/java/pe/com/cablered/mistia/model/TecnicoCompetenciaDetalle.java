@@ -5,132 +5,71 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
-
 /**
  * The persistent class for the tecnico_competencia_detalle database table.
- * 
+ *
  */
 @Entity
-@Table(name="tecnico_competencia_detalle")
-@NamedQuery(name="TecnicoCompetenciaDetalle.findAll", query="SELECT t FROM TecnicoCompetenciaDetalle t")
-public class TecnicoCompetenciaDetalle implements Serializable {
-	private static final long serialVersionUID = 1L;
+@Table(name = "tecnico_competencia_detalle")
+@NamedQuery(name = "TecnicoCompetenciaDetalle.findAll", query = "SELECT t FROM TecnicoCompetenciaDetalle t")
+public class TecnicoCompetenciaDetalle extends ObjectBean implements Serializable {
 
-	@EmbeddedId
-	private TecnicoCompetenciaDetallePK id;
+    private static final long serialVersionUID = 1L;
 
-	@Column(name="estacion_creacion")
-	private String estacionCreacion;
+    @EmbeddedId
+    private TecnicoCompetenciaDetallePK id;
 
-	@Column(name="estacion_modifcion")
-	private String estacionModifcion;
+    @Column(name = "grado_competencia")
+    private BigDecimal gradoCompetencia;
 
-	@Column(name="fecha_creacion")
-	private Timestamp fechaCreacion;
+    //bi-directional many-to-one association to Competencia
+    @ManyToOne
+    @JoinColumn(name = "codigo_competencia", insertable = false, updatable = false)
+    private Competencia competencia;
 
-	@Column(name="fecha_modificacion")
-	private Timestamp fechaModificacion;
+    //bi-directional many-to-one association to Tecnico
+    @ManyToOne
+    @JoinColumn(name = "codigo_tecnico", insertable = false, updatable = false)
+    private Tecnico tecnico;
 
-	@Column(name="grado_competencia")
-	private BigDecimal gradoCompetencia;
+    public TecnicoCompetenciaDetalle() {
+    }
 
-	@Column(name="usuario_creacion")
-	private String usuarioCreacion;
+    public TecnicoCompetenciaDetallePK getId() {
+        return this.id;
+    }
 
-	@Column(name="usuario_modificacion")
-	private String usuarioModificacion;
+    public void setId(TecnicoCompetenciaDetallePK id) {
+        this.id = id;
+    }
 
-	//bi-directional many-to-one association to Competencia
-	@ManyToOne
-	@JoinColumn(name="codigo_competencia", insertable = false, updatable= false)
-	private Competencia competencia;
+    public BigDecimal getGradoCompetencia() {
+        return this.gradoCompetencia;
+    }
 
-	//bi-directional many-to-one association to Tecnico
-	@ManyToOne
-	@JoinColumn(name="codigo_tecnico" , insertable = false, updatable= false)
-	private Tecnico tecnico;
+    public void setGradoCompetencia(BigDecimal gradoCompetencia) {
+        this.gradoCompetencia = gradoCompetencia;
+    }
 
-	public TecnicoCompetenciaDetalle() {
-	}
+    public Competencia getCompetencia() {
+        return this.competencia;
+    }
 
-	public TecnicoCompetenciaDetallePK getId() {
-		return this.id;
-	}
+    public void setCompetencia(Competencia competencia) {
+        this.competencia = competencia;
+    }
 
-	public void setId(TecnicoCompetenciaDetallePK id) {
-		this.id = id;
-	}
+    public Tecnico getTecnico() {
+        return this.tecnico;
+    }
 
-	public String getEstacionCreacion() {
-		return this.estacionCreacion;
-	}
+    public void setTecnico(Tecnico tecnico) {
+        this.tecnico = tecnico;
+    }
 
-	public void setEstacionCreacion(String estacionCreacion) {
-		this.estacionCreacion = estacionCreacion;
-	}
-
-	public String getEstacionModifcion() {
-		return this.estacionModifcion;
-	}
-
-	public void setEstacionModifcion(String estacionModifcion) {
-		this.estacionModifcion = estacionModifcion;
-	}
-
-	public Timestamp getFechaCreacion() {
-		return this.fechaCreacion;
-	}
-
-	public void setFechaCreacion(Timestamp fechaCreacion) {
-		this.fechaCreacion = fechaCreacion;
-	}
-
-	public Timestamp getFechaModificacion() {
-		return this.fechaModificacion;
-	}
-
-	public void setFechaModificacion(Timestamp fechaModificacion) {
-		this.fechaModificacion = fechaModificacion;
-	}
-
-	public BigDecimal getGradoCompetencia() {
-		return this.gradoCompetencia;
-	}
-
-	public void setGradoCompetencia(BigDecimal gradoCompetencia) {
-		this.gradoCompetencia = gradoCompetencia;
-	}
-
-	public String getUsuarioCreacion() {
-		return this.usuarioCreacion;
-	}
-
-	public void setUsuarioCreacion(String usuarioCreacion) {
-		this.usuarioCreacion = usuarioCreacion;
-	}
-
-	public String getUsuarioModificacion() {
-		return this.usuarioModificacion;
-	}
-
-	public void setUsuarioModificacion(String usuarioModificacion) {
-		this.usuarioModificacion = usuarioModificacion;
-	}
-
-	public Competencia getCompetencia() {
-		return this.competencia;
-	}
-
-	public void setCompetencia(Competencia competencia) {
-		this.competencia = competencia;
-	}
-
-	public Tecnico getTecnico() {
-		return this.tecnico;
-	}
-
-	public void setTecnico(Tecnico tecnico) {
-		this.tecnico = tecnico;
-	}
+    @Override
+    public String toString() {
+        return "TecnicoCompetenciaDetalle{" + "id=" + id + ", gradoCompetencia=" + gradoCompetencia + ", competencia=" + competencia + ", tecnico=" + tecnico + '}';
+    }
 
 }

@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 import pe.com.cablered.mistia.dao.EncuestaSolicitudResultadoDao;
 import pe.com.cablered.mistia.dao.TecnicoCompetenciaDetalleDao;
 import pe.com.cablered.mistia.dao.TecnicoDao;
+import pe.com.cablered.mistia.model.Competencia;
 import pe.com.cablered.mistia.model.Encuesta;
 import pe.com.cablered.mistia.model.EncuestaPregunta;
 
@@ -62,18 +63,39 @@ public class encuestaSolicitudResultadoService {
             //actualizand las competencias de los usuarios
             List<Tecnico> tecnicoList = tecnicoDao.getTecnicoList(numeroSolicitud);
             for (Tecnico tecnico : tecnicoList) {
+                logger.info("tecnico  : "+tecnico.getCodigoTecnico());
                 List<TecnicoCompetenciaDetalle> detalles = tecnicoCompetenciaDetalleDao.getTecnicoCompetenciaDetalleList(tecnico.getCodigoTecnico());
+                
                 if (detalles != null && !detalles.isEmpty()) {
+                    
                     for (TecnicoCompetenciaDetalle detalle : detalles) {
                         if (detalle.getCompetencia().getCodigoCompetencia() == encuestaPregunta.getCodigoCompetencia()) {
-                            detalle.getGradoCompetencia().add(new BigDecimal(puntaje));
+                            logger.info("CodigoCompetencia :" + encuestaPregunta.getCodigoCompetencia());
+                            logger.info("puntaje :" + puntaje);
+                            logger.info("grado old :" + detalle.getGradoCompetencia());
+                            double oldGrado = detalle.getGradoCompetencia().doubleValue();
+                            BigDecimal  gradoCompetencia  = detalle.getGradoCompetencia().add(new BigDecimal(puntaje));
+                            if (gradoCompetencia.doubleValue()>1.0) {
+                                gradoCompetencia = new BigDecimal(1.0);
+                            }
+                            
+                            if( gradoCompetencia.doubleValue() < 0.0){
+                                gradoCompetencia =  new BigDecimal(0.0);
+                            }
+                            logger.info("grado add:" + gradoCompetencia);
+                            detalle.setGradoCompetencia(gradoCompetencia);
                             tecnicoCompetenciaDetalleDao.update(detalle);
                             break;
                         }
                     }
-                } else {
-
                     
+                } else {
+                    
+                    TecnicoCompetenciaDetalle tecnicoCompetenciaDetalle =  new TecnicoCompetenciaDetalle();
+                    tecnicoCompetenciaDetalle.setTecnico(tecnico);
+                    tecnicoCompetenciaDetalle.setCompetencia(new Competencia(encuestaPregunta.getCodigoCompetencia()));
+                    tecnicoCompetenciaDetalle.setGradoCompetencia(new BigDecimal(puntaje));
+                    tecnicoCompetenciaDetalleDao.create(tecnicoCompetenciaDetalle);
                 }
             }
 

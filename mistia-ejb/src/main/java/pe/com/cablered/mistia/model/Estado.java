@@ -7,220 +7,221 @@ import javax.xml.bind.annotation.XmlTransient;
 import java.sql.Timestamp;
 import java.util.List;
 
-
 /**
  * The persistent class for the estados database table.
- * 
+ *
  */
 @Entity
-@Table(name="estados")
-@NamedQuery(name="Estado.findAll", query="SELECT e FROM Estado e")
+@Table(name = "estados")
+@NamedQuery(name = "Estado.findAll", query = "SELECT e FROM Estado e")
 public class Estado implements Serializable {
-	private static final long serialVersionUID = 1L;
 
-	@Id
-	@Column(name="codigo_estado")
-	private Integer codigoEstado;
+    private static final long serialVersionUID = 1L;
 
-	@Column(name="codigo_grupo")
-	private Integer codigoGrupo;
+    @Id
+    @Column(name = "codigo_estado")
+    private Integer codigoEstado;
 
-	private String descripcion;
+    @Column(name = "codigo_grupo")
+    private Integer codigoGrupo;
 
-	@Column(name="estacion_creacion")
-	private String estacionCreacion;
+    private String descripcion;
 
-	@Column(name="estacion_modifcion")
-	private String estacionModifcion;
+    @Column(name = "tiempo_promedio")
+    private Double tiempoPromedio;
 
-	@Column(name="fecha_creacion")
-	private Timestamp fechaCreacion;
+    @Column(name = "estacion_creacion")
+    private String estacionCreacion;
 
-	@Column(name="fecha_modificacion")
-	private Timestamp fechaModificacion;
+    @Column(name = "estacion_modifcion")
+    private String estacionModifcion;
 
-	@Column(name="ind_activo")
-	private Integer indActivo;
+    @Column(name = "fecha_creacion")
+    private Timestamp fechaCreacion;
 
-	@Column(name="usuario_creacion")
-	private String usuarioCreacion;
+    @Column(name = "fecha_modificacion")
+    private Timestamp fechaModificacion;
 
-	@Column(name="usuario_modificacion")
-	private String usuarioModificacion;
+    @Column(name = "ind_activo")
+    private Integer indActivo;
 
-	//bi-directional many-to-one association to Programacion
-	@OneToMany(mappedBy="estado")
-	private List<Programacion> programacions;
-	
-	
-	@OneToMany(mappedBy="estado")
-	private List<SolicitudServicio> solicitudes;
-	
-	
-	@OneToMany(mappedBy="estado")
-	private List<SolicitudServicioEstado> SolicitudServicioEstados;
-	
-	
-	@OneToMany(mappedBy="estado")
-	private List<Reclamo> reclamos;
+    @Column(name = "usuario_creacion")
+    private String usuarioCreacion;
 
-	@OneToMany(mappedBy="estado")
-	private List<ComprobantePago>  comprobantePagos; 
-	
-	
-	
-	
+    @Column(name = "usuario_modificacion")
+    private String usuarioModificacion;
 
-	public Estado() {
-	}
-	
-	public Estado(Integer codigoEstado) {
-		 this.codigoEstado =  codigoEstado;
-		 
-	}
+    //bi-directional many-to-one association to Programacion
+    @OneToMany(mappedBy = "estado")
+    private List<Programacion> programacions;
 
-	
-	public Estado(Integer codigoEstado, String descripcion) {
-		 this.codigoEstado =  codigoEstado;
-		 this.descripcion =  descripcion;
-	}
+    @OneToMany(mappedBy = "estado")
+    private List<SolicitudServicio> solicitudes;
 
-	public Integer getCodigoEstado() {
-		return this.codigoEstado;
-	}
+    @OneToMany(mappedBy = "estado")
+    private List<SolicitudServicioEstado> SolicitudServicioEstados;
 
-	public void setCodigoEstado(Integer codigoEstado) {
-		this.codigoEstado = codigoEstado;
-	}
+    @OneToMany(mappedBy = "estado")
+    private List<Reclamo> reclamos;
 
-	public Integer getCodigoGrupo() {
-		return this.codigoGrupo;
-	}
+    @OneToMany(mappedBy = "estado")
+    private List<ComprobantePago> comprobantePagos;
 
-	public void setCodigoGrupo(Integer codigoGrupo) {
-		this.codigoGrupo = codigoGrupo;
-	}
+    public Estado() {
+    }
 
-	public String getDescripcion() {
-		return this.descripcion;
-	}
+    public Estado(Integer codigoEstado) {
+        this.codigoEstado = codigoEstado;
 
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
-	}
+    }
 
-	public String getEstacionCreacion() {
-		return this.estacionCreacion;
-	}
+    public Estado(Integer codigoEstado, String descripcion) {
+        this.codigoEstado = codigoEstado;
+        this.descripcion = descripcion;
+    }
 
-	public void setEstacionCreacion(String estacionCreacion) {
-		this.estacionCreacion = estacionCreacion;
-	}
+    public Integer getCodigoEstado() {
+        return this.codigoEstado;
+    }
 
-	public String getEstacionModifcion() {
-		return this.estacionModifcion;
-	}
+    public void setCodigoEstado(Integer codigoEstado) {
+        this.codigoEstado = codigoEstado;
+    }
 
-	public void setEstacionModifcion(String estacionModifcion) {
-		this.estacionModifcion = estacionModifcion;
-	}
+    public Integer getCodigoGrupo() {
+        return this.codigoGrupo;
+    }
 
-	public Timestamp getFechaCreacion() {
-		return this.fechaCreacion;
-	}
+    public void setCodigoGrupo(Integer codigoGrupo) {
+        this.codigoGrupo = codigoGrupo;
+    }
 
-	public void setFechaCreacion(Timestamp fechaCreacion) {
-		this.fechaCreacion = fechaCreacion;
-	}
+    public String getDescripcion() {
+        return this.descripcion;
+    }
 
-	public Timestamp getFechaModificacion() {
-		return this.fechaModificacion;
-	}
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
 
-	public void setFechaModificacion(Timestamp fechaModificacion) {
-		this.fechaModificacion = fechaModificacion;
-	}
+    public String getEstacionCreacion() {
+        return this.estacionCreacion;
+    }
 
-	public Integer getIndActivo() {
-		return this.indActivo;
-	}
+    public void setEstacionCreacion(String estacionCreacion) {
+        this.estacionCreacion = estacionCreacion;
+    }
 
-	public void setIndActivo(Integer indActivo) {
-		this.indActivo = indActivo;
-	}
+    public String getEstacionModifcion() {
+        return this.estacionModifcion;
+    }
 
-	public String getUsuarioCreacion() {
-		return this.usuarioCreacion;
-	}
+    public void setEstacionModifcion(String estacionModifcion) {
+        this.estacionModifcion = estacionModifcion;
+    }
 
-	public void setUsuarioCreacion(String usuarioCreacion) {
-		this.usuarioCreacion = usuarioCreacion;
-	}
+    public Timestamp getFechaCreacion() {
+        return this.fechaCreacion;
+    }
 
-	public String getUsuarioModificacion() {
-		return this.usuarioModificacion;
-	}
+    public void setFechaCreacion(Timestamp fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
+    }
 
-	public void setUsuarioModificacion(String usuarioModificacion) {
-		this.usuarioModificacion = usuarioModificacion;
-	}
+    public Timestamp getFechaModificacion() {
+        return this.fechaModificacion;
+    }
 
-	@XmlTransient
-	public List<Programacion> getProgramacions() {
-		return this.programacions;
-	}
+    public void setFechaModificacion(Timestamp fechaModificacion) {
+        this.fechaModificacion = fechaModificacion;
+    }
 
-	public void setProgramacions(List<Programacion> programacions) {
-		this.programacions = programacions;
-	}
+    public Integer getIndActivo() {
+        return this.indActivo;
+    }
 
-	@XmlTransient
-	public List<SolicitudServicio> getSolicitudes() {
-		return solicitudes;
-	}
+    public void setIndActivo(Integer indActivo) {
+        this.indActivo = indActivo;
+    }
 
-	public void setSolicitudes(List<SolicitudServicio> solicitudes) {
-		this.solicitudes = solicitudes;
-	}
+    public String getUsuarioCreacion() {
+        return this.usuarioCreacion;
+    }
 
-	public Programacion addProgramacion(Programacion programacion) {
-		getProgramacions().add(programacion);
-		programacion.setEstado(this);
+    public void setUsuarioCreacion(String usuarioCreacion) {
+        this.usuarioCreacion = usuarioCreacion;
+    }
 
-		return programacion;
-	}
+    public String getUsuarioModificacion() {
+        return this.usuarioModificacion;
+    }
 
-	public Programacion removeProgramacion(Programacion programacion) {
-		getProgramacions().remove(programacion);
-		programacion.setEstado(null);
+    public void setUsuarioModificacion(String usuarioModificacion) {
+        this.usuarioModificacion = usuarioModificacion;
+    }
 
-		return programacion;
-	}
+    @XmlTransient
+    public List<Programacion> getProgramacions() {
+        return this.programacions;
+    }
 
-	public List<SolicitudServicioEstado> getSolicitudServicioEstados() {
-		return SolicitudServicioEstados;
-	}
+    public void setProgramacions(List<Programacion> programacions) {
+        this.programacions = programacions;
+    }
 
-	public void setSolicitudServicioEstados(List<SolicitudServicioEstado> solicitudServicioEstados) {
-		SolicitudServicioEstados = solicitudServicioEstados;
-	}
+    @XmlTransient
+    public List<SolicitudServicio> getSolicitudes() {
+        return solicitudes;
+    }
 
-	public List<Reclamo> getReclamos() {
-		return reclamos;
-	}
+    public void setSolicitudes(List<SolicitudServicio> solicitudes) {
+        this.solicitudes = solicitudes;
+    }
 
-	public void setReclamos(List<Reclamo> reclamos) {
-		this.reclamos = reclamos;
-	}
+    public Programacion addProgramacion(Programacion programacion) {
+        getProgramacions().add(programacion);
+        programacion.setEstado(this);
 
-	public List<ComprobantePago> getComprobantePagos() {
-		return comprobantePagos;
-	}
+        return programacion;
+    }
 
-	public void setComprobantePagos(List<ComprobantePago> comprobantePagos) {
-		this.comprobantePagos = comprobantePagos;
-	}
-	
-	
+    public Programacion removeProgramacion(Programacion programacion) {
+        getProgramacions().remove(programacion);
+        programacion.setEstado(null);
+
+        return programacion;
+    }
+
+    public List<SolicitudServicioEstado> getSolicitudServicioEstados() {
+        return SolicitudServicioEstados;
+    }
+
+    public void setSolicitudServicioEstados(List<SolicitudServicioEstado> solicitudServicioEstados) {
+        SolicitudServicioEstados = solicitudServicioEstados;
+    }
+
+    public List<Reclamo> getReclamos() {
+        return reclamos;
+    }
+
+    public void setReclamos(List<Reclamo> reclamos) {
+        this.reclamos = reclamos;
+    }
+
+    public List<ComprobantePago> getComprobantePagos() {
+        return comprobantePagos;
+    }
+
+    public void setComprobantePagos(List<ComprobantePago> comprobantePagos) {
+        this.comprobantePagos = comprobantePagos;
+    }
+
+    public Double getTiempoPromedio() {
+        return tiempoPromedio;
+    }
+
+    public void setTiempoPromedio(Double tiempoPromedio) {
+        this.tiempoPromedio = tiempoPromedio;
+    }
 
 }

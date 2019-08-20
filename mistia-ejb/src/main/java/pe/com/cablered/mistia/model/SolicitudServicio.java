@@ -57,7 +57,7 @@ public class SolicitudServicio extends ObjectBean implements Serializable, Clone
     @Column(name = "referencia")
     private String referencia;
 
-    @Column(name = "urbanizacion")
+    @Column(name = "urbanizacion")  
     private String urbanizacion;
 
     @Column(name = "direccion")

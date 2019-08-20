@@ -208,7 +208,7 @@ public class SolicitudServicioGenerarController extends AbastractSolicitudServic
             referencia = solicitudServicio.getReferencia();
 
             accion = ACCION_EDITA;
-            labelActualizar = "Modificar";
+            labelActualizar = "Guardar";
 
             calcularCosto();
         } catch (Exception e) {

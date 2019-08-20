@@ -228,23 +228,27 @@ public class SolicitudServicioDao extends CrudDao<SolicitudServicio>{
 					+ " join s.solicitudServicioEstados se"
 					+ " join pd.planTrabajo p"
 					+ " join p.cuadrilla cu "
-					//+ " join s.cliente c  "
-					//+ " join s.distrito  d"
+					+ " join s.cliente c  "
+					+ " join s.distrito  d"
 					+ " where "
 					+ " s.estado =  se.estado	"
+                                      
 					+ " and s.estado.codigoEstado = :pcodigoestado"
-					//+ " and (cu.numeroCuadrilla = :pnumerocuadrilla or :pnumerocuadrilla is null)"
-					//+ " and (d.codigoDistrito = :pcodigodistrito or :pcodigodistrito is null)"
-					//+ " and date_trunc('day',s.fechaSolicitud)   between  :paramfecIni and  :paramfecFin"
+                                        + " and (c.codigoCliente = :pcodigocliente or :pcodigocliente is null )"
+					+ " and (cu.numeroCuadrilla = :pnumerocuadrilla or :pnumerocuadrilla is null)"
+					+ " and (d.codigoDistrito = :pcodigodistrito or :pcodigodistrito is null)"
+					+ " and date_trunc('day',s.fechaSolicitud)   between  :paramfecIni and  :paramfecFin"
 					+ "";
 					;
 						
 			Query  query = getEntityManager().createQuery(sql);
+                        
+                        query.setParameter("pcodigocliente",codigoCliente);
 			query.setParameter("pcodigoestado",codigoEstado);
-			//query.setParameter("pnumerocuadrilla",numeroCuadrilla);
-			//query.setParameter("pcodigodistrito",codigoDistrito);
-			//query.setParameter("paramfecIni", fechaIni, TemporalType.TIMESTAMP);
-			//query.setParameter("paramfecFin", fechaFin, TemporalType.TIMESTAMP);
+			query.setParameter("pnumerocuadrilla",numeroCuadrilla);
+			query.setParameter("pcodigodistrito",codigoDistrito);
+			query.setParameter("paramfecIni", fechaIni, TemporalType.TIMESTAMP);
+			query.setParameter("paramfecFin", fechaFin, TemporalType.TIMESTAMP);
 			List<Object[]> list = query.getResultList();
 			
                         logger.info(" cant list :"+list.size());

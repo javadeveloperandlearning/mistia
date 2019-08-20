@@ -6,180 +6,184 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.List;
 
-
 /**
  * The persistent class for the competencias database table.
- * 
+ *
  */
 @Entity
-@Table(name="competencias")
-@NamedQuery(name="Competencia.findAll", query="SELECT c FROM Competencia c")
+@Table(name = "competencias")
+@NamedQuery(name = "Competencia.findAll", query = "SELECT c FROM Competencia c")
 public class Competencia implements Serializable {
-	private static final long serialVersionUID = 1L;
 
-	@Id
-	@Column(name="codigo_competencia")
-	private Integer codigoCompetencia;
+    private static final long serialVersionUID = 1L;
 
-	private String descripcion;
+    @Id
+    @Column(name = "codigo_competencia")
+    private Integer codigoCompetencia;
 
-	@Column(name="estacion_creacion")
-	private String estacionCreacion;
+    private String descripcion;
 
-	@Column(name="estacion_modifcion")
-	private String estacionModifcion;
+    @Column(name = "estacion_creacion")
+    private String estacionCreacion;
 
-	@Column(name="fecha_creacion")
-	private Timestamp fechaCreacion;
+    @Column(name = "estacion_modifcion")
+    private String estacionModifcion;
 
-	@Column(name="fecha_modificacion")
-	private Timestamp fechaModificacion;
+    @Column(name = "fecha_creacion")
+    private Timestamp fechaCreacion;
 
-	@Column(name="usuario_creacion")
-	private String usuarioCreacion;
+    @Column(name = "fecha_modificacion")
+    private Timestamp fechaModificacion;
 
-	@Column(name="usuario_modificacion")
-	private String usuarioModificacion;
+    @Column(name = "usuario_creacion")
+    private String usuarioCreacion;
 
-	@Column(name="valor_maximo")
-	private BigDecimal valorMaximo;
+    @Column(name = "usuario_modificacion")
+    private String usuarioModificacion;
 
-	@Column(name="valor_minimo")
-	private BigDecimal valorMinimo;
+    @Column(name = "valor_maximo")
+    private BigDecimal valorMaximo;
 
-	//bi-directional many-to-one association to TecnicoCompetenciaDetalle
-	@OneToMany(mappedBy="competencia")
-	private List<TecnicoCompetenciaDetalle> tecnicoCompetenciaDetalles;
+    @Column(name = "valor_minimo")
+    private BigDecimal valorMinimo;
 
-	//bi-directional many-to-one association to TipoSolicitudCompetenciaDetalle
-	@OneToMany(mappedBy="competencia")
-	private List<TipoSolicitudCompetenciaDetalle> tipoSolicitudCompetenciaDetalles;
+    //bi-directional many-to-one association to TecnicoCompetenciaDetalle
+    @OneToMany(mappedBy = "competencia")
+    private List<TecnicoCompetenciaDetalle> tecnicoCompetenciaDetalles;
 
-	public Competencia() {
-	}
+    //bi-directional many-to-one association to TipoSolicitudCompetenciaDetalle
+    @OneToMany(mappedBy = "competencia")
+    private List<TipoSolicitudCompetenciaDetalle> tipoSolicitudCompetenciaDetalles;
 
-	public Integer getCodigoCompetencia() {
-		return this.codigoCompetencia;
-	}
+    public Competencia() {
+    }
 
-	public void setCodigoCompetencia(Integer codigoCompetencia) {
-		this.codigoCompetencia = codigoCompetencia;
-	}
+    public Competencia(Integer codigoCompetencia) {
+       this.codigoCompetencia = codigoCompetencia;
+    }
 
-	public String getDescripcion() {
-		return this.descripcion;
-	}
+    public Integer getCodigoCompetencia() {
+        return this.codigoCompetencia;
+    }
 
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
-	}
+    public void setCodigoCompetencia(Integer codigoCompetencia) {
+        this.codigoCompetencia = codigoCompetencia;
+    }
 
-	public String getEstacionCreacion() {
-		return this.estacionCreacion;
-	}
+    public String getDescripcion() {
+        return this.descripcion;
+    }
 
-	public void setEstacionCreacion(String estacionCreacion) {
-		this.estacionCreacion = estacionCreacion;
-	}
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
 
-	public String getEstacionModifcion() {
-		return this.estacionModifcion;
-	}
+    public String getEstacionCreacion() {
+        return this.estacionCreacion;
+    }
 
-	public void setEstacionModifcion(String estacionModifcion) {
-		this.estacionModifcion = estacionModifcion;
-	}
+    public void setEstacionCreacion(String estacionCreacion) {
+        this.estacionCreacion = estacionCreacion;
+    }
 
-	public Timestamp getFechaCreacion() {
-		return this.fechaCreacion;
-	}
+    public String getEstacionModifcion() {
+        return this.estacionModifcion;
+    }
 
-	public void setFechaCreacion(Timestamp fechaCreacion) {
-		this.fechaCreacion = fechaCreacion;
-	}
+    public void setEstacionModifcion(String estacionModifcion) {
+        this.estacionModifcion = estacionModifcion;
+    }
 
-	public Timestamp getFechaModificacion() {
-		return this.fechaModificacion;
-	}
+    public Timestamp getFechaCreacion() {
+        return this.fechaCreacion;
+    }
 
-	public void setFechaModificacion(Timestamp fechaModificacion) {
-		this.fechaModificacion = fechaModificacion;
-	}
+    public void setFechaCreacion(Timestamp fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
+    }
 
-	public String getUsuarioCreacion() {
-		return this.usuarioCreacion;
-	}
+    public Timestamp getFechaModificacion() {
+        return this.fechaModificacion;
+    }
 
-	public void setUsuarioCreacion(String usuarioCreacion) {
-		this.usuarioCreacion = usuarioCreacion;
-	}
+    public void setFechaModificacion(Timestamp fechaModificacion) {
+        this.fechaModificacion = fechaModificacion;
+    }
 
-	public String getUsuarioModificacion() {
-		return this.usuarioModificacion;
-	}
+    public String getUsuarioCreacion() {
+        return this.usuarioCreacion;
+    }
 
-	public void setUsuarioModificacion(String usuarioModificacion) {
-		this.usuarioModificacion = usuarioModificacion;
-	}
+    public void setUsuarioCreacion(String usuarioCreacion) {
+        this.usuarioCreacion = usuarioCreacion;
+    }
 
-	public BigDecimal getValorMaximo() {
-		return this.valorMaximo;
-	}
+    public String getUsuarioModificacion() {
+        return this.usuarioModificacion;
+    }
 
-	public void setValorMaximo(BigDecimal valorMaximo) {
-		this.valorMaximo = valorMaximo;
-	}
+    public void setUsuarioModificacion(String usuarioModificacion) {
+        this.usuarioModificacion = usuarioModificacion;
+    }
 
-	public BigDecimal getValorMinimo() {
-		return this.valorMinimo;
-	}
+    public BigDecimal getValorMaximo() {
+        return this.valorMaximo;
+    }
 
-	public void setValorMinimo(BigDecimal valorMinimo) {
-		this.valorMinimo = valorMinimo;
-	}
+    public void setValorMaximo(BigDecimal valorMaximo) {
+        this.valorMaximo = valorMaximo;
+    }
 
-	public List<TecnicoCompetenciaDetalle> getTecnicoCompetenciaDetalles() {
-		return this.tecnicoCompetenciaDetalles;
-	}
+    public BigDecimal getValorMinimo() {
+        return this.valorMinimo;
+    }
 
-	public void setTecnicoCompetenciaDetalles(List<TecnicoCompetenciaDetalle> tecnicoCompetenciaDetalles) {
-		this.tecnicoCompetenciaDetalles = tecnicoCompetenciaDetalles;
-	}
+    public void setValorMinimo(BigDecimal valorMinimo) {
+        this.valorMinimo = valorMinimo;
+    }
 
-	public TecnicoCompetenciaDetalle addTecnicoCompetenciaDetalle(TecnicoCompetenciaDetalle tecnicoCompetenciaDetalle) {
-		getTecnicoCompetenciaDetalles().add(tecnicoCompetenciaDetalle);
-		tecnicoCompetenciaDetalle.setCompetencia(this);
+    public List<TecnicoCompetenciaDetalle> getTecnicoCompetenciaDetalles() {
+        return this.tecnicoCompetenciaDetalles;
+    }
 
-		return tecnicoCompetenciaDetalle;
-	}
+    public void setTecnicoCompetenciaDetalles(List<TecnicoCompetenciaDetalle> tecnicoCompetenciaDetalles) {
+        this.tecnicoCompetenciaDetalles = tecnicoCompetenciaDetalles;
+    }
 
-	public TecnicoCompetenciaDetalle removeTecnicoCompetenciaDetalle(TecnicoCompetenciaDetalle tecnicoCompetenciaDetalle) {
-		getTecnicoCompetenciaDetalles().remove(tecnicoCompetenciaDetalle);
-		tecnicoCompetenciaDetalle.setCompetencia(null);
+    public TecnicoCompetenciaDetalle addTecnicoCompetenciaDetalle(TecnicoCompetenciaDetalle tecnicoCompetenciaDetalle) {
+        getTecnicoCompetenciaDetalles().add(tecnicoCompetenciaDetalle);
+        tecnicoCompetenciaDetalle.setCompetencia(this);
 
-		return tecnicoCompetenciaDetalle;
-	}
+        return tecnicoCompetenciaDetalle;
+    }
 
-	public List<TipoSolicitudCompetenciaDetalle> getTipoSolicitudCompetenciaDetalles() {
-		return this.tipoSolicitudCompetenciaDetalles;
-	}
+    public TecnicoCompetenciaDetalle removeTecnicoCompetenciaDetalle(TecnicoCompetenciaDetalle tecnicoCompetenciaDetalle) {
+        getTecnicoCompetenciaDetalles().remove(tecnicoCompetenciaDetalle);
+        tecnicoCompetenciaDetalle.setCompetencia(null);
 
-	public void setTipoSolicitudCompetenciaDetalles(List<TipoSolicitudCompetenciaDetalle> tipoSolicitudCompetenciaDetalles) {
-		this.tipoSolicitudCompetenciaDetalles = tipoSolicitudCompetenciaDetalles;
-	}
+        return tecnicoCompetenciaDetalle;
+    }
 
-	public TipoSolicitudCompetenciaDetalle addTipoSolicitudCompetenciaDetalle(TipoSolicitudCompetenciaDetalle tipoSolicitudCompetenciaDetalle) {
-		getTipoSolicitudCompetenciaDetalles().add(tipoSolicitudCompetenciaDetalle);
-		tipoSolicitudCompetenciaDetalle.setCompetencia(this);
+    public List<TipoSolicitudCompetenciaDetalle> getTipoSolicitudCompetenciaDetalles() {
+        return this.tipoSolicitudCompetenciaDetalles;
+    }
 
-		return tipoSolicitudCompetenciaDetalle;
-	}
+    public void setTipoSolicitudCompetenciaDetalles(List<TipoSolicitudCompetenciaDetalle> tipoSolicitudCompetenciaDetalles) {
+        this.tipoSolicitudCompetenciaDetalles = tipoSolicitudCompetenciaDetalles;
+    }
 
-	public TipoSolicitudCompetenciaDetalle removeTipoSolicitudCompetenciaDetalle(TipoSolicitudCompetenciaDetalle tipoSolicitudCompetenciaDetalle) {
-		getTipoSolicitudCompetenciaDetalles().remove(tipoSolicitudCompetenciaDetalle);
-		tipoSolicitudCompetenciaDetalle.setCompetencia(null);
+    public TipoSolicitudCompetenciaDetalle addTipoSolicitudCompetenciaDetalle(TipoSolicitudCompetenciaDetalle tipoSolicitudCompetenciaDetalle) {
+        getTipoSolicitudCompetenciaDetalles().add(tipoSolicitudCompetenciaDetalle);
+        tipoSolicitudCompetenciaDetalle.setCompetencia(this);
 
-		return tipoSolicitudCompetenciaDetalle;
-	}
+        return tipoSolicitudCompetenciaDetalle;
+    }
+
+    public TipoSolicitudCompetenciaDetalle removeTipoSolicitudCompetenciaDetalle(TipoSolicitudCompetenciaDetalle tipoSolicitudCompetenciaDetalle) {
+        getTipoSolicitudCompetenciaDetalles().remove(tipoSolicitudCompetenciaDetalle);
+        tipoSolicitudCompetenciaDetalle.setCompetencia(null);
+
+        return tipoSolicitudCompetenciaDetalle;
+    }
 
 }

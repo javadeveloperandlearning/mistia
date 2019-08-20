@@ -877,9 +877,6 @@
 </script>
 
 
-<script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyChk5fjsxbMDJmHbDA1Ap8fO34fplNvbDE&callback=initMap">
-</script>
 
 
 <input type="hidden" id ="switch1">

@@ -128,8 +128,10 @@ public class CalidadAtencionRegistrarController {
 
                 map.put("fechahora", e.getFechaHora());
                 map.put("fechahora1", sdf.format(e.getFechaHora()));
+                map.put("tiempopromedio", e.getEstado().getTiempoPromedio());
+                
 
-                String _acumulado = "";
+                String _acumulado = "0.0 min";
                 if (fechante == null) {
                     _acumulado = "";
                 } else {
@@ -145,13 +147,23 @@ public class CalidadAtencionRegistrarController {
 
                     int hora = cal.get(Calendar.HOUR);
                     int minu = cal.get(Calendar.MINUTE);
+                    int segu  = cal.get(Calendar.SECOND);
 
                     if (hora > 0) {
-                        _acumulado = "" + hora + "h ";
+                        _acumulado = "" + hora + "horas ";
+                    }else{
+                        _acumulado = "00 horas ";
                     }
-
                     if (minu > 0) {
-                        _acumulado += "" + minu + " min";
+                        _acumulado += " " + minu + " min";
+                    }else{
+                        _acumulado += "00 min";
+                    }
+                    
+                    if (segu > 0) {
+                        _acumulado += " " + segu + " seg";
+                    }else{
+                        _acumulado += "00 seg";
                     }
                 }
 
@@ -214,12 +226,18 @@ public class CalidadAtencionRegistrarController {
         //logger.info(" respuesta 2 " + respuesta2);
         String mg1 = "Debe seleccionar una opción para calificar el trato recibido ";
         String mg2 = "Debe seleccionar una opción para calificar la calidad del servicio instalado ";
+        
+        for (String respuesta : arrayrespuestas) {
+            if(respuesta==null){
+                mostrarMensaje("Debe seleccionar una respuesta por cada pregunta");
+                return null;
+            }
+        }
 
         /*if (respuesta1 == null || (respuesta1 != null && respuesta1.trim().equals(""))) {
             mostrarMensaje(mg1);
             return null;
         }
-
         if (respuesta2 == null || (respuesta2 != null && respuesta2.trim().equals(""))) {
             mostrarMensaje(mg2);
             return null;
@@ -231,18 +249,15 @@ public class CalidadAtencionRegistrarController {
         if (response != null && response.getCodigo() == Response.OK && consulta != null) {
             consulta.buscar();
         }*/
-        Response response = null;
         
+        Response response = null;
+        int idx = 0;
         for (String respuesta : arrayrespuestas) {
-            EncuestaPregunta _encuestaPregunta = null;
-            for (EncuestaPregunta encuestaPregunta : preguntaList) {
-                if(encuestaPregunta.getDescripcion().equals(respuesta)){
-                    _encuestaPregunta =  encuestaPregunta;
-                    break;
-                }
-            }
-
-            response = encuestaPreguntaSolicitudService.calificar(CONSTANTE_ENCUESTA_CALIDAD_ATENCION, numeroSolicitud, _encuestaPregunta, respuesta);
+            
+            EncuestaPregunta encuestaPregunta = preguntaList.get(idx);
+            response = encuestaPreguntaSolicitudService.calificar(CONSTANTE_ENCUESTA_CALIDAD_ATENCION, numeroSolicitud, encuestaPregunta, respuesta);
+            idx++;
+            
         }
 
         if (response != null && response.getCodigo() == Response.OK && consulta != null) {

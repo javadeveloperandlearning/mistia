@@ -82,7 +82,7 @@ public class HomeManageBean {
 
             Opcion opcion11 = new Opcion("Perfiles", PERFIL_VIEW, ConstantSecurity.TIPO_MENU_SEGURIDAD);
             Opcion opcion12 = new Opcion("Usuarios", USUARIOS_VIEW, ConstantSecurity.TIPO_MENU_SEGURIDAD);
-            Opcion opcion13 = new Opcion("Reclamos", RECLAMOS_VIEW, ConstantSecurity.TIPO_MENU_PROGRAMACION);
+            //Opcion opcion13 = new Opcion("Reclamos", RECLAMOS_VIEW, ConstantSecurity.TIPO_MENU_PROGRAMACION);
             Opcion opcion14 = new Opcion("Salir", null, ConstantSecurity.TIPO_MENU_SALIR);
             //Opcion opcion3 = new Opcion("Consultar Programación", "programacion_consulta.xhtml", ConstantSecurity.TIPO_MENU_PROGRAMACION);
             opciones.add(opcion0);
@@ -100,7 +100,7 @@ public class HomeManageBean {
 
             opciones.add(opcion11);
             opciones.add(opcion12);
-            opciones.add(opcion13);
+           // opciones.add(opcion13);
             opciones.add(opcion14);
 
             // creando submenus
@@ -122,8 +122,8 @@ public class HomeManageBean {
             /*DefaultSubMenu sm5 = new DefaultSubMenu("Ejecución");
             sm5.setIcon("ui-icon-pencil");*/
 
-            DefaultSubMenu sm6 = new DefaultSubMenu("Seguridad");
-            sm6.setIcon("ui-icon-pencil");
+            /*DefaultSubMenu sm6 = new DefaultSubMenu("Seguridad");
+            sm6.setIcon("ui-icon-pencil");*/
 
             DefaultSubMenu sm7 = new DefaultSubMenu("Atención al cliente");
             sm7.setIcon("ui-icon-pencil");
@@ -169,7 +169,7 @@ public class HomeManageBean {
                 } else if (opcion.getTipoOpci() == ConstantSecurity.TIPO_MENU_EJECUCION) {
                    // sm5.addElement(menuItem);
                 } else if (opcion.getTipoOpci() == ConstantSecurity.TIPO_MENU_SEGURIDAD) {
-                    sm6.addElement(menuItem);
+                   // sm6.addElement(menuItem);
                 } else if (opcion.getTipoOpci() == ConstantSecurity.TIPO_MENU_ATENCION_CLIENTE) {
                     sm7.addElement(menuItem);
                 } else if (opcion.getTipoOpci() == 11) {
@@ -186,7 +186,7 @@ public class HomeManageBean {
             this.menubar.addElement(sm3);
             //this.menubar.addElement(sm4);
             //this.menubar.addElement(sm5);
-            this.menubar.addElement(sm6);
+            //this.menubar.addElement(sm6);
             this.menubar.addElement(sm7);
             //this.menubar.addElement(sm8);
             this.menubar.addElement(sm9);
