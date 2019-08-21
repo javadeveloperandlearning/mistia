@@ -209,21 +209,18 @@ public class SolicitudServicioDao extends CrudDao<SolicitudServicio>{
                 
 		List<Map> lista = new ArrayList<>();
 		try {
-			String sql = "Select  s.numeroSolicitud, "
+			String sql = "Select  s, "
 					+ "   e.descripcion  as desEstado,"
 					+ "   se.fechaHora as cambioestado, "
 					+ "   s.fechaCreacion as fecharegistro, "
-					+ "   '0001' as codigoCliente,"
+					+ "   c.codigoCliente,"
 					+ " cu.nombre as  desCuadrilla, "
 					+ " (select  count(1) from s.encuestaSolicitudResultados esr ) as cantencuestas,"
-                                        + " '' as nombres,"
-                                        + " '' as apellidoPaterno,"
-                                        + " '' as apellidoMaterno"
-                                
-                                
+                                        + " c.nombres,"
+                                        + " c.apellidoPaterno,"
+                                        + " c.apellidoMaterno"
 					+ " from SolicitudServicio s  "
 					+ " join s.estado e  "
-					//+ " join s.contratoServicio cs  "
 					+ " join s.planTrabajoDetalles pd"
 					+ " join s.solicitudServicioEstados se"
 					+ " join pd.planTrabajo p"
@@ -242,7 +239,6 @@ public class SolicitudServicioDao extends CrudDao<SolicitudServicio>{
 					;
 						
 			Query  query = getEntityManager().createQuery(sql);
-                        
                         query.setParameter("pcodigocliente",codigoCliente);
 			query.setParameter("pcodigoestado",codigoEstado);
 			query.setParameter("pnumerocuadrilla",numeroCuadrilla);
@@ -255,7 +251,8 @@ public class SolicitudServicioDao extends CrudDao<SolicitudServicio>{
                        
 			for (Object[] result : list) {
 				Map<String, Object> map=new HashMap<String, Object>();
-				map.put("numeroSolicitud", result[0]);
+                                SolicitudServicio solicitud =  (SolicitudServicio)result[0];
+				map.put("numeroSolicitud",   solicitud.getNumeroSolicitud());
 				map.put("desEstado", result[1]);
 				map.put("cambioestado", result[2]);
 				map.put("fecharegistro", result[3]);
@@ -263,6 +260,7 @@ public class SolicitudServicioDao extends CrudDao<SolicitudServicio>{
 				map.put("desCuadrilla", result[5]);
 				map.put("cantencuestas", result[6]);
                                 map.put("nombreCliente", result[7]+" "+result[8]+" "+result[9]);
+                                map.put("tag", Util.getTag(solicitud));
                                 
 				lista.add(map);
 			}

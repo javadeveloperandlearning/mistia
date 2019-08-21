@@ -63,6 +63,16 @@ public class ClienteController extends BaseController<Cliente> implements Serial
     private List<Distrito> distritoList;
     private List<Provincia> provinciaList;
     private List<ClienteDireccion> clienteDireccionList;
+    private boolean disabledNombres;
+    private boolean disabledNombresFiltros;
+
+    public boolean isDisabledNombresFiltros() {
+        return disabledNombresFiltros;
+    }
+
+    public void setDisabledNombresFiltros(boolean disabledNombresFiltros) {
+        this.disabledNombresFiltros = disabledNombresFiltros;
+    }
 
     @Inject
     private ClienteService clienteService;
@@ -124,7 +134,7 @@ public class ClienteController extends BaseController<Cliente> implements Serial
         Response response  =  clienteService.registrar((Cliente)cliente);
     }*/
     public void limpiar() {
-        tipoDocu = TIPO_DOCU_DNI;
+        tipoDocu = TODOS_VALUE;
         codigoCliente = null;
         nombres = null;
         apellidoPaterno = null;
@@ -161,13 +171,16 @@ public class ClienteController extends BaseController<Cliente> implements Serial
     @Override
     public void nuevo() {
         super.nuevo();
+        
         this.cliente = new Cliente();
+        
+        
         this.cliente.setClienteDireccions(new ArrayList<>());
         setCodigoDepartamento(COD_DEPARTAMENTO_JUNIN);
         setDepartamentoList(departamentoService.getDepartamentoList());
         setProvinciaList(provinciaService.getProvinciaList(COD_DEPARTAMENTO_JUNIN));
         setDistritoList(distritoService.getDistritoList(COD_DEPARTAMENTO_HUANACAYO));
-        this.cliente.setTipoDocumento(TIPO_DOCU_DNI);
+        this.cliente.setTipoDocumento(new Tipo(TIPO_DOCU_DNI));
         this.cliente.setSexo(SM);
 
         setObject(cliente);
@@ -177,15 +190,11 @@ public class ClienteController extends BaseController<Cliente> implements Serial
     @Override
     public void grabar() {
 
+        this.cliente.setTipoDocumento(new Tipo(this.cliente.getCodigoTipoDocumento()));
         if (action.equals(NUEVO)) {
             cliente.setCodigoCliente(clienteService.getMax());
         } else {
-             
-            Response response =  clienteService.actualizarDireccionesList(cliente);
-            
-            
-            
-            
+            Response response = clienteService.actualizarDireccionesList(cliente);
         }
 
         setObject(cliente);
@@ -226,6 +235,31 @@ public class ClienteController extends BaseController<Cliente> implements Serial
             e.printStackTrace();
         }
 
+    }
+
+    public void activaNombres() {
+        logger.info("metodo : activaNombres");
+        if (cliente.getCodigoTipoDocumento() != null && cliente.getCodigoTipoDocumento() == TIPO_DOCU_RUC) {
+            disabledNombres = true;
+        } else {
+            disabledNombres = false;
+        }
+    }
+
+    public void activaNombresFiltros() {
+        logger.info("metodo : activaNombresFiltros");
+        
+        if (getTipoDocu() == TIPO_DOCU_RUC) {
+            
+            disabledNombresFiltros = true;
+            
+            this.nombres = null;
+            this.apellidoPaterno = null;
+            this.apellidoMaterno = null;
+            
+        } else {
+            disabledNombresFiltros = false;
+        }
     }
 
     public int getTipoDocu() {
@@ -364,6 +398,14 @@ public class ClienteController extends BaseController<Cliente> implements Serial
 
     public void setClienteDireccionList(List<ClienteDireccion> clienteDireccionList) {
         this.clienteDireccionList = clienteDireccionList;
+    }
+
+    public boolean isDisabledNombres() {
+        return disabledNombres;
+    }
+
+    public void setDisabledNombres(boolean disabledNombres) {
+        this.disabledNombres = disabledNombres;
     }
 
 }

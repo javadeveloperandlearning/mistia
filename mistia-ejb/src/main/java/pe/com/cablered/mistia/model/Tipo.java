@@ -50,13 +50,19 @@ public class Tipo implements Serializable {
     @Column(name = "usuario_modificacion")
     private String usuarioModificacion;
 
-
     //bi-directional many-to-one association to TipoSolicitudCompetenciaDetalle
     @OneToMany(mappedBy = "tipo")
     private List<TipoSolicitudCompetenciaDetalle> tipoSolicitudCompetenciaDetalles;
+    
+    @OneToMany(mappedBy = "tipoDocumento")
+    private List<Cliente> clienteList;
 
     public Tipo() {
-    
+
+    }
+
+    public Tipo(Integer codigoTipo) {
+        this.codigoTipo =  codigoTipo;
     }
 
     public Tipo(Integer codigoTipo, String descripcion) {
@@ -64,9 +70,6 @@ public class Tipo implements Serializable {
         this.descripcion = descripcion;
     }
 
-    
-    
-    
     public Integer getCodigoTipo() {
         return this.codigoTipo;
     }
@@ -147,51 +150,6 @@ public class Tipo implements Serializable {
         this.usuarioModificacion = usuarioModificacion;
     }
 
-
-
-    /*public List<SolicitudServicio> getSolicitudServicios1() {
-		return this.solicitudServicios1;
-	}
-
-	public void setSolicitudServicios1(List<SolicitudServicio> solicitudServicios1) {
-		this.solicitudServicios1 = solicitudServicios1;
-	}
-
-	public SolicitudServicio addSolicitudServicios1(SolicitudServicio solicitudServicios1) {
-		getSolicitudServicios1().add(solicitudServicios1);
-		solicitudServicios1.setTipo1(this);
-
-		return solicitudServicios1;
-	}
-
-	public SolicitudServicio removeSolicitudServicios1(SolicitudServicio solicitudServicios1) {
-		getSolicitudServicios1().remove(solicitudServicios1);
-		solicitudServicios1.setTipo1(null);
-
-		return solicitudServicios1;
-	}
-
-	public List<SolicitudServicio> getSolicitudServicios2() {
-		return this.solicitudServicios2;
-	}
-
-	public void setSolicitudServicios2(List<SolicitudServicio> solicitudServicios2) {
-		this.solicitudServicios2 = solicitudServicios2;
-	}
-
-	public SolicitudServicio addSolicitudServicios2(SolicitudServicio solicitudServicios2) {
-		getSolicitudServicios2().add(solicitudServicios2);
-		solicitudServicios2.setTipo2(this);
-
-		return solicitudServicios2;
-	}
-
-	public SolicitudServicio removeSolicitudServicios2(SolicitudServicio solicitudServicios2) {
-		getSolicitudServicios2().remove(solicitudServicios2);
-		solicitudServicios2.setTipo2(null);
-
-		return solicitudServicios2;
-	}*/
     public List<TipoSolicitudCompetenciaDetalle> getTipoSolicitudCompetenciaDetalles() {
         return this.tipoSolicitudCompetenciaDetalles;
     }
@@ -221,5 +179,15 @@ public class Tipo implements Serializable {
     public void setPrioridad(Integer prioridad) {
         this.prioridad = prioridad;
     }
+
+    public List<Cliente> getClienteList() {
+        return clienteList;
+    }
+
+    public void setClienteList(List<Cliente> clienteList) {
+        this.clienteList = clienteList;
+    }
+    
+    
 
 }

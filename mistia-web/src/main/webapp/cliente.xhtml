@@ -35,14 +35,19 @@
 
                         <p:panel  header="Criterios de Búsqueda">
 
-                            <p:panelGrid    columns="1"  layout="grid" styleClass="ui-panelgrid-blank ui-fluid" >
-
-                                <p:selectOneRadio style="width: 100%" id="console" value="#{clienteview.tipoDocu}" >
-                                    <f:selectItem itemLabel="D.N.I." itemValue="9"   />
-                                    <f:selectItem itemLabel="R.U.C." itemValue="3" />
-                                    <f:selectItem itemLabel="Carné de extranjería" itemValue="10" />
-                                </p:selectOneRadio>
-
+                            <p:panelGrid    columns="4"  layout="grid" styleClass="ui-panelgrid-blank ui-fluid" >
+                                <p:outputLabel>Tipo Documento: </p:outputLabel>
+                                <p:selectOneMenu id="cmbtipodocu"  tabindex="1" value="#{clienteview.tipoDocu}" style="width: 100%"  >
+                                    
+                                    <f:selectItem   itemValue="0"  itemLabel="Todos"  ></f:selectItem>
+                                    <f:selectItems value="#{clienteview.tipoList}" var="tipo" itemValue="#{tipo.codigoTipo}" itemLabel="#{tipo.descripcion}" />
+                                     <p:ajax event="itemSelect"  listener="#{clienteview.activaNombresFiltros()}" update="form" ></p:ajax>
+                                    
+                                </p:selectOneMenu>
+                                
+                                <p:outputLabel>Razón Social: </p:outputLabel>
+                                <p:inputText id="txtRazonSocial"  value="#{clienteview.nombreRazonSocial}" maxlength="100"  ></p:inputText>
+                                
                             </p:panelGrid>
 
 
@@ -53,15 +58,15 @@
                                 <p:inputText id="txtNumeroCliente"    value="#{clienteview.codigoCliente}"  maxlength="15" validatorMessage="error"  ></p:inputText>
 
 
-                                <p:outputLabel for="txtRazonSocial">Nombres / Razón Social:</p:outputLabel>
-                                <p:inputText id="txtRazonSocial"  value="#{clienteview.nombreRazonSocial}" maxlength="100"  ></p:inputText>
+                                <p:outputLabel for="txtRazonSocial">Nombres:</p:outputLabel>
+                                <p:inputText id="txtnombres"  value="#{clienteview.nombres}" maxlength="100" disabled="#{clienteview.disabledNombresFiltros}"  ></p:inputText>
 
                                 <p:outputLabel for="txtApellidoPaterno">Apellido Paterno: </p:outputLabel>
-                                <p:inputText id="txtApellidoPaterno" value="#{clienteview.apellidoPaterno}" maxlength="50"  ></p:inputText>
+                                <p:inputText id="txtApellidoPaterno" value="#{clienteview.apellidoPaterno}" maxlength="50"  disabled="#{clienteview.disabledNombresFiltros}"></p:inputText>
 
 
                                 <p:outputLabel for="txtApellidoMaterno">Apellido Materno: </p:outputLabel>
-                                <p:inputText id="txtApellidoMaterno"   value="#{clienteview.apellidoMaterno}" maxlength="50"  ></p:inputText>
+                                <p:inputText id="txtApellidoMaterno"   value="#{clienteview.apellidoMaterno}" maxlength="50" disabled="#{clienteview.disabledNombresFiltros}"></p:inputText>
                             </p:panelGrid>
 
 
@@ -87,40 +92,54 @@
 
                         <br></br>
 
-                        <p:dataTable  id="dataTable"  reflow="true"  var="reg" value="#{clienteview.clienteList}"
+                        <p:dataTable  id="dataTable"    var="reg" value="#{clienteview.clienteList}"
                                       paginator="true" rows="10" 
                                       paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                       currentPageReportTemplate="( Página : {currentPage} de {totalPages})"  emptyMessage="No se encontraron registros" 
                                       >
 
-                            <p:column   >
+                            <p:column style="width:10%">
                                 <f:facet name="header">
                                     <h:outputText value="Número Cliente" />
                                 </f:facet>
                                 <h:outputText value="#{reg.codigoCliente}" >
-
                                 </h:outputText>
-
                             </p:column>
-
 
                             <p:column   >
                                 <f:facet name="header">
+                                    <h:outputText value="Tipo Documento" />
+                                </f:facet>
+                                <h:outputText value="#{reg.tipoDocumento.descripcion}" >
+                                </h:outputText>
+                            </p:column>
+                            
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Nombres" />
+                                </f:facet>
+                                <h:outputText  value="#{reg.nombres}" />
+                            </p:column>
+                            
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Apellido Paterno" />
+                                </f:facet>
+                                <h:outputText  value="#{reg.apellidoPaterno}" />
+                            </p:column>
+                            
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Apellido Materno" />
+                                </f:facet>
+                                <h:outputText  value="#{reg.apellidoMaterno}" />
+                            </p:column> 
+                           
+                            <p:column>
+                                <f:facet name="header">
                                     <h:outputText value="Razón Social" />
                                 </f:facet>
-
-                                <h:outputText value="#{reg.nombreRazonSocial}" />
-
-                            </p:column>
-
-
-                            <p:column    >
-                                <f:facet name="header">
-                                    <h:outputText value="Apellidos y  Nombres" />
-                                </f:facet>
-                                <h:outputText value="#{reg.apellidos}, #{reg.nombres}" >
-
-                                </h:outputText>
+                                <h:outputText   value="#{reg.nombreRazonSocial}" />
                             </p:column>
 
                             <p:column    >
@@ -145,11 +164,9 @@
                                 <f:facet name="header">
                                     <h:outputText value="" style="align:center" />
                                 </f:facet>
-
                                 <f:attribute name="align" value="center" />
-
                                 <p:commandButton icon="ui-icon-pencil"  style="width:30%"  actionListener="#{clienteview.editar(reg)}"   
-                                                 ajax="true"   title="validar" update="formsave:dlgsave" oncomplete="PF('dlgsave').show()"  > 
+                                                 ajax="true"   title="Editar" update="formsave:dlgsave" oncomplete="PF('dlgsave').show()"  > 
 
                                 </p:commandButton>
 
@@ -182,9 +199,9 @@
 
                 <h:form id="formsave"  >
 
-                    
-                    
-                    
+
+
+
                     <p:dialog id="dlgsave" widgetVar="dlgsave" header="Nuevo Cliente"   width="900" >
 
                         <p:panel  header="Datos del cliente">
@@ -194,42 +211,41 @@
 
 
                                 <p:panelGrid  columns="2" layout="grid"  styleClass="ui-panelgrid-blank"  >
-                                    <p:outputLabel>Tipo documento: </p:outputLabel>
-                                    <p:selectOneMenu id="cmbtipodocu"  tabindex="1"  value="#{clienteview.cliente.tipoDocumento}"  >
+
+                                    <p:outputLabel>Tipo Documento: </p:outputLabel>
+                                    <p:selectOneMenu id="cmbtipodocu"  tabindex="1"  value="#{clienteview.cliente.codigoTipoDocumento}" style="width: 80%"  >
+                                        <p:ajax event="itemSelect"  listener="#{clienteview.activaNombres()}" update="txtuapellidopaterno,txtuapellidomaterno,txtunombres" ></p:ajax>
                                         <f:selectItems value="#{clienteview.tipoList}" 
                                                        var="tipo" itemValue="#{tipo.codigoTipo}" itemLabel="#{tipo.descripcion}" />
+
                                     </p:selectOneMenu>
 
-
-
                                     <p:outputLabel>Número Cliente: </p:outputLabel>
-                                    <p:inputText id="txtunnumero"   tabindex="2"
-                                                 value="#{clienteview.cliente.documentoIdentidad}" 
-                                                 />
-
+                                    <p:inputText id="txtunnumero"   tabindex="2" value="#{clienteview.cliente.documentoIdentidad}" maxlength="12" />
+ 
 
 
 
                                     <p:outputLabel>Razón social </p:outputLabel>
                                     <p:inputText id="txturazonsocial" tabindex="3"
                                                  value="#{clienteview.cliente.nombreRazonSocial}" 
-                                                 maxlength="50" 
+                                                 maxlength="50"  
                                                  />
-
+                                    <!--
                                     <p:outputLabel>Ruc </p:outputLabel>
                                     <p:inputText id="txtnumeroruc" tabindex="4"
                                                  value="#{clienteview.cliente.numeroRuc}" 
                                                  maxlength="11" 
-                                                 />
+                                                 />-->
 
                                     <p:outputLabel>Teléfono fijo: </p:outputLabel>
-                                    <p:inputText id="txttelefono" tabindex="5"  onkeypress="alphanumeric(event)"
+                                    <p:inputText id="txttelefono" tabindex="5"  
                                                  value="#{clienteview.cliente.telefono}" 
                                                  maxlength="15" 
                                                  />
 
                                     <p:outputLabel>Teléfono móvil: </p:outputLabel>
-                                    <p:inputText id="txttelefonomovil" tabindex="6" onkeypress=" return alphanumeric(event)"
+                                    <p:inputText id="txttelefonomovil" tabindex="6" 
                                                  value="#{clienteview.cliente.telefonoMovil}" maxlength="15"  />
 
                                 </p:panelGrid>
@@ -242,14 +258,14 @@
 
                                     <p:outputLabel>Apellido Paterno: </p:outputLabel>
                                     <p:inputText id="txtuapellidopaterno"
-                                                 value="#{clienteview.cliente.apellidoPaterno}" tabindex="7"
+                                                 value="#{clienteview.cliente.apellidoPaterno}" tabindex="7"  disabled="#{clienteview.disabledNombres}"
                                                  maxlength="50"  />
 
 
 
                                     <p:outputLabel>Apellido Materno </p:outputLabel>
                                     <p:inputText id="txtuapellidomaterno" tabindex="8"
-                                                 value="#{clienteview.cliente.apellidoMaterno}"
+                                                 value="#{clienteview.cliente.apellidoMaterno}"  disabled="#{clienteview.disabledNombres}"
                                                  maxlength="50"  />
 
 
@@ -257,19 +273,15 @@
 
                                     <p:outputLabel>Nombres: </p:outputLabel>
                                     <p:inputText id="txtunombres" tabindex="9"
-                                                 value="#{clienteview.cliente.nombres}" 
+                                                 value="#{clienteview.cliente.nombres}"   disabled="#{clienteview.disabledNombres}"
                                                  maxlength="50" 
                                                  />
-
-
 
                                     <p:outputLabel>Sexo: </p:outputLabel>
                                     <p:selectOneRadio  id="console" value="#{clienteview.cliente.sexo}" tabindex="10"   >
                                         <f:selectItem itemLabel="Masculino" itemValue="1"   />
                                         <f:selectItem itemLabel="Femenino" itemValue="2" />
                                     </p:selectOneRadio>
-
-
 
                                     <p:outputLabel>Email: </p:outputLabel>
                                     <p:inputText id="txtemail" tabindex="11" value="#{clienteview.cliente.email}" maxlength="50"  validatorMessage="El formato del correo no es válido"  >
@@ -278,7 +290,7 @@
                                     </p:inputText>
                                     <p:spacer></p:spacer>
                                     <p:message id="msgemail"   for="txtemail" ></p:message>
-                                        
+
                                 </p:panelGrid>
 
                             </p:panelGrid>
@@ -335,10 +347,10 @@
 
                                 <p:row>
                                     <p:column  style="width:40%">        
-                                        
+
                                     </p:column>
                                     <p:column  style="width:40%">   
-                                        
+
                                     </p:column>
                                     <p:column  style="width:20%">       
                                         <p:commandButton value="Agregar"  ajax="true"   action="#{clienteview.agregarDireccion()}"  update="dtdirecciones,txtdireccion,txtreferencia, messages" >
@@ -386,17 +398,17 @@
                                     <h:outputText value="#{reg.distrito.descripcion}" >
                                     </h:outputText>
                                 </p:column>
-                                
+
                                 <p:column  style="width:10%">               
                                     <f:facet name="header">
                                         <h:outputText value="" />
                                     </f:facet>
-                                    
+
                                     <p:commandButton  icon="ui-icon-trash"  actionListener="#{clienteview.eliminarDireccion(reg)}"  update="dtdirecciones">
                                     </p:commandButton>
 
                                 </p:column>
-                               
+
 
                             </p:dataTable>
 
@@ -427,26 +439,26 @@
 
                 <h:outputScript target="head">
                     function handleSaveRequest(xhr, status, args) {
-                        if( args.notValid || args.validationFailed){
-                            if(args.mensaje!=null){
+                    if( args.notValid || args.validationFailed){
+                    if(args.mensaje!=null){
 
-                            //alert("Enviando alertas");
-                            PF('messages').renderMessage({ detail: args.mensaje, severity: 'warm'});
-                            }
-                            return;
-                        }else{
-                            PF('dlgsave').hide();
-                            PF('messages').renderMessage({ detail: 'Operación realizada con éxito', severity: 'info'});
-                            updateDataTable();
-                        }  
+                    //alert("Enviando alertas");
+                    PF('messages').renderMessage({ detail: args.mensaje, severity: 'warm'});
+                    }
+                    return;
+                    }else{
+                    PF('dlgsave').hide();
+                    PF('messages').renderMessage({ detail: 'Operación realizada con éxito', severity: 'info'});
+                    updateDataTable();
+                    }  
                     }  
                     function alphanumeric(event) {
-                        var value =   event.target.value
-                        var pattern = new RegExp(/^[\w.]+$/i);
-                        var result =  pattern.test(value);
-                        
-                        return result;
-                        
+                    var value =   event.target.value
+                    var pattern = new RegExp(/^[\w.]+$/i);
+                    var result =  pattern.test(value);
+
+                    return result;
+
                     }
                 </h:outputScript>
 

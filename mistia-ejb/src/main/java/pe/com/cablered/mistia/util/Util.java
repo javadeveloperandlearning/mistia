@@ -2,6 +2,7 @@ package pe.com.cablered.mistia.util;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Random;
 
 import pe.com.cablered.mistia.model.SolicitudServicio;
@@ -69,6 +70,20 @@ public class Util {
 		return tag;
 		
 	}
+        
+        
+       /* public static String getTag (Long numeroSolicitud, Date fechaSolicitud, Sol){
+		
+		Calendar cal =  Calendar.getInstance();
+		cal.setTime(fechaSolicitud);
+		int year     =  cal.get(Calendar.YEAR);
+		String nsoli =  "00000"+numeroSolicitud ;
+		nsoli =  nsoli.substring(nsoli.length()-5,nsoli.length());
+		String tag = s.getTipoSolicitud().getAbreviatura()+""+year+""+nsoli;
+		return tag;
+		
+	}*/
+        
 	
 	public static String  getNombreNumero(int numero ){
 		

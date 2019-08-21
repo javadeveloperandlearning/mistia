@@ -104,6 +104,9 @@ public class CalidadAtencionConsultaController implements Serializable {
         }
         
         lista = SolicitudServicioService.getSolicitudList(codigoCliente, numeroCuadrilla, codigoDistrito, fechaInicio, fechaFin);
+        
+        
+        
     }
 
     public void limpiar() {

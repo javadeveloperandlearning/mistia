@@ -621,11 +621,11 @@
                 });
             });
         }
-
-
-
     </script>
-   
+    
+    
+    
+
 
     <div id="mensaje" title="Mensaje">	
         <p id="pmensaje"  > <span class="ui-icon ui-icon-check" style="float:left;"></span>La dirección tiene cobertura <p>

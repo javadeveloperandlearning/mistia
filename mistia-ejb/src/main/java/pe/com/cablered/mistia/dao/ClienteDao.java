@@ -46,56 +46,42 @@ public class ClienteDao extends CrudDao<Cliente> {
     }
 
     public List<Cliente> clienteList(int tipoDocu, Integer codigoCliente, String nombres, String apellidoPaterno, String apellidoMaterno, String nombreRazonSocial) {
-        
-        
+
         List<Cliente> list = Collections.EMPTY_LIST;
 
         try {
 
             apellidoPaterno = (apellidoPaterno != null && apellidoPaterno.trim().equals("") ? null : apellidoPaterno);
             apellidoMaterno = (apellidoMaterno != null && apellidoMaterno.trim().equals("") ? null : apellidoMaterno);
+            nombres = (nombres != null && nombres.trim().equals("") ? null : nombres);
             nombreRazonSocial = (nombreRazonSocial != null && nombreRazonSocial.trim().equals("") ? null : nombreRazonSocial);
-            
+
             logger.info(" tipoDocu :  " + tipoDocu);
             logger.info(" codigoCliente :  " + codigoCliente);
             logger.info(" nombres :  " + nombres);
             logger.info(" apellidoPaterno :  " + apellidoPaterno);
             logger.info(" apellidoMaterno :  " + apellidoMaterno);
             logger.info(" nombreRazonSocial :  " + nombreRazonSocial);
-                       
 
             String sql = "Select c "
                     + "from Cliente c  where "
-                    //+ " (nombres =:pnombres or :pnombres is null)"
-                   + "   (codigoCliente = :pcodigocliente or :pcodigocliente is  null )"
-                   + " and  (upper(apellidoPaterno) like :papellidopaterno or :papellidopaterno is null ) "
-                   + " and (upper(apellidoMaterno) like :papellidomaterno or :papellidomaterno is null) "
-                   + " and (upper(nombreRazonSocial) like :pnombrerazonsocial or :pnombrerazonsocial is  null )";;
-                        
-            
-            /*switch(tipoDocu){
-                case TIPO_DOCU_DNI:
-                    sql = sql+" and tipoDocumento  = "+ TIPO_DOCU_DNI;
-                    break;                   
-                    
-                case TIPO_DOCU_CAR_EXT:
-                    sql = sql+" and tipoDocumento  = "+ TIPO_DOCU_CAR_EXT;
-                    break;
-                    
-                case TIPO_DOCU_RUC:
-                    sql = sql+" and numeroRuc is not null";
-                    break;                    
-            }*/
+                    + "   (codigoCliente = :pcodigocliente or :pcodigocliente is  null )"
+                    + " and (upper(apellidoPaterno) like :papellidopaterno or :papellidopaterno is null ) "
+                    + " and (upper(apellidoMaterno) like :papellidomaterno or :papellidomaterno is null) "
+                    + " and (upper(nombres) like :pnombres or :pnombres is null) "
+                    + " and (upper(nombreRazonSocial) like :pnombrerazonsocial or :pnombrerazonsocial is  null)"
+                    + " and (c.tipoDocumento.codigoTipo=:pcodigotipo) or (:pcodigotipo is null)"
+                    + "";
 
-            sql =  sql+" order by codigoCliente";
-            
-            
+            sql = sql + " order by codigoCliente";
+
             TypedQuery<Cliente> query = getEntityManager().createQuery(sql, Cliente.class);
             query.setParameter("pcodigocliente", codigoCliente);
-            //query.setParameter("pnombres", nombres);
-            query.setParameter("papellidopaterno",   (apellidoPaterno==null?null: "%"+apellidoPaterno.trim().toUpperCase()+"%") );
-            query.setParameter("papellidomaterno",   (apellidoMaterno==null?null: "%"+apellidoMaterno.trim().toUpperCase()+"%") );
-            query.setParameter("pnombrerazonsocial", (nombreRazonSocial==null?null: "%"+nombreRazonSocial.trim().toUpperCase()+"%") );
+            query.setParameter("papellidopaterno", (apellidoPaterno == null ? null : "%" + apellidoPaterno.trim().toUpperCase() + "%"));
+            query.setParameter("papellidomaterno", (apellidoMaterno == null ? null : "%" + apellidoMaterno.trim().toUpperCase() + "%"));
+            query.setParameter("pnombres", (nombres == null ? null : "%" + nombres.trim().toUpperCase() + "%"));
+            query.setParameter("pnombrerazonsocial", (nombreRazonSocial == null ? null : "%" + nombreRazonSocial.trim().toUpperCase() + "%"));
+            query.setParameter("pcodigotipo", (tipoDocu == 0 ? null : tipoDocu));
 
             list = query.getResultList();
 
@@ -104,8 +90,7 @@ public class ClienteDao extends CrudDao<Cliente> {
         }
         return list;
     }
-    
-    
+
     public int getMax() {
         int max = 0;
         try {
@@ -118,9 +103,9 @@ public class ClienteDao extends CrudDao<Cliente> {
             e.printStackTrace();
             logger.info(e);
             logger.error(e);
-            max =  0;
+            max = 0;
         }
         return max;
-    }   
+    }
 
 }

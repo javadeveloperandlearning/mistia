@@ -98,7 +98,7 @@ public class ConstantBusiness {
     public static final int COD_GRUPO_TIPO_DOCU_IDENT = 4;
 
     public final static int TIPO_DOCU_DNI = 9;
-    public final static int TIPO_DOCU_RUC = 3;
+    public final static int TIPO_DOCU_RUC = 11;
     public final static int TIPO_DOCU_CAR_EXT = 10;
     
     

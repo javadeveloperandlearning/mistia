@@ -99,21 +99,25 @@ public class ClienteService extends AbstractSevice<Cliente> {
             return response;
         }
 
-        if (isEmpty(cliente.getApellidoPaterno())) {
-            response = new Response(Response.ERROR, "Ingrese un apellido paterno válido");
-            return response;
-        }
+        if(cliente.getTipoDocumento().getCodigoTipo()!=11){
+        
+            if (isEmpty(cliente.getApellidoPaterno())) {
+                response = new Response(Response.ERROR, "Ingrese un apellido paterno válido");
+                return response;
+            }
 
-        if (isEmpty(cliente.getApellidoMaterno())) {
-            response = new Response(Response.ERROR, "Ingrese un apellido materno válido");
-            return response;
-        }
+            if (isEmpty(cliente.getApellidoMaterno())) {
+                response = new Response(Response.ERROR, "Ingrese un apellido materno válido");
+                return response;
+            }
 
-        if (isEmpty(cliente.getNombres())) {
-            response = new Response(Response.ERROR, "Ingrese un nombre válido");
-            return response;
+            if (isEmpty(cliente.getNombres())) {
+                response = new Response(Response.ERROR, "Ingrese un nombre válido");
+                return response;
+            }
         }
-
+        
+        
         if (isEmpty(cliente.getEmail())) {
             response = new Response(Response.ERROR, "Ingrese un email válido");
             return response;

@@ -38,6 +38,7 @@ import pe.com.cablered.mistia.service.SolicitudServicioEstadoService;
 import pe.com.cablered.mistia.service.SolicitudServicioService;
 import static pe.com.cablered.mistia.util.ConstantBusiness.*;
 import static pe.com.cablered.mistia.controller.ConstansView.*;
+import pe.com.cablered.mistia.model.SolicitudServicioDetalle;
 
 @ManagedBean(name = "caliatenreg")
 @RequestScoped
@@ -53,7 +54,7 @@ public class CalidadAtencionRegistrarController {
     final static Logger logger = Logger.getLogger(CalidadAtencionRegistrarController.class);
 
     @Inject
-    private SolicitudServicioService SolicitudServicioService;
+    private SolicitudServicioService solicitudServicioService;
 
     @Inject
     private SolicitudServicioEstadoService solicitudServicioEstadoService;
@@ -82,6 +83,8 @@ public class CalidadAtencionRegistrarController {
     private  List<EncuestaRespuesta> respuestaList;
     
     private List<EncuestaPregunta> preguntaList;
+    
+    private List<SolicitudServicioDetalle> solicitudServicioDetalleList;
 
     @PostConstruct
     public void init() {
@@ -97,7 +100,7 @@ public class CalidadAtencionRegistrarController {
             preguntas = new ArrayList<String>();
 
             // detalle de solicitud
-            SolicitudServicio solicitudServicio = SolicitudServicioService.getSolicitudServicio(numerosolicitud);
+            SolicitudServicio solicitudServicio = solicitudServicioService.getSolicitudServicio(numerosolicitud);
             solicitud = new HashMap<>();
             if (solicitudServicio != null) {
 
@@ -186,6 +189,8 @@ public class CalidadAtencionRegistrarController {
             }
 
             arrayrespuestas = new String[respuestaList.size()];
+            
+            solicitudServicioDetalleList =   solicitudServicioService.getListSolicitudServicioDetalle(numerosolicitud);
 
         } catch (Exception e) {
 
@@ -331,5 +336,15 @@ public class CalidadAtencionRegistrarController {
     public void setArrayrespuestas(String[] arrayrespuestas) {
         this.arrayrespuestas = arrayrespuestas;
     }
+
+    public List<SolicitudServicioDetalle> getSolicitudServicioDetalleList() {
+        return solicitudServicioDetalleList;
+    }
+
+    public void setSolicitudServicioDetalleList(List<SolicitudServicioDetalle> solicitudServicioDetalleList) {
+        this.solicitudServicioDetalleList = solicitudServicioDetalleList;
+    }
+    
+    
 
 }

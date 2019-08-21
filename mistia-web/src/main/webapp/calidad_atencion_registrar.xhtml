@@ -48,23 +48,45 @@
 
                                 <p:outputLabel for="txtDistrito">Distrito </p:outputLabel>
                                 <p:inputText id= "txtDistrito" readonly="true" value="#{caliatenreg.solicitud['distrito']}"  >   </p:inputText>
-
-
-                                <p:outputLabel for="txtTelevisores">Televisores</p:outputLabel>
-                                <p:inputText id= "txtTelevisores" readonly="true"   >   </p:inputText>
-
-                                <p:outputLabel for="txtPaquete">Paquete </p:outputLabel>
-                                <p:inputText id= "txtPaquete" readonly="true" value="#{caliatenreg.solicitud['servicio']}"    >   </p:inputText>
-
-
-                                <p:outputLabel for="txtInternet">Internet </p:outputLabel>
-                                <p:inputText id= "txtInternet" readonly="true" >   </p:inputText>
-
-                                <p:outputLabel for="txtAccess">Access Point </p:outputLabel>
-                                <p:inputText id= "txtAccess" readonly="true" >   </p:inputText>
                             </p:panelGrid>
 
-                            <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank ui-fluid" style="align:center">
+                            <br></br>
+                            <p:dataTable    style="width:100%;" id="dtservicios" var="reg" value="#{caliatenreg.solicitudServicioDetalleList}"   emptyMessage="No se encontraron registros"  >
+
+                                <p:column style="width:10%" >
+                                    <f:facet name="header">
+                                        <h:outputText value="Código" />
+                                    </f:facet>
+                                    <h:outputText value="#{reg.servicio.codigoServicio}" />	
+                                </p:column>
+
+                                <p:column style="width:50%">
+                                    <f:facet name="header">
+                                        <h:outputText value="Servicio" />
+                                    </f:facet>
+                                    <h:outputText value="#{reg.servicio.descripcion}" />						
+                                </p:column>
+
+
+                                <p:column style="width:20%" >
+                                    <f:facet name="header">
+                                        <h:outputText value="Tarifa Unitaria" />
+                                    </f:facet>
+                                    <h:outputText value="#{reg.tarifa}" />						
+                                </p:column> 
+
+                                <p:column style="width:20%" >
+                                    <f:facet name="header">
+                                        <h:outputText value="Cantidad Televisor" />
+                                    </f:facet>
+                                    <h:outputText  value="#{reg.cantTelevisor}" />
+                                </p:column>
+
+                            </p:dataTable>
+
+                            <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank ui-fluid" style="align:center">
+                                <p:spacer></p:spacer>
+                                <p:spacer></p:spacer>
                                 <p:outputLabel for="txtTarifa"> Monto mensual a facturar </p:outputLabel>
                                 <p:inputText id= "txtTarifa" readonly="true"  value="#{caliatenreg.solicitud['tarifa']}"    >   </p:inputText>
                             </p:panelGrid>
@@ -125,32 +147,28 @@
                                         <c:forEach items="#{caliatenreg.respuestas}" var="respuesta">
                                             <f:selectItem itemLabel="#{respuesta}" itemValue="#{respuesta}" />
                                         </c:forEach>
-                                        
+
                                     </p:selectOneRadio>
                                 </h:panelGrid>
-                            
+
                             </ui:repeat>
 
                         </p:panel>	
 
 
+                        <div  align="center" >
+                            <p:panelGrid   styleClass="ui-panelgrid-blank ui-fluid">
+                                <p:commandButton value="Guardar"  class="btn btn-primary"  style="width:100px" action="#{caliatenreg.guardar()}" update="form:messages"
+                                                 ajax="true">
+                                    <p:confirm header="Confirmation" message="¿Está seguro que desea guardar la calificación?" icon="ui-icon-alert" />
+                                </p:commandButton>
 
-                        <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank ui-fluid">
-
-
-                            <p:commandButton value="Guardar"  class="btn btn-primary"  style="width:100px" action="#{caliatenreg.guardar()}" update="form:messages"
-                                             ajax="true">
-                                <p:confirm header="Confirmation" message="¿Está seguro que desea guardar la calificación?" icon="ui-icon-alert" />
-                            </p:commandButton>
-
-                            <p:commandButton value="Salir"  class="btn btn-primary"  style="width:100px"   action="#{caliatenreg.salir()}"
-                                             ajax="false">
-                            </p:commandButton>
-
-
-                        </p:panelGrid>
-
-
+                                <p:commandButton value="Salir"  class="btn btn-primary"  style="width:100px"   action="#{caliatenreg.salir()}"
+                                                 ajax="false">
+                                </p:commandButton>
+                            </p:panelGrid>
+                        </div>
+                            
 
                         <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
                             <p:commandButton value="Si" type="button"

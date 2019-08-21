@@ -61,8 +61,14 @@ public class Cliente extends ObjectBean implements Serializable {
     @Column(name = "usuario_modificacion")
     private String usuarioModificacion;
 
-    @Column(name = "tipo_documento")
-    private Integer tipoDocumento;
+
+    @ManyToOne
+    @JoinColumn(name="tipo_documento" , insertable = false, updatable= false)
+    private Tipo tipoDocumento;
+    
+    @Transient
+    private Integer codigoTipoDocumento;
+    
 
     @Column(name = "documento_identidad")
     private String documentoIdentidad;
@@ -100,7 +106,7 @@ public class Cliente extends ObjectBean implements Serializable {
     public Cliente() {
     }
 
-    public Cliente(Integer codigoCliente, String apellidoMaterno, String apellidoPaterno, Integer codigoDistrito, String direccion, String referencia, String estacionCreacion, String estacionModificacion, Timestamp fechaCreacion, Timestamp fechaModificacion, String nombres, String telefono, String usuarioCreacion, String usuarioModificacion, Integer tipoDocumento, String documentoIdentidad, String nombreRazonSocial, String telefonoMovil, Integer sexo, String email, String numeroRuc) {
+    public Cliente(Integer codigoCliente, String apellidoMaterno, String apellidoPaterno, Integer codigoDistrito, String direccion, String referencia, String estacionCreacion, String estacionModificacion, Timestamp fechaCreacion, Timestamp fechaModificacion, String nombres, String telefono, String usuarioCreacion, String usuarioModificacion, Tipo tipoDocumento, String documentoIdentidad, String nombreRazonSocial, String telefonoMovil, Integer sexo, String email, String numeroRuc) {
         this.codigoCliente = codigoCliente;
         this.apellidoMaterno = apellidoMaterno;
         this.apellidoPaterno = apellidoPaterno;
@@ -238,13 +244,24 @@ public class Cliente extends ObjectBean implements Serializable {
         this.usuarioModificacion = usuarioModificacion;
     }
 
-    public Integer getTipoDocumento() {
+    /*public Integer getTipoDocumento() {
         return tipoDocumento;
     }
 
     public void setTipoDocumento(Integer tipoDocumento) {
         this.tipoDocumento = tipoDocumento;
+    }*/
+
+    public Tipo getTipoDocumento() {
+        return tipoDocumento;
     }
+
+    public void setTipoDocumento(Tipo tipoDocumento) {
+        this.tipoDocumento = tipoDocumento;
+    }
+    
+    
+    
 
     public String getDocumentoIdentidad() {
         return documentoIdentidad;
@@ -378,6 +395,16 @@ public class Cliente extends ObjectBean implements Serializable {
     public void setClienteDireccions(List<ClienteDireccion> clienteDireccions) {
         this.clienteDireccions = clienteDireccions;
     }
+
+    public Integer getCodigoTipoDocumento() {
+        return codigoTipoDocumento;
+    }
+
+    public void setCodigoTipoDocumento(Integer codigoTipoDocumento) {
+        this.codigoTipoDocumento = codigoTipoDocumento;
+    }
+    
+    
 
     @Override
     public int hashCode() {
