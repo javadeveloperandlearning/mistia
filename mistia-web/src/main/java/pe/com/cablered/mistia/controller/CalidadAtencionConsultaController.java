@@ -30,7 +30,7 @@ import pe.com.cablered.mistia.service.SolicitudServicioService;
 import static pe.com.cablered.mistia.controller.ConstansView.*;
 
 @ManagedBean(name = "caliatencon")
-@SessionScoped
+@ViewScoped
 public class CalidadAtencionConsultaController implements Serializable {
 
     final static Logger logger = Logger.getLogger(CalidadAtencionConsultaController.class);
@@ -161,9 +161,22 @@ public class CalidadAtencionConsultaController implements Serializable {
         List<String> filtro = new ArrayList();
 
         for (Cliente cliente : clienteList) {
-            String nombre = cliente.getApellidos() + " " + cliente.getNombres();
+            /*String nombre = cliente.getApellidos() + " " + cliente.getNombres();
             if (nombre.toUpperCase().contains(criterio.trim().toUpperCase())) {
                 filtro.add(cliente.getApellidos() + " " + cliente.getNombres());
+            }*/
+            
+            if (cliente.getTipoDocumento().getCodigoTipo() == 11) {
+
+                String nombre = cliente.getNombreRazonSocial();
+                if (nombre.toUpperCase().contains(criterio.trim().toUpperCase())) {
+                    filtro.add(nombre);
+                }
+            } else {
+                String nombre = cliente.getApellidos() + " " + cliente.getNombres();
+                if (nombre.toUpperCase().contains(criterio.trim().toUpperCase())) {
+                    filtro.add(cliente.getApellidos() + " " + cliente.getNombres());
+                }
 
             }
 

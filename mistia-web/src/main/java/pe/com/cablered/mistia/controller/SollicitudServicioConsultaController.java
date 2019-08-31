@@ -109,9 +109,17 @@ public class SollicitudServicioConsultaController implements Serializable {
         Integer codigoClient = null;
         if (nombreCliente != null) {
             for (Cliente cliente : clienteList) {
-                String nomclie = cliente.getApellidos().trim() + " " + cliente.getNombres().trim();
+                
+                 String nomclie = null;
+                 if (cliente.getTipoDocumento().getCodigoTipo() == 11) {
+                     nomclie = cliente.getNombreRazonSocial();
+                 }else{
+                     nomclie = cliente.getApellidos().trim() + " " + cliente.getNombres().trim();
+                 }
+                
                 logger.info(" buscando cliente : " + nomclie);
-                if (nomclie.trim().equals(nombreCliente.trim())) {
+                
+                if (nomclie!=null  && nomclie.trim().equals(nombreCliente.trim())) {
                     codigoClient = cliente.getCodigoCliente();
                     codigoCliente = cliente.getCodigoCliente();
                     this.cliente = cliente;
@@ -192,10 +200,25 @@ public class SollicitudServicioConsultaController implements Serializable {
 
         List<String> filtro = new ArrayList();
         for (Cliente cliente : clienteList) {
-            String nombre = cliente.getApellidos() + " " + cliente.getNombres();
+            /*String nombre = cliente.getApellidos() + " " + cliente.getNombres();
             if (nombre.toUpperCase().startsWith(criterio.trim().toUpperCase())) {
                 filtro.add(cliente.getApellidos() + " " + cliente.getNombres());
+            }*/
+            
+            if (cliente.getTipoDocumento().getCodigoTipo() == 11) {
+
+                String nombre = cliente.getNombreRazonSocial();
+                if (nombre.toUpperCase().contains(criterio.trim().toUpperCase())) {
+                    filtro.add(nombre);
+                }
+            } else {
+                String nombre = cliente.getApellidos() + " " + cliente.getNombres();
+                if (nombre.toUpperCase().contains(criterio.trim().toUpperCase())) {
+                    filtro.add(cliente.getApellidos() + " " + cliente.getNombres());
+                }
+
             }
+            
         }
         return filtro;
     }

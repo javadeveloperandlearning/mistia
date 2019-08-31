@@ -31,8 +31,8 @@ public class ClienteService extends AbstractSevice<Cliente> {
         return clienteDao.clienteList();
     }
 
-    public List<Cliente> clienteList(int tipoDocu, Integer codigoCliente, String nombres, String apellidoPaterno, String apellidoMaterno, String nombreRazonSocial) {
-        return clienteDao.clienteList(tipoDocu, codigoCliente, nombres, apellidoPaterno, apellidoMaterno, nombreRazonSocial);
+    public List<Cliente> clienteList(int tipoDocu, String documentoIdentidad, String nombres, String apellidoPaterno, String apellidoMaterno, String nombreRazonSocial) {
+        return clienteDao.clienteList(tipoDocu, documentoIdentidad, nombres, apellidoPaterno, apellidoMaterno, nombreRazonSocial);
     }
 
     public Response registrar(Cliente cliente) {
@@ -84,11 +84,6 @@ public class ClienteService extends AbstractSevice<Cliente> {
 
         Response response = new Response(Response.OK, Response.MSG_OK);
 
-        if (isEmpty(cliente.getNombreRazonSocial())) {
-            response = new Response(Response.ERROR, "Ingrese un nombre de Razón social válido");
-            return response;
-        }
-
         if (isEmpty(cliente.getTelefono())) {
             response = new Response(Response.ERROR, "Ingrese teléfono válido");
             return response;
@@ -99,8 +94,8 @@ public class ClienteService extends AbstractSevice<Cliente> {
             return response;
         }
 
-        if(cliente.getTipoDocumento().getCodigoTipo()!=11){
-        
+        if (cliente.getTipoDocumento().getCodigoTipo() != 11) {
+
             if (isEmpty(cliente.getApellidoPaterno())) {
                 response = new Response(Response.ERROR, "Ingrese un apellido paterno válido");
                 return response;
@@ -115,9 +110,16 @@ public class ClienteService extends AbstractSevice<Cliente> {
                 response = new Response(Response.ERROR, "Ingrese un nombre válido");
                 return response;
             }
+
+        } else {
+            
+            if (isEmpty(cliente.getNombreRazonSocial())) {
+                response = new Response(Response.ERROR, "Ingrese un nombre de Razón social válido");
+                return response;
+            }
+
         }
-        
-        
+
         if (isEmpty(cliente.getEmail())) {
             response = new Response(Response.ERROR, "Ingrese un email válido");
             return response;
@@ -147,8 +149,14 @@ public class ClienteService extends AbstractSevice<Cliente> {
     }
 
     @Override
-    public Response eliminar(Cliente t) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Response eliminar(Cliente cliente) {
+
+        Response response = new Response();
+        response = clienteDireccionDao.eliminarDirecciones(cliente);
+        response = clienteDao.eliminar(cliente);
+
+        return response;
+
     }
 
     public int getMax() {
@@ -170,8 +178,8 @@ public class ClienteService extends AbstractSevice<Cliente> {
             List<ClienteDireccion> clisClienteDireccionList = cliente.getClienteDireccions();
             for (ClienteDireccion clienteDireccion : clisClienteDireccionList) {
                 clienteDireccion.getId().setCodigoCliente(cliente.getCodigoCliente());
-               
-                logger.info(" pk : "+clienteDireccion.toString());
+
+                logger.info(" pk : " + clienteDireccion.toString());
                 clienteDireccionDao.create(clienteDireccion);
             }
         } catch (Exception e) {

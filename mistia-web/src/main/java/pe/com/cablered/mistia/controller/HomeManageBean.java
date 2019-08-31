@@ -133,6 +133,10 @@ public class HomeManageBean {
 
             DefaultSubMenu sm9 = new DefaultSubMenu("Salir");
             sm9.setIcon("ui-icon-pencil");
+            
+            DefaultSubMenu sm10 = new DefaultSubMenu("Mantenimientos");
+            sm10.setIcon("ui-icon-pencil");
+            sm3.addElement(sm10);
 
             // añadiendo opciones segun tipo de opcion
             for (Opcion opcion : opciones) {
@@ -163,7 +167,13 @@ public class HomeManageBean {
                 } else if (opcion.getTipoOpci() == ConstantSecurity.TIPO_MENU_COMERCIAL) {
                     //sm2.addElement(menuItem);
                 } else if (opcion.getTipoOpci() == ConstantSecurity.TIPO_MENU_PROGRAMACION) {
-                    sm3.addElement(menuItem);
+                    
+                    if(opcion.getUrlOpci().equals(PROGRAMACION_CONSULTA_VIEW)){
+                        sm3.addElement(menuItem);
+                    }else{
+                        sm10.addElement(menuItem);
+                    }
+                    
                 } else if (opcion.getTipoOpci() == ConstantSecurity.TIPO_MENU_MONITOREO) {
                     //sm4.addElement(menuItem);
                 } else if (opcion.getTipoOpci() == ConstantSecurity.TIPO_MENU_EJECUCION) {

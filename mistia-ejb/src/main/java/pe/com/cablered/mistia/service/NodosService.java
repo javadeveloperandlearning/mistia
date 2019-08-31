@@ -149,11 +149,14 @@ public class NodosService {
         }
         
         logger.info("cant postes :"+coberturaList.size());
+        
+        //getcoberuraListaPostes() ;
+        
         return coberturaList;
     }
 
     public List<Map> getcoberuraListaPostes() {
-        logger.info("metodo : getcoberuraListaPostes");
+        logger.info("metodo : getcoberuraListaPostes######");
         List<Map> coberturaList = new ArrayList<>();
         List<Poste> posteList = posteDao.getPostesLIst();
         logger.info("cant postes : " + posteList.size());
@@ -177,8 +180,11 @@ public class NodosService {
 
             coberturaList.add(map);
         }
-
-        /* List<Poste> posteList = posteDao.getPostesLIst();
+        
+        //////////////////////////////////////////////////////
+        
+        List<Map> _coberturaList = new ArrayList<>();
+        
 
         Map<Integer, Poste> mpPostes = new LinkedHashMap<Integer, Poste>();
         List<PointGeo> points = new ArrayList<PointGeo>();
@@ -191,7 +197,7 @@ public class NodosService {
             mpPostes.put(poste.getCodigoPoste(), poste);
         }
 
-        Long cantCluster = Math.round(((posteList.size() * 1.0) / 200));
+        Long cantCluster = Math.round(((posteList.size() * 1.0) / 50));
         logger.info("cant cantCluster :" + cantCluster);
 
         KMeans kMeans = new KMeans();
@@ -220,13 +226,13 @@ public class NodosService {
         for (Cluster cluster : kMeans.getClusters()) {
             
             List<Point> pointList = cluster.getPoints();
-            logger.info("calculando distancias");
+            //logger.info("calculando distancias");
             for (Point point : pointList) {
                 double distance = PointGeo.distance(point, cluster.getCentroid());
                 point.setDistance(distance);
             }
 
-            logger.info("ordenando distancias distancias mayorrr");
+            //logger.info("ordenando distancias distancias mayorrr");
             Collections.sort(pointList, (p1, p2) -> p1.getDistance().compareTo(p2.getDistance()));
             List<Point> _pointList = new ArrayList<>(); // lista de puntosn acotados
 
@@ -237,35 +243,41 @@ public class NodosService {
                 //}
                 cant++;
             }
-            logger.info("cantidad de alrederdor :" + _pointList.size());    
+            //logger.info("cantidad de alrederdor :" + _pointList.size());    
             cluster.setPoints(_pointList);
 
         }
         
-        ArrayList<Integer> colorsindex = Util.getRandomNonRepeatingIntegers(kMeans.getClusters().size(), 0, kMeans.getClusters().size() - 1);
+        //ArrayList<Integer> colorsindex = Util.getRandomNonRepeatingIntegers(kMeans.getClusters().size(), 0, kMeans.getClusters().size() - 1);
         int idxcolor= 0;    
         for (Cluster _cluster : kMeans.getClusters()) {
+            
+            logger.info("numero cluster:" +_cluster.getId());
             Map map = new HashMap<>();
             map.put("descripcion", "nodo");
             map.put("latitudcentral", _cluster.getCentroid().getX());
             map.put("longitudcentral", _cluster.getCentroid().getY());
             map.put("radio", 0);
             map.put("color", "#003399");
-            coberturaList.add(map);
+            _coberturaList.add(map);
             List<Map> mpposteList = new ArrayList<>();
             for (Point p : _cluster.getPoints()) {
                 Map mpposte = new HashMap<>();
+                mpposte.put("numero", p.getNumber());
                 mpposte.put("latitud", p.getX());
                 mpposte.put("longitud", p.getY());
-                int c = colorsindex.get(idxcolor);
-                        
-                mpposte.put("color",  Geometria.colors[c]);
+                //int c = colorsindex.get(idxcolor);
+                logger.info(" p.getNumber() :"+p.getNumber());    
+                
+                posteDao.actualizarNodo(p.getNumber(), _cluster.getId()+1 );
+                //mpposte.put("color",  Geometria.colors[c]);
                 mpposteList.add(mpposte);
             }
             map.put("postes", mpposteList);
             idxcolor++;
 
-        }*/
+        }
+         ///////////////////////////////////////////       
         return coberturaList;
     }
 

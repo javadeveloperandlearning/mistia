@@ -24,16 +24,25 @@ public class AbastractSolicitudServicioBean {
 
         logger.info(" metodo :  buscarCliente ##### ");
         logger.info(" citerio :" + criterio);
-        logger.info(" cant :  "+clienteList.size());
+        logger.info(" cant :  " + clienteList.size());
         List<String> filtro = new ArrayList();
 
         for (Cliente cliente : clienteList) {
-            String nombre = cliente.getApellidos() + " " + cliente.getNombres();
-            if (nombre.toUpperCase().contains(criterio.trim().toUpperCase())) {
-                filtro.add(cliente.getApellidos() + " " + cliente.getNombres());
-                logger.info("Cliente seleccionado :"+ cliente.getCodigoCliente()+"  - "+cliente.getApellidoPaterno()+" - "+cliente.getApellidoMaterno());
-                // break;
+
+            if (cliente.getTipoDocumento().getCodigoTipo() == 11) {
+
+                String nombre = cliente.getNombreRazonSocial();
+                if (nombre.toUpperCase().contains(criterio.trim().toUpperCase())) {
+                    filtro.add(nombre);
+                }
+            } else {
+                String nombre = cliente.getApellidos() + " " + cliente.getNombres();
+                if (nombre.toUpperCase().contains(criterio.trim().toUpperCase())) {
+                    filtro.add(cliente.getApellidos() + " " + cliente.getNombres());
+                }
+
             }
+
         }
         return filtro;
     }
@@ -59,19 +68,32 @@ public class AbastractSolicitudServicioBean {
     }
 
     protected Integer getCodigoCliente(String nombreCliente) {
+        
         logger.info(" metodo :  getCodigoCliente " + nombreCliente);
         Integer codigoClient = null;
         if (nombreCliente != null) {
             for (Cliente cliente : clienteList) {
-                String nomclie = cliente.getApellidos().trim() + " " + cliente.getNombres().trim();
-                if (nomclie.trim().equals(nombreCliente.trim())) {
-                    codigoClient = cliente.getCodigoCliente();
-                    this.cliente = cliente;
-                    
-                    break;
+
+                if (cliente.getTipoDocumento().getCodigoTipo() == 11) {
+                    String nomclie = cliente.getNombreRazonSocial().trim();
+                    if (nomclie.trim().equals(nombreCliente.trim())) {
+                        codigoClient = cliente.getCodigoCliente();
+                        this.cliente = cliente;
+                        break;
+                    }
+
+                } else {
+                    String nomclie = cliente.getApellidos().trim() + " " + cliente.getNombres().trim();
+                    if (nomclie.trim().equals(nombreCliente.trim())) {
+                        codigoClient = cliente.getCodigoCliente();
+                        this.cliente = cliente;
+                        break;
+                    }
                 }
+
             }
         }
+
         return codigoClient;
     }
 

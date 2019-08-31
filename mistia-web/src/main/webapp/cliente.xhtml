@@ -38,16 +38,16 @@
                             <p:panelGrid    columns="4"  layout="grid" styleClass="ui-panelgrid-blank ui-fluid" >
                                 <p:outputLabel>Tipo Documento: </p:outputLabel>
                                 <p:selectOneMenu id="cmbtipodocu"  tabindex="1" value="#{clienteview.tipoDocu}" style="width: 100%"  >
-                                    
+
                                     <f:selectItem   itemValue="0"  itemLabel="Todos"  ></f:selectItem>
                                     <f:selectItems value="#{clienteview.tipoList}" var="tipo" itemValue="#{tipo.codigoTipo}" itemLabel="#{tipo.descripcion}" />
-                                     <p:ajax event="itemSelect"  listener="#{clienteview.activaNombresFiltros()}" update="form" ></p:ajax>
-                                    
+                                    <p:ajax event="itemSelect"  listener="#{clienteview.activaNombresFiltros()}" update="form" ></p:ajax>
+
                                 </p:selectOneMenu>
-                                
+
                                 <p:outputLabel>Razón Social: </p:outputLabel>
                                 <p:inputText id="txtRazonSocial"  value="#{clienteview.nombreRazonSocial}" maxlength="100"  ></p:inputText>
-                                
+
                             </p:panelGrid>
 
 
@@ -55,7 +55,7 @@
 
 
                                 <p:outputLabel for="txtNumeroCliente"> Número Cliente:</p:outputLabel>
-                                <p:inputText id="txtNumeroCliente"    value="#{clienteview.codigoCliente}"  maxlength="15" validatorMessage="error"  ></p:inputText>
+                                <p:inputText id="txtNumeroCliente"    value="#{clienteview.documentoIdentidad}"  maxlength="15" validatorMessage="error"  ></p:inputText>
 
 
                                 <p:outputLabel for="txtRazonSocial">Nombres:</p:outputLabel>
@@ -102,7 +102,7 @@
                                 <f:facet name="header">
                                     <h:outputText value="Número Cliente" />
                                 </f:facet>
-                                <h:outputText value="#{reg.codigoCliente}" >
+                                <h:outputText value="#{reg.documentoIdentidad}" >
                                 </h:outputText>
                             </p:column>
 
@@ -113,28 +113,28 @@
                                 <h:outputText value="#{reg.tipoDocumento.descripcion}" >
                                 </h:outputText>
                             </p:column>
-                            
+
                             <p:column>
                                 <f:facet name="header">
                                     <h:outputText value="Nombres" />
                                 </f:facet>
                                 <h:outputText  value="#{reg.nombres}" />
                             </p:column>
-                            
+
                             <p:column>
                                 <f:facet name="header">
                                     <h:outputText value="Apellido Paterno" />
                                 </f:facet>
                                 <h:outputText  value="#{reg.apellidoPaterno}" />
                             </p:column>
-                            
+
                             <p:column>
                                 <f:facet name="header">
                                     <h:outputText value="Apellido Materno" />
                                 </f:facet>
                                 <h:outputText  value="#{reg.apellidoMaterno}" />
                             </p:column> 
-                           
+
                             <p:column>
                                 <f:facet name="header">
                                     <h:outputText value="Razón Social" />
@@ -167,8 +167,14 @@
                                 <f:attribute name="align" value="center" />
                                 <p:commandButton icon="ui-icon-pencil"  style="width:30%"  actionListener="#{clienteview.editar(reg)}"   
                                                  ajax="true"   title="Editar" update="formsave:dlgsave" oncomplete="PF('dlgsave').show()"  > 
-
                                 </p:commandButton>
+
+                                <p:commandButton icon="ui-icon-trash"  style="width:30%"  actionListener="#{clienteview.eliminar(reg)}"   
+                                                 ajax="true"   title="Eliminar"    update="dataTable"> 
+                                     <p:confirm header="Confirmación" message="¿Está seguro que desea eliminar?" icon="ui-icon-alert" />             
+                                     
+                                </p:commandButton>
+
 
                             </p:column>
 
@@ -214,7 +220,7 @@
 
                                     <p:outputLabel>Tipo Documento: </p:outputLabel>
                                     <p:selectOneMenu id="cmbtipodocu"  tabindex="1"  value="#{clienteview.cliente.codigoTipoDocumento}" style="width: 80%"  >
-                                        <p:ajax event="itemSelect"  listener="#{clienteview.activaNombres()}" update="txtuapellidopaterno,txtuapellidomaterno,txtunombres" ></p:ajax>
+                                        <p:ajax event="itemSelect"  listener="#{clienteview.activaNombres()}" update="txtuapellidopaterno,txtuapellidomaterno,txtunombres,cmbsexo" ></p:ajax>
                                         <f:selectItems value="#{clienteview.tipoList}" 
                                                        var="tipo" itemValue="#{tipo.codigoTipo}" itemLabel="#{tipo.descripcion}" />
 
@@ -222,7 +228,7 @@
 
                                     <p:outputLabel>Número Cliente: </p:outputLabel>
                                     <p:inputText id="txtunnumero"   tabindex="2" value="#{clienteview.cliente.documentoIdentidad}" maxlength="12" />
- 
+
 
 
 
@@ -268,9 +274,6 @@
                                                  value="#{clienteview.cliente.apellidoMaterno}"  disabled="#{clienteview.disabledNombres}"
                                                  maxlength="50"  />
 
-
-
-
                                     <p:outputLabel>Nombres: </p:outputLabel>
                                     <p:inputText id="txtunombres" tabindex="9"
                                                  value="#{clienteview.cliente.nombres}"   disabled="#{clienteview.disabledNombres}"
@@ -278,7 +281,7 @@
                                                  />
 
                                     <p:outputLabel>Sexo: </p:outputLabel>
-                                    <p:selectOneRadio  id="console" value="#{clienteview.cliente.sexo}" tabindex="10"   >
+                                    <p:selectOneRadio  id="cmbsexo" value="#{clienteview.cliente.sexo}" tabindex="10"   >
                                         <f:selectItem itemLabel="Masculino" itemValue="1"   />
                                         <f:selectItem itemLabel="Femenino" itemValue="2" />
                                     </p:selectOneRadio>

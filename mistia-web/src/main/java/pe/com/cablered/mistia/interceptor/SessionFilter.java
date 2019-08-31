@@ -45,8 +45,8 @@ public class SessionFilter implements Filter {
     final static Logger logger = Logger.getLogger(SessionFilter.class);
 
     private static final Set<String> ALLOWED_PATHS = Collections.unmodifiableSet(new HashSet<>(
-            Arrays.asList("", 
-                    "/login.xhtml", 
+            Arrays.asList("",
+                    "/login.xhtml",
                     "/logout.jsf",
                     "/javax.faces.resource/theme.css.xhtml",
                     "/javax.faces.resource/components.css.xhtml",
@@ -56,13 +56,8 @@ public class SessionFilter implements Filter {
                     "/javax.faces.resource/components.js.xhtml",
                     "/javax.faces.resource/css/default.css.xhtml",
                     "/javax.faces.resource/spacer/dot_clear.gif.xhtml"
-                    
-                    
-                    
-                    )
+            )
     ));
-    
- 
 
     public SessionFilter() {
 
@@ -79,7 +74,7 @@ public class SessionFilter implements Filter {
         // the rest of the filter chain is invoked.
         // For example, a logging filter might log items on the request object,
         // such as the parameters.
-       /*
+        /*
 	for (Enumeration en = request.getParameterNames(); en.hasMoreElements(); ) {
 	    String name = (String)en.nextElement();
 	    String values[] = request.getParameterValues(name);
@@ -134,26 +129,26 @@ public class SessionFilter implements Filter {
     public void doFilter(ServletRequest req, ServletResponse res,
             FilterChain chain)
             throws IOException, ServletException {
+        
         //logger.info(" metodo :  doFilter");
-        
-        if(true){
-        
-              chain.doFilter(req, res);
-                  return ;
+        if (true) {
+            chain.doFilter(req, res);
+            return;
         }
-        HttpServletRequest request  = (HttpServletRequest) req;
-        HttpServletResponse respone =  (HttpServletResponse) res;
+
+        HttpServletRequest request = (HttpServletRequest) req;
+        HttpServletResponse respone = (HttpServletResponse) res;
         //logger.info(" get user  ###");
 
         logger.info(request.getSession().getAttribute(ConstantSecurity.USER_SESSION));
 
         Usuario user = (Usuario) request.getSession(false).getAttribute(ConstantSecurity.USER_SESSION);
-        
-        String path = request.getRequestURI().substring(request.getContextPath().length()).replaceAll("[/]+$", ""); 
+
+        String path = request.getRequestURI().substring(request.getContextPath().length()).replaceAll("[/]+$", "");
         boolean allowedPath = ALLOWED_PATHS.contains(path); // path permitido
-        
+
         //logger.info(" url : "+request.getRequestURI().toString());
-        logger.info(" path : "+path);
+        logger.info(" path : " + path);
         if (user != null || allowedPath) {
             try {
                 logger.info("logueado 1 ");
@@ -161,13 +156,12 @@ public class SessionFilter implements Filter {
             } catch (Throwable t) {
                 t.printStackTrace();
             }
-        }else{
+        } else {
             logger.info("logueado 2 ");
-            request.getSession(false).setAttribute(ConstantSecurity.USER_SESSION,null);
+            request.getSession(false).setAttribute(ConstantSecurity.USER_SESSION, null);
             respone.sendRedirect(request.getContextPath() + "/login.xhtml");
-             
-        }
 
+        }
 
     }
 

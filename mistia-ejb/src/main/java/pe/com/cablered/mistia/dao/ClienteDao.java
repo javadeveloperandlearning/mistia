@@ -13,6 +13,7 @@ import static pe.com.cablered.mistia.dao.CuadrillaDao.logger;
 
 import pe.com.cablered.mistia.model.Cliente;
 import pe.com.cablered.mistia.model.Cuadrilla;
+import pe.com.cablered.mistia.service.Response;
 
 import static pe.com.cablered.mistia.util.ConstantBusiness.*;
 
@@ -45,19 +46,20 @@ public class ClienteDao extends CrudDao<Cliente> {
 
     }
 
-    public List<Cliente> clienteList(int tipoDocu, Integer codigoCliente, String nombres, String apellidoPaterno, String apellidoMaterno, String nombreRazonSocial) {
+    public List<Cliente> clienteList(int tipoDocu, String documentoIdentidad, String nombres, String apellidoPaterno, String apellidoMaterno, String nombreRazonSocial) {
 
         List<Cliente> list = Collections.EMPTY_LIST;
 
         try {
 
+            documentoIdentidad = (documentoIdentidad != null && documentoIdentidad.trim().equals("") ? null : documentoIdentidad);
             apellidoPaterno = (apellidoPaterno != null && apellidoPaterno.trim().equals("") ? null : apellidoPaterno);
             apellidoMaterno = (apellidoMaterno != null && apellidoMaterno.trim().equals("") ? null : apellidoMaterno);
             nombres = (nombres != null && nombres.trim().equals("") ? null : nombres);
             nombreRazonSocial = (nombreRazonSocial != null && nombreRazonSocial.trim().equals("") ? null : nombreRazonSocial);
 
             logger.info(" tipoDocu :  " + tipoDocu);
-            logger.info(" codigoCliente :  " + codigoCliente);
+            logger.info(" documentoIdentidad :  " + documentoIdentidad);
             logger.info(" nombres :  " + nombres);
             logger.info(" apellidoPaterno :  " + apellidoPaterno);
             logger.info(" apellidoMaterno :  " + apellidoMaterno);
@@ -65,7 +67,7 @@ public class ClienteDao extends CrudDao<Cliente> {
 
             String sql = "Select c "
                     + "from Cliente c  where "
-                    + "   (codigoCliente = :pcodigocliente or :pcodigocliente is  null )"
+                    + "     (upper(documentoIdentidad) like :pdocumentoidentidad or :pdocumentoidentidad is  null )"
                     + " and (upper(apellidoPaterno) like :papellidopaterno or :papellidopaterno is null ) "
                     + " and (upper(apellidoMaterno) like :papellidomaterno or :papellidomaterno is null) "
                     + " and (upper(nombres) like :pnombres or :pnombres is null) "
@@ -76,7 +78,7 @@ public class ClienteDao extends CrudDao<Cliente> {
             sql = sql + " order by codigoCliente";
 
             TypedQuery<Cliente> query = getEntityManager().createQuery(sql, Cliente.class);
-            query.setParameter("pcodigocliente", codigoCliente);
+            query.setParameter("pdocumentoidentidad", (documentoIdentidad == null ? null : "%" + documentoIdentidad.trim().toUpperCase() + "%"));
             query.setParameter("papellidopaterno", (apellidoPaterno == null ? null : "%" + apellidoPaterno.trim().toUpperCase() + "%"));
             query.setParameter("papellidomaterno", (apellidoMaterno == null ? null : "%" + apellidoMaterno.trim().toUpperCase() + "%"));
             query.setParameter("pnombres", (nombres == null ? null : "%" + nombres.trim().toUpperCase() + "%"));
@@ -89,6 +91,23 @@ public class ClienteDao extends CrudDao<Cliente> {
             e.printStackTrace();
         }
         return list;
+    }
+
+    
+    
+    public Response eliminar(Cliente cliente) {
+        
+        Response response =  new Response();
+        try{
+            
+            remove(cliente);
+            
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        
+        return response;
+
     }
 
     public int getMax() {

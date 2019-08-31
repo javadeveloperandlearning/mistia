@@ -122,7 +122,7 @@ public class EjecucionService {
 		try {
                     
                         s.setId(s.getSolicitudServicio().getNumeroSolicitud(),  s.getNumeroSecuencial());
-                        String ruta =  "/home/javadeveloper/proyectos/imgs/"+s.getNombre();
+                        String ruta =  "/home/ubuntu/apps/mistia/imgs/"+s.getNombre();
                         s.setRuta(ruta);
                         logger.info("registrando  ruta");
                         solicitudServicioEvidenciaDao.create(s);

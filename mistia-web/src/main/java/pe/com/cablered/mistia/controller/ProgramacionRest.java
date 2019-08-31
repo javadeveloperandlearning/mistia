@@ -455,8 +455,8 @@ public class ProgramacionRest implements Serializable {
                 d.put("numeroSolicitud", detalle.getSolicitudServicio().getNumeroSolicitud());
                 d.put("tag", Util.getTag(detalle.getSolicitudServicio()));
 
-                d.put("latitud", detalle.getSolicitudServicio().getContratoServicio().getLatitud());
-                d.put("longitud", detalle.getSolicitudServicio().getContratoServicio().getLongitud());
+                d.put("latitud", detalle.getSolicitudServicio().getLatitud());
+                d.put("longitud", detalle.getSolicitudServicio().getLongitud());
                 d.put("tipo", detalle.getSolicitudServicio().getTipoSolicitud().getDescripcion());
 
                 _detalles.add(d);

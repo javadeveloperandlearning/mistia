@@ -150,6 +150,7 @@ public class SolicitudServicioGenerarController extends AbastractSolicitudServic
 
         this.codigoCliente = getCodigoCliente(nombreCliente);
         this.clienteDireccionList = clienteService.getClienteDireccionList(cliente);
+        direccionSelected = "";
     }
 
     private void mostrarEditar(SolicitudServicio solicitudServicio) {
@@ -527,26 +528,7 @@ public class SolicitudServicioGenerarController extends AbastractSolicitudServic
 
     }
 
-    /* private Map createhorario(HorarioAtencionDetalle d) {
-        Map mp = new LinkedHashMap<>();
-        mp.put("rango", d.getRango());dthorario
-        mp.put("nse", d.getId().getNumeroSecuencial());
-        mp.put("horainicio", d.getHoraInicio());
-        mp.put("horafin", d.getHoraFin());
-        Map checkdias = new LinkedHashMap<>();
-        for (int i = 1; i <= 7; i++) {
-            checkdias.put(i, false);
-        }
-        mp.put("checkdias", checkdias);
-
-        Map checkdias1 = new LinkedHashMap<>();
-        for (int i = 1; i <= 7; i++) {
-            checkdias1.put(i + "", false);
-        }
-        mp.put("checkdias1", checkdias1);
-        return mp;
-
-    }*/
+    
     public void addListaServicios() {
 
         try {
@@ -588,19 +570,6 @@ public class SolicitudServicioGenerarController extends AbastractSolicitudServic
 
         try {
 
-            /*
-               FacesMessage msg = new FacesMessage(response.getMensaje());
-               if (response != null && response.getCodigo() == Response.OK) {
-                   msg.setSeverity(FacesMessage.SEVERITY_INFO);
-               } else {
-                  msg.setSeverity(FacesMessage.SEVERITY_ERROR);
-                  RequestContext.getCurrentInstance().
-                  addCallbackParam("notValid", true);
-                  RequestContext.getCurrentInstance().
-                  addCallbackParam("mensaje", response.getMensaje());
-                }
-                getFacesContext().addMessage(null, msg);
-             */
             FacesMessage msg = new FacesMessage("");
 
             if (codigoCliente == null) {
@@ -674,41 +643,7 @@ public class SolicitudServicioGenerarController extends AbastractSolicitudServic
 
             }
 
-            // contrato 
-            /*ContratoServicio contratoServicio = new ContratoServicio();
-                contratoServicio.setCliente(new Cliente(codigoCliente));
-                Calendar cal = Calendar.getInstance();
-                Date fechaIni = cal.getTime();
-                cal.add(Calendar.MONTH, 12);
-                Date fechaFin = cal.getTime();
-                contratoServicio.setFechaInicio(fechaIni);
-                contratoServicio.setFechaFin(fechaFin);
-                contratoServicio.setTarifa(tarifaMensual);
-                contratoServicio.setCliente(cliente);
-                contratoServicio.setPoste(new Poste(1));
-                contratoServicio.setDistrito(new Distrito(codigoDisrito));
-                
-                contratoServicio.setDireccion(direccion);
-                contratoServicio.setCodigoTipoDomicilio(codigoTipoDomicilio);
-                contratoServicio.setNroDomicilio(nroDomicilio);
-                contratoServicio.setDptoIntDomicilio(dptoIntDomicilio);
-                contratoServicio.setReferencia(referencia);
-                contratoServicio.setUrbanizacion(urbanizacion);
-                
-             */
-            // detalle de łos servicios del contrato 
-
-            /* List<ContratoServicioDetalle> contratoServicioDetalleList = new ArrayList<>();
-                for (Servicio servicio : servicioList) {
-                    ContratoServicioDetalle d = new ContratoServicioDetalle();
-                    d.setId(new ContratoServicioDetallePK());
-                    d.getId().setCodigoServicio(servicio.getCodigoServicio());
-                    d.setCantidad(1);
-                    contratoServicioDetalleList.add(d);
-
-                }*/
-            //contratoServicio.setContratoServicioDetalleList(contratoServicioDetalleList);
-            // solicitud de servicio
+          
             Map<String, Object> mpsession = facesContext.getExternalContext().getSessionMap();
 
             solicitudServicio.setCliente(cliente);
@@ -872,7 +807,7 @@ public class SolicitudServicioGenerarController extends AbastractSolicitudServic
         this.tarifaMensual = 0.0;
 
         if (numerosolicitudedit != null) {
-            SolicitudServicio solicitudServicio = solicitudServicioService.getSolicitudServicio(numerosolicitudedit);
+            SolicitudServicio solicitudServicio = solicitudServicioService.getSolicitudServicio1(numerosolicitudedit);
             mostrarEditar(solicitudServicio);
         }
         logger.info("numerosolicitudedit :" + numerosolicitudedit);

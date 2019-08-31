@@ -175,6 +175,18 @@ public class SolicitudServicioService {
         }
     }
 
+    
+    public SolicitudServicio getSolicitudServicio1(Long numeroSolicitud) {
+        try {
+            return solicitudServicioDao.getSolicitudServicio1(numeroSolicitud);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    
+    
+    
     public List<Map> getSolicitudList(Integer codigoCliente, Integer codigoTipoSolicitud, Integer codigoEstado,
             Date fechaInicio, Date fechaFin) {
         List<Map> list = solicitudServicioDao.getSolicitudList(codigoCliente, codigoTipoSolicitud, codigoEstado, fechaInicio, fechaFin);

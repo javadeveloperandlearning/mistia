@@ -24,17 +24,14 @@ import pe.com.cablered.mistia.dao.PlanTrabajoDetalleDao;
 import pe.com.cablered.mistia.geometria.Geometria;
 import pe.com.cablered.mistia.geometria.Punto;
 import pe.com.cablered.mistia.ia.clustering.Clustering;
-import pe.com.cablered.mistia.ia.tsp.Ruta;
 import pe.com.cablered.mistia.ia.tsp.TSP;
 import pe.com.cablered.mistia.ia.tsp.TSPHeuristica;
-import pe.com.cablered.mistia.model.ContratoServicio;
 import pe.com.cablered.mistia.model.GrupoAtencion;
 import pe.com.cablered.mistia.model.GrupoAtencionDetalle;
 import pe.com.cablered.mistia.model.GrupoAtencionDetallePK;
 import pe.com.cablered.mistia.model.PlanTrabajo;
 import pe.com.cablered.mistia.model.PlanTrabajoDetalle;
 import pe.com.cablered.mistia.model.PlanTrabajoDetallePK;
-import pe.com.cablered.mistia.model.Poste;
 import pe.com.cablered.mistia.model.SolicitudServicio;
 import pe.com.cablered.mistia.model.TipoSolicitud;
 import pe.com.cablered.mistia.model.sort.GrupoAtencionDetalleSortPrioridad;
@@ -54,7 +51,7 @@ public class GrupoService {
 
     @Inject
     private GrupoAtencionDetalleDao grupoAtencionDetalleDao;
-    
+
     @Inject
     private GrupoAtencionDao grupoAtencionDao;
 
@@ -112,17 +109,13 @@ public class GrupoService {
             return null;
         }
 
-        System.out.println(" cantidad soli selected " + solicitudes.size());
+        logger.info(" cantidad soli selected " + solicitudes.size());
 
         List<Punto> _puntos = new ArrayList<Punto>();
         int idx = 0;
         for (SolicitudServicio s : solicitudes) {
-            //Poste poste= s.getPoste();
-            ContratoServicio c = s.getContratoServicio();
             TipoSolicitud ts = s.getTipoSolicitud();
-            //_puntos.add(new Punto(poste.getCodigoPoste(), poste.getLatitud().doubleValue(), poste.getLongitud().doubleValue(), ts.getTiempoEjecucion()*1.0 ));
-            _puntos.add(new Punto((int) s.getNumeroSolicitud(), c.getLatitud(), c.getLongitud(), ts.getTiempoEjecucion() * 1.0));
-            System.out.println("  poste to punto " + _puntos.get(idx));
+            _puntos.add(new Punto((int) s.getNumeroSolicitud(), s.getLatitud(), s.getLongitud(), ts.getTiempoEjecucion() * 1.0));
             idx++;
         }
 
@@ -135,7 +128,7 @@ public class GrupoService {
 
         for (Map<Integer, Punto> map : clusters) {
             GrupoAtencion grupo = new GrupoAtencion(g, "Grupo" + g);
-            System.out.println("Grupo : " + grupo.getDescripcion());
+            logger.info("Grupo : " + grupo.getDescripcion());
             int nse = 1;
             List<GrupoAtencionDetalle> detalles = new ArrayList<GrupoAtencionDetalle>();
             Iterator<Integer> it = map.keySet().iterator();
@@ -173,8 +166,8 @@ public class GrupoService {
 											poste.getLatitud().doubleValue(), 
 											poste.getLongitud().doubleValue(), 
 											0.0   );*/
-                ContratoServicio c = d.getSolicitudServicio().getContratoServicio();
-                Punto punto = new Punto((int) d.getSolicitudServicio().getNumeroSolicitud(), c.getLatitud(), c.getLongitud(), 0.0);
+                SolicitudServicio solicitudServicio =  d.getSolicitudServicio();
+                Punto punto = new Punto((int) solicitudServicio.getNumeroSolicitud(), solicitudServicio.getLatitud(), solicitudServicio.getLongitud(), 0.0);
 
                 Date fecha = d.getSolicitudServicio().getFechaAtencion();
                 String _fecha = sdf.format(fecha);
@@ -238,9 +231,9 @@ public class GrupoService {
                 for (GrupoAtencionDetalle d : detalles) {
 
                     SolicitudServicio s = d.getSolicitudServicio();
-                    
+
                     if (s != null && s.getNumeroSolicitud() == numeroSolicitud) {
-                        solicitudfound =  s;
+                        solicitudfound = s;
                         dfound = d;
                         break;
                     }
@@ -255,7 +248,7 @@ public class GrupoService {
                         if (deleted != null) {
                             logger.info("del grupo anterior");
                             //grupoAtencionDetalleDao.remove(deleted);
-                            Response response =  grupoAtencionDetalleDao.transferir(deleted);
+                            Response response = grupoAtencionDetalleDao.transferir(deleted);
                             logger.info(" elimando del grupo anterior");
                         }
                     }
@@ -290,8 +283,8 @@ public class GrupoService {
                                 if (pddeleted != null) {
                                     logger.info("del plan detalle anterior");
                                     //planTrabajoDetalleDao.remove(pdfound);
-                                    Response response =  planTrabajoDetalleDao.transferir(pdfound);
-                                    
+                                    Response response = planTrabajoDetalleDao.transferir(pdfound);
+
                                     logger.info(" elimnado del plan detalle anterior");
 
                                 }
@@ -337,33 +330,29 @@ public class GrupoService {
                             for (PlanTrabajoDetalle detalle : detalles) {
                                 logger.info(detalle.getId().toString());
                             }
-                            
-                            
+
                             for (GrupoAtencionDetalle detalle : gaDetalles) {
                                 logger.info(detalle.getId().toString());
                             }
 
-                            
                             // secuencial para plan de trabajo
                             Integer nse = detalles.get(detalles.size() - 1).getId().getNumeroSecuencial() + 1;
                             pdfound.setId(new PlanTrabajoDetallePK(p.getNumeroPlanTrabajo(), nse));
                             p.getPlanTrabajoDetalles().add(pdfound);
                             logger.info(" p.getNumeroPlanTrabajo() :  " + p.getNumeroPlanTrabajo());
                             logger.info(" nse :  " + nse);
-                            
+
                             logger.info("nuevo plan detalle");
                             planTrabajoDetalleDao.create(pdfound);
                             logger.info("insertado nuevo plan detalle");
 
-                            
                             // numero de orden para el nuevo detalple de la cuadrilla
-                            GrupoAtencionDetalle  gaDetalle =  (GrupoAtencionDetalle) gaDetalles.get(gaDetalles.size()-1).clone();
-                            Integer numeroOrden  =  gaDetalle.getId().getNumeroOrden()+1;
+                            GrupoAtencionDetalle gaDetalle = (GrupoAtencionDetalle) gaDetalles.get(gaDetalles.size() - 1).clone();
+                            Integer numeroOrden = gaDetalle.getId().getNumeroOrden() + 1;
                             gaDetalle.setId(new GrupoAtencionDetallePK(ga.getNumeroGrupoAtencion(), numeroOrden));
                             gaDetalle.setSolicitudServicio(solicitudfound);
                             gaDetalles.add(gaDetalle);
                             grupoAtencionDetalleDao.create(gaDetalle);
-                            
 
                             break;
 
@@ -373,13 +362,13 @@ public class GrupoService {
             }
             logger.info("#### mostrando detalle del cambio #### ");
             generargraficos(mpGrupos);
-            Set<Long> _keys =  mpGrupos.keySet();
+            Set<Long> _keys = mpGrupos.keySet();
             for (Long numero : _keys) {
                 //Response response = grupoAtencionDao.actualizarRadio(mpGrupos.get(numero));       
                 logger.info("actualizando grupo ####");
                 grupoAtencionDao.update(mpGrupos.get(numero));
             }
-            
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -416,12 +405,9 @@ public class GrupoService {
                     Punto[] puntos = new Punto[detalles.size()];
                     int i = 0;
                     for (GrupoAtencionDetalle d : detalles) {
-                        /*
-				    	 double latitud  =    d.getSolicitudServicio().getPoste().getLatitud().doubleValue();
-				    	 double longitud  =    d.getSolicitudServicio().getPoste().getLongitud() .doubleValue();
-                         */
-                        double latitud = d.getSolicitudServicio().getContratoServicio().getLatitud();
-                        double longitud = d.getSolicitudServicio().getContratoServicio().getLongitud();
+
+                        double latitud = d.getSolicitudServicio().getLatitud();
+                        double longitud = d.getSolicitudServicio().getLongitud();
 
                         puntos[i] = new Punto(latitud, longitud);
                         i++;
@@ -435,8 +421,8 @@ public class GrupoService {
                     // obtener el radio máximo del grupo
                     double radio = Geometria.getRadioMaximo(puntoCentral, puntos);
                     g.setRadio(radio);
-                    
-                    System.out.println(" radio : "+radio);
+
+                    System.out.println(" radio : " + radio);
 
                     // area del circulo
                     g.setArea(Geometria.getAreaCirculo(radio));
@@ -589,32 +575,17 @@ public class GrupoService {
      *
      */
     private List<Punto> getPuntosFromSolicitudes(List<SolicitudServicio> solicitudes) {
-
         List<Punto> puntos = new ArrayList<Punto>();
         int idx = 0;
-
         for (SolicitudServicio s : solicitudes) {
-            //Poste poste= s.getPoste();
             TipoSolicitud ts = s.getTipoSolicitud();
-            ContratoServicio c = s.getContratoServicio();
-            /*
-			 	puntos.add(new Punto(poste.getCodigoPoste(), 
-					poste.getLatitud().doubleValue(), 
-					poste.getLongitud().doubleValue(), 
-					ts.getTiempoEjecucion()*1.0 ) // tiempo de ejecucion de la solicitud
-					
-					);
-			 * */
-
             puntos.add(new Punto((int) s.getNumeroSolicitud(),
-                    c.getLatitud(),
-                    c.getLongitud(),
+                    s.getLatitud(),
+                    s.getLongitud(),
                     ts.getTiempoEjecucion() * 1.0) // tiempo de ejecucion de la solicitud
             );
-
             idx++;
         }
-
         return puntos;
 
     }

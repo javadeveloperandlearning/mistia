@@ -183,8 +183,8 @@ public class ProgramacionService implements Serializable {
             GrupoAtencion g = getGrupoAtencion(fecPrgn, s);
             map.put("descripcionGrupo", g == null ? "" : g.getDescripcion());
             map.put("prioridad", getPriortidad(s));
-            map.put("latitud", s.getContratoServicio().getLatitud());
-            map.put("longitud", s.getContratoServicio().getLongitud());
+            map.put("latitud", s.getLatitud());
+            map.put("longitud", s.getLongitud());
             map.put("tipo", s.getTipoSolicitud().getDescripcion());
             solicitudes.add(map);
         }
@@ -933,11 +933,8 @@ public class ProgramacionService implements Serializable {
                     Response result = planTrabajoDao.insert(planTrabajo);
                     Long np = (Long) result.getData();// numero de plan de trabajo generado
                     planTrabajo.setNumeroPlanTrabajo(np);
-
                     int nse = 1;
-
                     Timestamp timeiniaux = null;
-
                     for (PlanTrabajoDetalle pd : planTrabajo.getPlanTrabajoDetalles()) {
                         pd.setId(new PlanTrabajoDetallePK(planTrabajo.getNumeroPlanTrabajo(), nse));
                         long numeroSolicitud = pd.getSolicitudServicio().getNumeroSolicitud();

@@ -31,7 +31,7 @@ public class TipoSolicitudCompetenciaDetalle implements Serializable {
 	private Timestamp fechaModificacion;
 
 	@Column(name="grado_competencia")
-	private Integer gradoCompetencia;
+	private Double gradoCompetencia;
 
 	@Column(name="usuario_creacion")
 	private String usuarioCreacion;
@@ -92,11 +92,11 @@ public class TipoSolicitudCompetenciaDetalle implements Serializable {
 		this.fechaModificacion = fechaModificacion;
 	}
 
-	public Integer getGradoCompetencia() {
+	public Double getGradoCompetencia() {
 		return this.gradoCompetencia;
 	}
 
-	public void setGradoCompetencia(Integer gradoCompetencia) {
+	public void setGradoCompetencia(Double gradoCompetencia) {
 		this.gradoCompetencia = gradoCompetencia;
 	}
 

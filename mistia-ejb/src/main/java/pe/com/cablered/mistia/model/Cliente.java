@@ -63,7 +63,7 @@ public class Cliente extends ObjectBean implements Serializable {
 
 
     @ManyToOne
-    @JoinColumn(name="tipo_documento" , insertable = false, updatable= false)
+    @JoinColumn(name="tipo_documento")
     private Tipo tipoDocumento;
     
     @Transient
@@ -98,6 +98,9 @@ public class Cliente extends ObjectBean implements Serializable {
 
     @OneToMany(mappedBy = "cliente")
     private List<ContratoServicio> contratoServicios;
+        
+    @OneToMany(mappedBy = "cliente")
+    private List<SolicitudServicio> solicitudServicios;
 
    //@OneToMany(mappedBy = "cliente")
     @Transient
@@ -403,6 +406,15 @@ public class Cliente extends ObjectBean implements Serializable {
     public void setCodigoTipoDocumento(Integer codigoTipoDocumento) {
         this.codigoTipoDocumento = codigoTipoDocumento;
     }
+
+    public List<SolicitudServicio> getSolicitudServicios() {
+        return solicitudServicios;
+    }
+
+    public void setSolicitudServicios(List<SolicitudServicio> solicitudServicios) {
+        this.solicitudServicios = solicitudServicios;
+    }
+    
     
     
 

@@ -121,6 +121,18 @@ public class SolicitudServicio extends ObjectBean implements Serializable, Clone
     public SolicitudServicio(long numeroSolicitud) {
         this.numeroSolicitud = numeroSolicitud;
     }
+    
+    public SolicitudServicio(long numeroSolicitud, Date fechaAtencion, Date fechaSolicitud, Poste poste, TipoSolicitud tipoSolicitud, Double latitud, Double longitud) {
+
+        this.numeroSolicitud = numeroSolicitud;
+        this.fechaAtencion = fechaAtencion;
+        this.fechaSolicitud = fechaSolicitud;
+        this.poste = poste;
+        this.tipoSolicitud = tipoSolicitud;
+        this.latitud =  latitud;
+        this.longitud =  longitud;
+
+    }
 
     public SolicitudServicio(long numeroSolicitud, Date fechaAtencion, Date fechaSolicitud, Poste poste, TipoSolicitud tipoSolicitud, ContratoServicio contratoServicio) {
 

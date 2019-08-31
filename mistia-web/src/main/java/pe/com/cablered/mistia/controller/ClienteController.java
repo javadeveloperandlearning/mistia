@@ -48,6 +48,7 @@ public class ClienteController extends BaseController<Cliente> implements Serial
     private List<Tipo> tipoList;
 
     private Integer codigoCliente;
+    private String documentoIdentidad;
     private int tipoDocu;
     private String nombres;
     private String apellidoPaterno;
@@ -122,12 +123,31 @@ public class ClienteController extends BaseController<Cliente> implements Serial
 
     public void editar(Cliente cliente) {
         logger.info("metodo :  editar ");
-        super.editar(cliente);
-
-        List<ClienteDireccion> clienteDireccionList = clienteService.getClienteDireccionList(cliente);
-        cliente.setClienteDireccions(clienteDireccionList);
+        try{
+            
+            super.editar(cliente);
+            List<ClienteDireccion> clienteDireccionList = clienteService.getClienteDireccionList(cliente);
+            cliente.setClienteDireccions(clienteDireccionList);
+            
+        }catch(Exception e){
+            e.printStackTrace();
+        }
 
     }
+    
+    public void eliminar(Cliente cliente) {
+        logger.info("metodo :  eliminar ");
+        
+        try{
+            
+            Response response =  clienteService.eliminar(cliente);
+            mostrar();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+                
+    }
+    
 
     /*
     public void guardar(){
@@ -161,7 +181,7 @@ public class ClienteController extends BaseController<Cliente> implements Serial
     public void mostrar() {
         try {
 
-            clienteList = clienteService.clienteList(tipoDocu, codigoCliente, nombres, apellidoPaterno, apellidoMaterno, nombreRazonSocial);
+            clienteList = clienteService.clienteList(tipoDocu, documentoIdentidad, nombres, apellidoPaterno, apellidoMaterno, nombreRazonSocial);
             setList(clienteList);
         } catch (Exception e) {
             clienteList = Collections.EMPTY_LIST;
@@ -190,7 +210,15 @@ public class ClienteController extends BaseController<Cliente> implements Serial
     @Override
     public void grabar() {
 
+        logger.info("metodo grabar");
+        logger.info("this.cliente.getCodigoTipoDocumento() : "+this.cliente.getCodigoTipoDocumento());
         this.cliente.setTipoDocumento(new Tipo(this.cliente.getCodigoTipoDocumento()));
+        ClienteDireccion clienteDireccion = cliente.getClienteDireccions().get(0);
+        this.cliente.setDireccion(clienteDireccion.getDireccion());
+        this.cliente.setReferencia(clienteDireccion.getReferencia());
+        this.cliente.setCodigoDistrito(clienteDireccion.getDistrito().getCodigoDistrito());
+        
+        
         if (action.equals(NUEVO)) {
             cliente.setCodigoCliente(clienteService.getMax());
         } else {
@@ -241,8 +269,10 @@ public class ClienteController extends BaseController<Cliente> implements Serial
         logger.info("metodo : activaNombres");
         if (cliente.getCodigoTipoDocumento() != null && cliente.getCodigoTipoDocumento() == TIPO_DOCU_RUC) {
             disabledNombres = true;
+            this.cliente.setSexo(0);
         } else {
             disabledNombres = false;
+            this.cliente.setSexo(SM);
         }
     }
 
@@ -252,10 +282,10 @@ public class ClienteController extends BaseController<Cliente> implements Serial
         if (getTipoDocu() == TIPO_DOCU_RUC) {
             
             disabledNombresFiltros = true;
-            
             this.nombres = null;
             this.apellidoPaterno = null;
             this.apellidoMaterno = null;
+            
             
         } else {
             disabledNombresFiltros = false;
@@ -408,4 +438,13 @@ public class ClienteController extends BaseController<Cliente> implements Serial
         this.disabledNombres = disabledNombres;
     }
 
+    public String getDocumentoIdentidad() {
+        return documentoIdentidad;
+    }
+
+    public void setDocumentoIdentidad(String documentoIdentidad) {
+        this.documentoIdentidad = documentoIdentidad;
+    }
+
+    
 }
