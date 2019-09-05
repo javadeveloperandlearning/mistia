@@ -223,7 +223,7 @@ public class ProgramacionRest implements Serializable {
                     logger.info(" cant solicitudes : "+solicitudList.size());
                 }
 
-            } catch (Exception e) {
+                } catch (Exception e) {
                 e.printStackTrace();
             }
             //solicitudList = programacionService.getSolicitudList(numeroProgramacion, accion, codigoDistrito, codigoTipoSolicitud);
@@ -240,21 +240,18 @@ public class ProgramacionRest implements Serializable {
     @Path("/cuadrillas.html")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Map<String, Object>> cuadrillas(@Context HttpServletRequest request) {
-        logger.info(" ########## metodo :  cuadrilas ##### ###");
-        System.out.println(" ########## metodo :  cuadrilas ##### ");
-
-        Calendar cal = Calendar.getInstance(); // locale-specific
         
+        logger.info(" ########## metodo :  cuadrilas ##### ###");
+        Calendar cal = Calendar.getInstance(); // locale-specific
         cal.set(Calendar.HOUR_OF_DAY, 0);
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);
         Date fecPrgn = cal.getTime();
-       // List<Cuadrilla> cuadrillas = CuadrillaService.getCuadrillaList(fecPrgn);
-        List<Cuadrilla> cuadrillas = CuadrillaService.getCuadrillaLibresList(fecPrgn);
+        //List<Cuadrilla> cuadrillas = CuadrillaService.getCuadrillaLibresList(fecPrgn);
+        List<Cuadrilla> cuadrillas = CuadrillaService.getCuadrillasCombinadas(fecPrgn);
 
         return toFormatPlantrabajo(cuadrillas);
-
     }
 
     @POST
@@ -409,12 +406,30 @@ public class ProgramacionRest implements Serializable {
         
         if(cuadrillas!=null && cuadrillas.size()>0){
             for (Cuadrilla c : cuadrillas) {
+                
+                StringBuilder tecnicos =   new StringBuilder("");
+                
+                for(CuadrillasDetalle cd:  c.getCuadrillasDetalles()){   
+                    String apellidos  =  cd.getTecnico().getApellidos().trim().split("\\s+")[0];
+                    String letraNombre=  cd.getTecnico().getNombres().trim().substring(0,1);
+                    if(tecnicos.toString().equals("")){
+                        tecnicos.append(letraNombre);
+                        tecnicos.append(" ");
+                        tecnicos.append(apellidos);
+                    }else{
+                        tecnicos.append(", ");
+                        tecnicos.append(letraNombre);
+                        tecnicos.append(" ");
+                        tecnicos.append( apellidos);
+                    }
+                }
 
                 Map<String, Object> p = new HashMap();
                 p.put("id", c.getNumeroCuadrilla());
                 p.put("numeroCuadrilla", c.getNumeroCuadrilla());
                 p.put("nombreCuadrilla", c.getNombre());
                 p.put("descripcionGrupo", "");
+                p.put("tecnicos", tecnicos.toString());
                 planList.add(p);
 
             }

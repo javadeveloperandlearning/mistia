@@ -737,8 +737,9 @@ $(document).ready(function () {
 
                     var numeroCuadrilla = data[idx].numeroCuadrilla;
                     var nombreCuadrilla = data[idx].nombreCuadrilla;
+                    var tecnicos =  data[idx].tecnicos;
                     $row.find("div[alt='drcua']").attr("id", numeroCuadrilla);
-                    $row.find("div[alt='drcua']").html(" <p align='center' >" + numeroCuadrilla + " - " + nombreCuadrilla + "</p>");
+                    $row.find("div[alt='drcua']").html(" <p align='center' >" + numeroCuadrilla + " - " + nombreCuadrilla + "</p>"+"<p align='center' > "+tecnicos+"</p>");
 
 
 
@@ -750,6 +751,8 @@ $(document).ready(function () {
                     $row.find("div[alt='drgrup']").html(" <p align='center' >" + desgrupo + "</p>");
                     $row.find("div[alt='drdet']").find("a[alt='detaplan']").attr("lkcuad", numeroCuadrilla);
                     $row.find("div[alt='drdet']").find("a[alt='detaplan']").attr("lkdesc", nombreCuadrilla);
+                    
+                    
                     html = html + $row.html();
                 }
             }

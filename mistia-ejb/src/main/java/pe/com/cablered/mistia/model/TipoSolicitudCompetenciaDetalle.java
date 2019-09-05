@@ -4,132 +4,133 @@ import java.io.Serializable;
 import javax.persistence.*;
 import java.sql.Timestamp;
 
-
 /**
- * The persistent class for the tipo_solicitud_competencia_detalle database table.
- * 
+ * The persistent class for the tipo_solicitud_competencia_detalle database
+ * table.
+ *
  */
 @Entity
-@Table(name="tipo_solicitud_competencia_detalle")
-@NamedQuery(name="TipoSolicitudCompetenciaDetalle.findAll", query="SELECT t FROM TipoSolicitudCompetenciaDetalle t")
+@Table(name = "tipo_solicitud_competencia_detalle")
+@NamedQuery(name = "TipoSolicitudCompetenciaDetalle.findAll", query = "SELECT t FROM TipoSolicitudCompetenciaDetalle t")
 public class TipoSolicitudCompetenciaDetalle implements Serializable {
-	private static final long serialVersionUID = 1L;
 
-	@EmbeddedId
-	private TipoSolicitudCompetenciaDetallePK id;
+    private static final long serialVersionUID = 1L;
 
-	@Column(name="estacion_creacion")
-	private String estacionCreacion;
+    @EmbeddedId
+    private TipoSolicitudCompetenciaDetallePK id;
 
-	@Column(name="estacion_modifcion")
-	private String estacionModifcion;
+    @Column(name = "estacion_creacion")
+    private String estacionCreacion;
 
-	@Column(name="fecha_creacion")
-	private Timestamp fechaCreacion;
+    @Column(name = "estacion_modifcion")
+    private String estacionModifcion;
 
-	@Column(name="fecha_modificacion")
-	private Timestamp fechaModificacion;
+    @Column(name = "fecha_creacion")
+    private Timestamp fechaCreacion;
 
-	@Column(name="grado_competencia")
-	private Double gradoCompetencia;
+    @Column(name = "fecha_modificacion")
+    private Timestamp fechaModificacion;
 
-	@Column(name="usuario_creacion")
-	private String usuarioCreacion;
+    @Column(name = "grado_competencia")
+    private Double gradoCompetencia;
 
-	@Column(name="usuario_modificacion")
-	private String usuarioModificacion;
+    @Column(name = "usuario_creacion")
+    private String usuarioCreacion;
 
-	//bi-directional many-to-one association to Competencia
-	@ManyToOne
-	@JoinColumn(name="codigo_competencia" , insertable = false, updatable= false)
-	private Competencia competencia;
+    @Column(name = "usuario_modificacion")
+    private String usuarioModificacion;
 
-	//bi-directional many-to-one association to Tipo
-	@ManyToOne
-	@JoinColumn(name="codigo_tipo_solicitud" , insertable = false, updatable= false)
-	private Tipo tipo;
+    //bi-directional many-to-one association to Competencia
+    @ManyToOne
+    @JoinColumn(name = "codigo_competencia", insertable = false, updatable = false)
+    private Competencia competencia;
 
-	public TipoSolicitudCompetenciaDetalle() {
-	}
+    //bi-directional many-to-one association to Tipo
+    @ManyToOne
+    @JoinColumn(name = "codigo_tipo_solicitud", insertable = false, updatable = false)
+    private TipoSolicitud tipoSolicitud;
 
-	public TipoSolicitudCompetenciaDetallePK getId() {
-		return this.id;
-	}
+    public TipoSolicitudCompetenciaDetalle() {
+    }
 
-	public void setId(TipoSolicitudCompetenciaDetallePK id) {
-		this.id = id;
-	}
+    public TipoSolicitudCompetenciaDetallePK getId() {
+        return this.id;
+    }
 
-	public String getEstacionCreacion() {
-		return this.estacionCreacion;
-	}
+    public void setId(TipoSolicitudCompetenciaDetallePK id) {
+        this.id = id;
+    }
 
-	public void setEstacionCreacion(String estacionCreacion) {
-		this.estacionCreacion = estacionCreacion;
-	}
+    public String getEstacionCreacion() {
+        return this.estacionCreacion;
+    }
 
-	public String getEstacionModifcion() {
-		return this.estacionModifcion;
-	}
+    public void setEstacionCreacion(String estacionCreacion) {
+        this.estacionCreacion = estacionCreacion;
+    }
 
-	public void setEstacionModifcion(String estacionModifcion) {
-		this.estacionModifcion = estacionModifcion;
-	}
+    public String getEstacionModifcion() {
+        return this.estacionModifcion;
+    }
 
-	public Timestamp getFechaCreacion() {
-		return this.fechaCreacion;
-	}
+    public void setEstacionModifcion(String estacionModifcion) {
+        this.estacionModifcion = estacionModifcion;
+    }
 
-	public void setFechaCreacion(Timestamp fechaCreacion) {
-		this.fechaCreacion = fechaCreacion;
-	}
+    public Timestamp getFechaCreacion() {
+        return this.fechaCreacion;
+    }
 
-	public Timestamp getFechaModificacion() {
-		return this.fechaModificacion;
-	}
+    public void setFechaCreacion(Timestamp fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
+    }
 
-	public void setFechaModificacion(Timestamp fechaModificacion) {
-		this.fechaModificacion = fechaModificacion;
-	}
+    public Timestamp getFechaModificacion() {
+        return this.fechaModificacion;
+    }
 
-	public Double getGradoCompetencia() {
-		return this.gradoCompetencia;
-	}
+    public void setFechaModificacion(Timestamp fechaModificacion) {
+        this.fechaModificacion = fechaModificacion;
+    }
 
-	public void setGradoCompetencia(Double gradoCompetencia) {
-		this.gradoCompetencia = gradoCompetencia;
-	}
+    public Double getGradoCompetencia() {
+        return this.gradoCompetencia;
+    }
 
-	public String getUsuarioCreacion() {
-		return this.usuarioCreacion;
-	}
+    public void setGradoCompetencia(Double gradoCompetencia) {
+        this.gradoCompetencia = gradoCompetencia;
+    }
 
-	public void setUsuarioCreacion(String usuarioCreacion) {
-		this.usuarioCreacion = usuarioCreacion;
-	}
+    public String getUsuarioCreacion() {
+        return this.usuarioCreacion;
+    }
 
-	public String getUsuarioModificacion() {
-		return this.usuarioModificacion;
-	}
+    public void setUsuarioCreacion(String usuarioCreacion) {
+        this.usuarioCreacion = usuarioCreacion;
+    }
 
-	public void setUsuarioModificacion(String usuarioModificacion) {
-		this.usuarioModificacion = usuarioModificacion;
-	}
+    public String getUsuarioModificacion() {
+        return this.usuarioModificacion;
+    }
 
-	public Competencia getCompetencia() {
-		return this.competencia;
-	}
+    public void setUsuarioModificacion(String usuarioModificacion) {
+        this.usuarioModificacion = usuarioModificacion;
+    }
 
-	public void setCompetencia(Competencia competencia) {
-		this.competencia = competencia;
-	}
+    public Competencia getCompetencia() {
+        return this.competencia;
+    }
 
-	public Tipo getTipo() {
-		return this.tipo;
-	}
+    public void setCompetencia(Competencia competencia) {
+        this.competencia = competencia;
+    }
 
-	public void setTipo(Tipo tipo) {
-		this.tipo = tipo;
-	}
+    public TipoSolicitud getTipoSolicitud() {
+        return tipoSolicitud;
+    }
+
+    public void setTipoSolicitud(TipoSolicitud tipoSolicitud) {
+        this.tipoSolicitud = tipoSolicitud;
+    }
 
 }

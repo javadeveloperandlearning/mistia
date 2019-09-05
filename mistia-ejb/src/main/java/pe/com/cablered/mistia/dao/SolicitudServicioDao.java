@@ -130,8 +130,6 @@ public class SolicitudServicioDao extends CrudDao<SolicitudServicio> {
                     + "	and	 ( d.codigoDistrito=:pcodigodistrito or :pcodigodistrito is null) "
                     + "	and	 (t.codigoTipoSolicitud=:pcodigotiposolicitud or :pcodigotiposolicitud is null )"
                     + "order by s.numeroSolicitud ";
-            // and  s.numeroSolicitud  between 1 and 95
-
             TypedQuery<SolicitudServicio> query = getEntityManager().createQuery(sql, SolicitudServicio.class);
             query.setParameter("pcodigoestado", codigoEstado);
             query.setParameter("pcodigodistrito", codigoDistrito);
@@ -142,10 +140,56 @@ public class SolicitudServicioDao extends CrudDao<SolicitudServicio> {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return list;
     }
 
+    
+    
+    public List<SolicitudServicio> getSolicitudList(int codigoEstado, Integer codigoDistrito, Integer codigoTipoSolicitud, int mumeroDia) {
+
+        List<SolicitudServicio> list = Collections.EMPTY_LIST;
+        try {
+            String sql = "Select new SolicitudServicio (s.numeroSolicitud,"
+                    + "s.fechaAtencion , "
+                    + "s.fechaSolicitud, "
+                    + "s.poste, "
+                    + "s.tipoSolicitud,"
+                    + "s.latitud, "
+                    + "s.longitud) "
+                    + " from SolicitudServicio s "
+                    + " join s.estado e "
+                    + "	join s.distrito d"
+                    + " join s.tipoSolicitud t "
+                    + "where e.codigoEstado  =:pcodigoestado"
+                    + "	and	 (d.codigoDistrito=:pcodigodistrito or :pcodigodistrito is null) "
+                    + "	and	 (t.codigoTipoSolicitud=:pcodigotiposolicitud or :pcodigotiposolicitud is null )"
+                    + " and (t.indHorario = 0 "
+                    
+                    + " or  (t.indHorario = 1 and exists(Select 1 from  SolicitudServicio a "
+                    + "                 join a.solicitudServicioHorarioAtencionList ha"
+                    + "           where a.numeroSolicitud =  s.numeroSolicitud"
+                    + "            and  ha.numeroDia = :pnumerodia      ))"
+                    + ")"
+                    
+                    
+                    + " order by s.numeroSolicitud ";
+            TypedQuery<SolicitudServicio> query = getEntityManager().createQuery(sql, SolicitudServicio.class);
+            query.setParameter("pcodigoestado", codigoEstado);
+            query.setParameter("pcodigodistrito", codigoDistrito);
+            query.setParameter("pcodigotiposolicitud", codigoTipoSolicitud);
+            query .setParameter("pnumerodia", mumeroDia);
+
+            list = query.getResultList();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+    
+    
+    
+    
     public Response actualizarEstado(SolicitudServicio solicitudServicio) {
 
         Response response = new Response(Response.OK, Response.MSG_OK);

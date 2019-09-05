@@ -27,20 +27,16 @@ public class SolicitudServicioHorarioAtencion extends ObjectBean implements Seri
 	@Column(name="numero_dia")
 	private Integer numeroDia;
 	
-
-
 	//bi-directional many-to-one association to SolicitudServicio
 	@ManyToOne
 	@JoinColumn(name="numero_solicitud", insertable = false, updatable = false)
 	private SolicitudServicio solicitudServicio;
 
+        
+        
 	public SolicitudServicioHorarioAtencion() {
-	}
-
 	
-	
-	
-	
+        }
 	
 	public SolicitudServicioHorarioAtencion( Integer numeroDia , String horaInicio , String horaFin) {
 		super();

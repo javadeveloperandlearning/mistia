@@ -109,7 +109,7 @@ public class SolicitudServicio extends ObjectBean implements Serializable, Clone
     @JoinColumn(name = "numero_contrato")
     private ContratoServicio contratoServicio;
 
-    @Transient
+    @OneToMany(mappedBy="solicitudServicio" , fetch =FetchType.LAZY)
     private List<SolicitudServicioHorarioAtencion> solicitudServicioHorarioAtencionList;
 
     @Transient

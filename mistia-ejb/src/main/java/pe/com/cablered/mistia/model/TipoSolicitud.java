@@ -7,189 +7,196 @@ import javax.xml.bind.annotation.XmlTransient;
 import java.sql.Timestamp;
 import java.util.List;
 
-
 /**
  * The persistent class for the tipo_solicitud database table.
- * 
+ *
  */
 @Entity
-@Table(name="tipo_solicitud")
-@NamedQuery(name="TipoSolicitud.findAll", query="SELECT t FROM TipoSolicitud t")
+@Table(name = "tipo_solicitud")
+@NamedQuery(name = "TipoSolicitud.findAll", query = "SELECT t FROM TipoSolicitud t")
 public class TipoSolicitud implements Serializable {
-	private static final long serialVersionUID = 1L;
 
-	@Id
-	@GeneratedValue(strategy=GenerationType.TABLE)
-	@Column(name="codigo_tipo_solicitud")
-	private Integer codigoTipoSolicitud;
+    private static final long serialVersionUID = 1L;
 
-	private String descripcion;
+    @Id
+    @GeneratedValue(strategy = GenerationType.TABLE)
+    @Column(name = "codigo_tipo_solicitud")
+    private Integer codigoTipoSolicitud;
 
-	@Column(name="estacion_creacion")
-	private String estacionCreacion;
+    private String descripcion;
 
-	@Column(name="estacion_modificacion")
-	private String estacionModificacion;
+    @Column(name = "estacion_creacion")
+    private String estacionCreacion;
 
-	@Column(name="fecha_creacion")
-	private Timestamp fechaCreacion;
+    @Column(name = "estacion_modificacion")
+    private String estacionModificacion;
 
-	@Column(name="fecha_modificacion")
-	private Timestamp fechaModificacion;
+    @Column(name = "fecha_creacion")
+    private Timestamp fechaCreacion;
 
-	@Column(name="ind_activo")
-	private Integer indActivo;
+    @Column(name = "fecha_modificacion")
+    private Timestamp fechaModificacion;
 
-	private Integer prioridad;
+    @Column(name = "ind_activo")
+    private Integer indActivo;
 
-	@Column(name="tiempo_ejecucion")
-	private Integer tiempoEjecucion;
+    private Integer prioridad;
 
-	@Column(name="usuario_creacion")
-	private String usuarioCreacion;
+    @Column(name = "tiempo_ejecucion")
+    private Integer tiempoEjecucion;
 
-	@Column(name="usuario_modificacion")
-	private String usuarioModificacion;
-	
-	
-	@Column(name="abreviatura")
-	private String abreviatura;
-	
-	@Column(name="tarifa")
-	private Double tarifa;
-	
+    @Column(name = "usuario_creacion")
+    private String usuarioCreacion;
 
-	public String getAbreviatura() {
-		return abreviatura;
-	}
+    @Column(name = "usuario_modificacion")
+    private String usuarioModificacion;
 
-	public void setAbreviatura(String abreviatura) {
-		this.abreviatura = abreviatura;
-	}
+    @Column(name = "abreviatura")
+    private String abreviatura;
 
-	//bi-directional many-to-one association to SolicitudServicio
-	@OneToMany(mappedBy="tipoSolicitud")
-	private List<SolicitudServicio> solicitudServicios;
+    @Column(name = "tarifa")
+    private Double tarifa;
 
-	public TipoSolicitud() {
-	}
+    @Column(name = "ind_horario")
+    private Integer indHorario;
 
-	public TipoSolicitud(Integer codigoTipoSolicitud, String descripcion) {
-		super();
-		this.codigoTipoSolicitud = codigoTipoSolicitud;
-		this.descripcion = descripcion;
-	}
+    public Integer getIndHorario() {
+        return indHorario;
+    }
 
-	public TipoSolicitud(Integer codigoTipoSolicitud) {
-		super();
-		this.codigoTipoSolicitud = codigoTipoSolicitud;
-	}
+    public void setIndHorario(Integer indHorario) {
+        this.indHorario = indHorario;
+    }
 
-	public Integer getCodigoTipoSolicitud() {
-		return this.codigoTipoSolicitud;
-	}
+    public String getAbreviatura() {
+        return abreviatura;
+    }
 
-	public void setCodigoTipoSolicitud(Integer codigoTipoSolicitud) {
-		this.codigoTipoSolicitud = codigoTipoSolicitud;
-	}
+    public void setAbreviatura(String abreviatura) {
+        this.abreviatura = abreviatura;
+    }
 
-	public String getDescripcion() {
-		return this.descripcion;
-	}
+    //bi-directional many-to-one association to SolicitudServicio
+    @OneToMany(mappedBy = "tipoSolicitud")
+    private List<SolicitudServicio> solicitudServicios;
 
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
-	}
+    public TipoSolicitud() {
+    }
 
-	public String getEstacionCreacion() {
-		return this.estacionCreacion;
-	}
+    public TipoSolicitud(Integer codigoTipoSolicitud, String descripcion) {
+        super();
+        this.codigoTipoSolicitud = codigoTipoSolicitud;
+        this.descripcion = descripcion;
+    }
 
-	public void setEstacionCreacion(String estacionCreacion) {
-		this.estacionCreacion = estacionCreacion;
-	}
+    public TipoSolicitud(Integer codigoTipoSolicitud) {
+        super();
+        this.codigoTipoSolicitud = codigoTipoSolicitud;
+    }
 
-	public String getEstacionModificacion() {
-		return this.estacionModificacion;
-	}
+    public Integer getCodigoTipoSolicitud() {
+        return this.codigoTipoSolicitud;
+    }
 
-	public void setEstacionModificacion(String estacionModificacion) {
-		this.estacionModificacion = estacionModificacion;
-	}
+    public void setCodigoTipoSolicitud(Integer codigoTipoSolicitud) {
+        this.codigoTipoSolicitud = codigoTipoSolicitud;
+    }
 
-	public Timestamp getFechaCreacion() {
-		return this.fechaCreacion;
-	}
+    public String getDescripcion() {
+        return this.descripcion;
+    }
 
-	public void setFechaCreacion(Timestamp fechaCreacion) {
-		this.fechaCreacion = fechaCreacion;
-	}
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
 
-	public Timestamp getFechaModificacion() {
-		return this.fechaModificacion;
-	}
+    public String getEstacionCreacion() {
+        return this.estacionCreacion;
+    }
 
-	public void setFechaModificacion(Timestamp fechaModificacion) {
-		this.fechaModificacion = fechaModificacion;
-	}
+    public void setEstacionCreacion(String estacionCreacion) {
+        this.estacionCreacion = estacionCreacion;
+    }
 
-	public Integer getIndActivo() {
-		return this.indActivo;
-	}
+    public String getEstacionModificacion() {
+        return this.estacionModificacion;
+    }
 
-	public void setIndActivo(Integer indActivo) {
-		this.indActivo = indActivo;
-	}
+    public void setEstacionModificacion(String estacionModificacion) {
+        this.estacionModificacion = estacionModificacion;
+    }
 
-	public Integer getPrioridad() {
-		return this.prioridad;
-	}
+    public Timestamp getFechaCreacion() {
+        return this.fechaCreacion;
+    }
 
-	public void setPrioridad(Integer prioridad) {
-		this.prioridad = prioridad;
-	}
+    public void setFechaCreacion(Timestamp fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
+    }
 
-	public Integer getTiempoEjecucion() {
-		return this.tiempoEjecucion;
-	}
+    public Timestamp getFechaModificacion() {
+        return this.fechaModificacion;
+    }
 
-	public void setTiempoEjecucion(Integer tiempoEjecucion) {
-		this.tiempoEjecucion = tiempoEjecucion;
-	}
+    public void setFechaModificacion(Timestamp fechaModificacion) {
+        this.fechaModificacion = fechaModificacion;
+    }
 
-	public String getUsuarioCreacion() {
-		return this.usuarioCreacion;
-	}
+    public Integer getIndActivo() {
+        return this.indActivo;
+    }
 
-	public void setUsuarioCreacion(String usuarioCreacion) {
-		this.usuarioCreacion = usuarioCreacion;
-	}
+    public void setIndActivo(Integer indActivo) {
+        this.indActivo = indActivo;
+    }
 
-	public String getUsuarioModificacion() {
-		return this.usuarioModificacion;
-	}
+    public Integer getPrioridad() {
+        return this.prioridad;
+    }
 
-	public void setUsuarioModificacion(String usuarioModificacion) {
-		this.usuarioModificacion = usuarioModificacion;
-	}
+    public void setPrioridad(Integer prioridad) {
+        this.prioridad = prioridad;
+    }
 
-	@XmlTransient
-	public List<SolicitudServicio> getSolicitudServicios() {
-		return this.solicitudServicios;
-	}
+    public Integer getTiempoEjecucion() {
+        return this.tiempoEjecucion;
+    }
 
-	public void setSolicitudServicios(List<SolicitudServicio> solicitudServicios) {
-		this.solicitudServicios = solicitudServicios;
-	}
+    public void setTiempoEjecucion(Integer tiempoEjecucion) {
+        this.tiempoEjecucion = tiempoEjecucion;
+    }
 
-	public Double getTarifa() {
-		return tarifa;
-	}
+    public String getUsuarioCreacion() {
+        return this.usuarioCreacion;
+    }
 
-	public void setTarifa(Double tarifa) {
-		this.tarifa = tarifa;
-	}
+    public void setUsuarioCreacion(String usuarioCreacion) {
+        this.usuarioCreacion = usuarioCreacion;
+    }
 
+    public String getUsuarioModificacion() {
+        return this.usuarioModificacion;
+    }
 
+    public void setUsuarioModificacion(String usuarioModificacion) {
+        this.usuarioModificacion = usuarioModificacion;
+    }
+
+    @XmlTransient
+    public List<SolicitudServicio> getSolicitudServicios() {
+        return this.solicitudServicios;
+    }
+
+    public void setSolicitudServicios(List<SolicitudServicio> solicitudServicios) {
+        this.solicitudServicios = solicitudServicios;
+    }
+
+    public Double getTarifa() {
+        return tarifa;
+    }
+
+    public void setTarifa(Double tarifa) {
+        this.tarifa = tarifa;
+    }
 
 }

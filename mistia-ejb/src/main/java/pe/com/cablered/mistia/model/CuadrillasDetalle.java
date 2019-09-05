@@ -38,6 +38,13 @@ public class CuadrillasDetalle extends ObjectBean implements Serializable {
 	public CuadrillasDetalle() {
 	
 	}
+        
+        public CuadrillasDetalle( Cuadrilla cuadrilla, Tecnico tecnico) {
+	
+           this.cuadrilla =  cuadrilla;
+           this.tecnico =  tecnico;
+           
+	}
 	
 	public CuadrillasDetalle(  Long numeroCuadrilla, Integer numeroSecuencia ) {
 	

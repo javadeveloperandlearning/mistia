@@ -50,9 +50,7 @@ public class Tipo implements Serializable {
     @Column(name = "usuario_modificacion")
     private String usuarioModificacion;
 
-    //bi-directional many-to-one association to TipoSolicitudCompetenciaDetalle
-    @OneToMany(mappedBy = "tipo")
-    private List<TipoSolicitudCompetenciaDetalle> tipoSolicitudCompetenciaDetalles;
+
     
     @OneToMany(mappedBy = "tipoDocumento")
     private List<Cliente> clienteList;
@@ -150,27 +148,7 @@ public class Tipo implements Serializable {
         this.usuarioModificacion = usuarioModificacion;
     }
 
-    public List<TipoSolicitudCompetenciaDetalle> getTipoSolicitudCompetenciaDetalles() {
-        return this.tipoSolicitudCompetenciaDetalles;
-    }
 
-    public void setTipoSolicitudCompetenciaDetalles(List<TipoSolicitudCompetenciaDetalle> tipoSolicitudCompetenciaDetalles) {
-        this.tipoSolicitudCompetenciaDetalles = tipoSolicitudCompetenciaDetalles;
-    }
-
-    public TipoSolicitudCompetenciaDetalle addTipoSolicitudCompetenciaDetalle(TipoSolicitudCompetenciaDetalle tipoSolicitudCompetenciaDetalle) {
-        getTipoSolicitudCompetenciaDetalles().add(tipoSolicitudCompetenciaDetalle);
-        tipoSolicitudCompetenciaDetalle.setTipo(this);
-
-        return tipoSolicitudCompetenciaDetalle;
-    }
-
-    public TipoSolicitudCompetenciaDetalle removeTipoSolicitudCompetenciaDetalle(TipoSolicitudCompetenciaDetalle tipoSolicitudCompetenciaDetalle) {
-        getTipoSolicitudCompetenciaDetalles().remove(tipoSolicitudCompetenciaDetalle);
-        tipoSolicitudCompetenciaDetalle.setTipo(null);
-
-        return tipoSolicitudCompetenciaDetalle;
-    }
 
     public Integer getPrioridad() {
         return prioridad;

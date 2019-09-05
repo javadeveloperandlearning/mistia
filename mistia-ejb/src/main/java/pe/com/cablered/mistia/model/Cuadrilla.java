@@ -8,6 +8,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -55,6 +56,11 @@ public class Cuadrilla extends ObjectBean implements Serializable {
     public Cuadrilla(Long numeroCuadrilla) {
         this.numeroCuadrilla = numeroCuadrilla;
     }
+    
+    public Cuadrilla(Long numeroCuadrilla, String nombre) {
+        this.numeroCuadrilla = numeroCuadrilla;
+        this.nombre =  nombre;
+    }
 
     public Long getNumeroCuadrilla() {
         return this.numeroCuadrilla;
@@ -98,6 +104,9 @@ public class Cuadrilla extends ObjectBean implements Serializable {
 
     @XmlTransient
     public List<CuadrillasDetalle> getCuadrillasDetalles() {
+        if(this.cuadrillasDetalles==null){
+            this.cuadrillasDetalles =  new ArrayList<>();
+        }
         return this.cuadrillasDetalles;
     }
 

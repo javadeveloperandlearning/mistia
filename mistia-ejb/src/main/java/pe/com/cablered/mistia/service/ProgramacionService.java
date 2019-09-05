@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -39,6 +40,7 @@ import pe.com.cablered.mistia.dao.RedNeuronalDetalleDao;
 import pe.com.cablered.mistia.dao.SolicitudServicioDao;
 import pe.com.cablered.mistia.dao.SolicitudServicioEstadoDao;
 import pe.com.cablered.mistia.dao.RedNeuronalDao;
+import pe.com.cablered.mistia.dao.TecnicoDao;
 import pe.com.cablered.mistia.geometria.Geometria;
 import pe.com.cablered.mistia.ia.rna.NeuralNetwork;
 import pe.com.cablered.mistia.model.Cuadrilla;
@@ -56,7 +58,9 @@ import pe.com.cablered.mistia.model.RedNeuronal;
 import pe.com.cablered.mistia.model.RedNeuronalDetalle;
 import pe.com.cablered.mistia.model.RedNeuronalDetallePK;
 import pe.com.cablered.mistia.model.SolicitudServicio;
+import pe.com.cablered.mistia.model.Tecnico;
 import pe.com.cablered.mistia.model.TecnicoCompetenciaDetalle;
+import pe.com.cablered.mistia.model.TipoSolicitud;
 import pe.com.cablered.mistia.model.sort.GrupoAtencionDetalleSortNumeroGrupo;
 import pe.com.cablered.mistia.model.sort.GrupoAtencionSortNumeroAtencion;
 import pe.com.cablered.mistia.util.ConstantBusiness;
@@ -108,6 +112,9 @@ public class ProgramacionService implements Serializable {
     private CuadrillasDetalleDao cuadrillasDetalleDao;
 
     @Inject
+    private TecnicoDao tecnicoDao;
+
+    @Inject
     private GrupoService grupoService;
 
     private List< Map<String, Object>> combinaciones;
@@ -152,8 +159,9 @@ public class ProgramacionService implements Serializable {
     }
 
     /**
-     * obtiene la lista de solicitudes por codigo para mostrar durante la
-     * generancion de la programacion
+     * obtiene la lista de solicitudes por D Distritro, Tipo de solicitud
+     * solicitudes que tienen atención ese día Estado pendiente para mostrar
+     * durante la generancion de la programacion
      *
      * @codigoDistrito
      * @codigoTipoSolicitud
@@ -172,8 +180,11 @@ public class ProgramacionService implements Serializable {
             codigoTipoSolicitud = null;
         }
 
-        solicitudesList = solicitudServicioDao.getSolicitudList(ConstantBusiness.ESTADO_SOLICITUD_PENDIENTE, codigoDistrito, codigoTipoSolicitud);;
+        Calendar cal = Calendar.getInstance();
+        int diaSemana = cal.get(Calendar.DAY_OF_WEEK);
+        logger.info(" dia de la semana : " + diaSemana);
 
+        solicitudesList = solicitudServicioDao.getSolicitudList(ConstantBusiness.ESTADO_SOLICITUD_PENDIENTE, codigoDistrito, codigoTipoSolicitud, diaSemana);
         for (SolicitudServicio s : solicitudesList) {
 
             Map<String, Object> map = new HashMap<String, Object>();
@@ -1412,14 +1423,68 @@ public class ProgramacionService implements Serializable {
     public Map<Long, GrupoAtencion> generarGruposAtencion(String solicitudesselect, Integer _numerogrupos) {
         Map<Long, GrupoAtencion> mpGrupos = null;
         try {
-
             mpGrupos = grupoService.generarGruposAtencion(solicitudesselect, _numerogrupos);
             this.mpGruposCached = mpGrupos;
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return mpGrupos;
+    }
+
+    public List<Cuadrilla> getCuadrillasGeneradas() {
+
+        List<Cuadrilla> cuadrillaList = Collections.EMPTY_LIST;
+        Calendar cal = Calendar.getInstance();
+        int diaSemana = cal.get(Calendar.DAY_OF_WEEK);
+        logger.info(" dia de la semana : " + diaSemana);
+        List<Cuadrilla> cuadrillaCombinadasList =   getCuadrillasCombinadas();
+        
+        List<SolicitudServicio> solicitudesList = solicitudServicioDao.getSolicitudList(ConstantBusiness.ESTADO_SOLICITUD_PENDIENTE, 0, 0, diaSemana);
+        Set<TipoSolicitud> tipoSolicitudSet =  new HashSet<>();
+        for (SolicitudServicio solicitudServicio : solicitudesList) {
+            tipoSolicitudSet.add(solicitudServicio.getTipoSolicitud());
+        }
+
+        return cuadrillaList;
+    }
+
+    public List<Cuadrilla> getCuadrillasCombinadas() {
+
+        List<Cuadrilla> cuadrillaList = new ArrayList<>();
+        List<Tecnico> tecnicoList = tecnicoDao.getTecnicoList();
+        long ncuadrilla = 1;
+        for (Tecnico t1 : tecnicoList) {
+            for (Tecnico t2 : tecnicoList) {
+                if (!existGrupo(cuadrillaList, t1, t2) && !t1.equals(t2)) {
+                    Cuadrilla cuadrilla = new Cuadrilla(ncuadrilla, "Cuadrilla " + ncuadrilla);
+                    cuadrilla.getCuadrillasDetalles().add(new CuadrillasDetalle(cuadrilla, t1));
+                    cuadrilla.getCuadrillasDetalles().add(new CuadrillasDetalle(cuadrilla, t2));
+                    cuadrillaList.add(cuadrilla);
+                    ncuadrilla++;
+                }
+            }
+        }
+
+        return cuadrillaList;
+    }
+
+    private boolean existGrupo(List<Cuadrilla> cuadrillaList, Tecnico t1, Tecnico t2) {
+        for (Cuadrilla c : cuadrillaList) {
+            boolean has1 = false;
+            boolean has2 = false;
+            for (CuadrillasDetalle cd : c.getCuadrillasDetalles()) {
+                if (cd.getTecnico().equals(t1)) {
+                    has1 = true;
+                }
+                if (cd.getTecnico().equals(t2)) {
+                    has2 = true;
+                }
+            }
+            if (has1 && has2) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }
