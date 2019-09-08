@@ -638,15 +638,18 @@ $(document).ready(function () {
 
     $("#lstdetalleplan").jqGrid({
         datatype: "local",
-        height: 350,
+        height: 400,
+        width: 700,
         autowidth: true,
-        colNames: ['Orden', '# Solicitud', 'Tipo', 'Hora'/*, 'Quitar' */],
+        colNames: ['Orden', '# Solicitud', 'Tipo','Tiempo Prom.<b> Atención','Hora<b>  solicitada','Hora<b>  programada'],
         colModel: [
             {name: 'numeroSecuencia', index: 'numeroSecuencia', width: 60},
             {name: 'tag', index: 'tag', width: 120},
             {name: 'tipoSolicitud', index: 'tipoSolicitud', width: 150},
-            {name: 'horaAtencion', index: 'horaAtencion', width: 100}/*,
-             {name : 'eliminar',index : 'eliminar',width : 100}*/
+            {name: 'tiempoEjecucion', index: 'tiempoEjecucion', width: 100},
+            {name: 'horaSolicitada', index: 'horaSolicitada', width: 100},
+            {name: 'horaAtencion', index: 'horaAtencion', width: 100}
+            
         ],
 
         caption: "Lista de solictudes de servicios"

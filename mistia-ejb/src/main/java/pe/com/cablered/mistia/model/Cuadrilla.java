@@ -11,6 +11,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * The persistent class for the cuadrillas database table.
@@ -36,6 +37,9 @@ public class Cuadrilla extends ObjectBean implements Serializable {
 
     @Column(name = "fecha_programacion")
     private Date fechaProgramacion;
+    
+    @Transient
+    private Map<Integer,Double> competenciasPromedios;
 
     //bi-directional many-to-one association to Vehiculo
     @ManyToOne(optional = false)
@@ -140,6 +144,16 @@ public class Cuadrilla extends ObjectBean implements Serializable {
         this.planTrabajos = planTrabajos;
     }
 
+    public Map<Integer, Double> getCompetenciasPromedios() {
+        return competenciasPromedios;
+    }
+
+    public void setCompetenciasPromedios(Map<Integer, Double> competenciasPromedios) {
+        this.competenciasPromedios = competenciasPromedios;
+    }
+
+    
+    
     @Override
     public int hashCode() {
         final int prime = 31;

@@ -132,14 +132,12 @@ public class GrupoService {
             int nse = 1;
             List<GrupoAtencionDetalle> detalles = new ArrayList<GrupoAtencionDetalle>();
             Iterator<Integer> it = map.keySet().iterator();
-            //double ct =  0.0;
+            
             while (it.hasNext()) {
                 Integer i = it.next();
                 Punto punto = map.get(i);
 
                 for (SolicitudServicio solicitud : solicitudes) {
-                    //solicitud.setNumeroSolicitud(i);
-                    // if(solicitud.getPoste().getCodigoPoste().equals(punto.getNumero())){
                     if (solicitud.getNumeroSolicitud() == punto.getNumero()) {
                         System.out.println("Punto : " + punto.toString() + " -  solicitud :" + solicitud.getNumeroSolicitud());
                         GrupoAtencionDetalle detalle = new GrupoAtencionDetalle(grupo.getNumeroGrupoAtencion(), nse, solicitud);

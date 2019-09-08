@@ -101,8 +101,8 @@ public class TSPHeuristica {
         // ordenamos por las heuristicas definidad en la clase comparator
         // hora atencion, prioridad, urgencia, distancia
         Collections.sort(puntos, new PuntoHeuristicaComparator1());
-        System.out.println("### mostrando las heuristicas #####");
-        mostratPuntosHeuristica(puntos);
+        //System.out.println("### mostrando las heuristicas #####");
+        //mostratPuntosHeuristica(puntos);
 
         if (puntos != null && puntos.size() > 0) {
             puntopriorizado = puntos.get(0);

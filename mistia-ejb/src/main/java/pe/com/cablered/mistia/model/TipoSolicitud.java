@@ -6,6 +6,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * The persistent class for the tipo_solicitud database table.
@@ -198,5 +199,32 @@ public class TipoSolicitud implements Serializable {
     public void setTarifa(Double tarifa) {
         this.tarifa = tarifa;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 41 * hash + Objects.hashCode(this.codigoTipoSolicitud);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final TipoSolicitud other = (TipoSolicitud) obj;
+        if (!Objects.equals(this.codigoTipoSolicitud, other.codigoTipoSolicitud)) {
+            return false;
+        }
+        return true;
+    }
+    
+    
 
 }

@@ -133,6 +133,16 @@ public class Util {
 	}
 	
         
+        public static int  diaSemanaCalendar(int diasemana){
+           int dia =  diasemana - 1;
+           if(dia==0){
+               return 7;
+           }else{
+               return dia;
+           }
+        }
+        
+        
         public  static boolean  isEmpty(String value){
              return (value==null|| (value!=null && value.trim().equals("")));
         }

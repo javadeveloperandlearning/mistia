@@ -40,9 +40,11 @@ import pe.com.cablered.mistia.dao.RedNeuronalDetalleDao;
 import pe.com.cablered.mistia.dao.SolicitudServicioDao;
 import pe.com.cablered.mistia.dao.SolicitudServicioEstadoDao;
 import pe.com.cablered.mistia.dao.RedNeuronalDao;
+import pe.com.cablered.mistia.dao.SolicitudServicioHorarioAtencionDao;
 import pe.com.cablered.mistia.dao.TecnicoDao;
 import pe.com.cablered.mistia.geometria.Geometria;
 import pe.com.cablered.mistia.ia.rna.NeuralNetwork;
+import pe.com.cablered.mistia.model.Competencia;
 import pe.com.cablered.mistia.model.Cuadrilla;
 import pe.com.cablered.mistia.model.CuadrillasDetalle;
 import pe.com.cablered.mistia.model.Estado;
@@ -58,11 +60,14 @@ import pe.com.cablered.mistia.model.RedNeuronal;
 import pe.com.cablered.mistia.model.RedNeuronalDetalle;
 import pe.com.cablered.mistia.model.RedNeuronalDetallePK;
 import pe.com.cablered.mistia.model.SolicitudServicio;
+import pe.com.cablered.mistia.model.SolicitudServicioHorarioAtencion;
 import pe.com.cablered.mistia.model.Tecnico;
 import pe.com.cablered.mistia.model.TecnicoCompetenciaDetalle;
 import pe.com.cablered.mistia.model.TipoSolicitud;
+import pe.com.cablered.mistia.model.sort.CombinacionCuadrillaSort1;
 import pe.com.cablered.mistia.model.sort.GrupoAtencionDetalleSortNumeroGrupo;
 import pe.com.cablered.mistia.model.sort.GrupoAtencionSortNumeroAtencion;
+import pe.com.cablered.mistia.model.sort.TipoSolicitudSort1;
 import pe.com.cablered.mistia.util.ConstantBusiness;
 import pe.com.cablered.mistia.util.Util;
 import static pe.com.cablered.mistia.util.ConstantBusiness.*;
@@ -116,6 +121,9 @@ public class ProgramacionService implements Serializable {
 
     @Inject
     private GrupoService grupoService;
+    
+    @Inject
+    private SolicitudServicioHorarioAtencionDao servicioHorarioAtencionDao;
 
     private List< Map<String, Object>> combinaciones;
 
@@ -144,7 +152,16 @@ public class ProgramacionService implements Serializable {
         if (accion != null && accion == ConstantBusiness.ACCION_NUEVA_PROGRAMACION) {
             for (PlanTrabajo pt : planTrabajoCachedList) {
                 if (pt.getCuadrilla().getNumeroCuadrilla() == numeroccuadrilla) {
-                    return pt.getPlanTrabajoDetalles();
+                    
+                    List<PlanTrabajoDetalle> planTrabajoDetalleList = pt.getPlanTrabajoDetalles();
+                    for (PlanTrabajoDetalle ptd : planTrabajoDetalleList) {
+                        SolicitudServicio s =  ptd.getSolicitudServicio();
+                        List<SolicitudServicioHorarioAtencion>  shList  = servicioHorarioAtencionDao.getListSolicitudServicioHorarioAtencion(s.getNumeroSolicitud());
+                        s.setSolicitudServicioHorarioAtencionList(shList);
+                       
+                    }
+                    
+                    return planTrabajoDetalleList;
                 }
             }
         } else if (accion != null && accion == ConstantBusiness.ACCION_EDITA_PROGRAMACION) {
@@ -412,7 +429,9 @@ public class ProgramacionService implements Serializable {
 
         logger.info(" _fecPrgn :" + _fecPrgn);
 
-        List<Cuadrilla> cuadrillas = cuadrillaDao.getCuadrillaLibresList(_fecPrgn);
+        //List<Cuadrilla> cuadrillas = cuadrillaDao.getCuadrillaLibresList(_fecPrgn);
+        
+        List<Cuadrilla> cuadrillas = getCuadrillasGeneradas();
 
         for (Cuadrilla cuadrilla : cuadrillas) {
             logger.info(" cuadrilla : " + cuadrilla.getNumeroCuadrilla());
@@ -1433,23 +1452,102 @@ public class ProgramacionService implements Serializable {
 
     public List<Cuadrilla> getCuadrillasGeneradas() {
 
-        List<Cuadrilla> cuadrillaList = Collections.EMPTY_LIST;
+        List<Cuadrilla> _cuadrillas = new ArrayList<>();
+
+        List<Cuadrilla> cuadrillaList = new ArrayList<>();
         Calendar cal = Calendar.getInstance();
-        int diaSemana = cal.get(Calendar.DAY_OF_WEEK);
+        int diaSemana = Util.diaSemanaCalendar(cal.get(Calendar.DAY_OF_WEEK));
         logger.info(" dia de la semana : " + diaSemana);
-        List<Cuadrilla> cuadrillaCombinadasList =   getCuadrillasCombinadas();
-        
-        List<SolicitudServicio> solicitudesList = solicitudServicioDao.getSolicitudList(ConstantBusiness.ESTADO_SOLICITUD_PENDIENTE, 0, 0, diaSemana);
-        Set<TipoSolicitud> tipoSolicitudSet =  new HashSet<>();
+        List<Cuadrilla> cuadrillaCombinadasList = getCuadrillasCombinadas();
+        // ordenar la solicitudes
+        Collections.sort(cuadrillaCombinadasList, new CombinacionCuadrillaSort1());
+
+        List<SolicitudServicio> solicitudesList = solicitudServicioDao.getSolicitudList(ConstantBusiness.ESTADO_SOLICITUD_PENDIENTE, null, null, diaSemana);
+        Set<TipoSolicitud> tipoSolicitudSet = new HashSet<>();
         for (SolicitudServicio solicitudServicio : solicitudesList) {
             tipoSolicitudSet.add(solicitudServicio.getTipoSolicitud());
         }
 
+        List<TipoSolicitud> tipoSolicitudLit = new ArrayList<>();
+        for (TipoSolicitud tipoSolicitud : tipoSolicitudSet) {
+            tipoSolicitudLit.add(tipoSolicitud);
+        }
+        Collections.sort(tipoSolicitudLit, new TipoSolicitudSort1());
+        
+        soli:
+        for (TipoSolicitud tipoSolicitud : tipoSolicitudLit) {
+            logger.info("############### ---> tipoSolicitud :" + tipoSolicitud.getCodigoTipoSolicitud() + " - " + tipoSolicitud.getDescripcion());
+
+            // buscar la combinacion de la cuadrilla 
+            if (_cuadrillas.isEmpty()) {
+                Cuadrilla cuadrillaComb = cuadrillaCombinadasList.get(0);
+                _cuadrillas.add(cuadrillaComb);
+                logger.info("añadiendo cuadrilla...");
+
+            } else {
+
+                // buscamos si la combinaacion(cuadrillaComb) seleccionada contiene algun técnico
+                // ya seleccionado en una cuadrilla anteriormente seleccionada
+                //int last = cuadrillaCombinadasList.size() - 1;
+                //Cuadrilla cuadrillaComb = cuadrillaCombinadasList.get(last);
+                for (Cuadrilla cuadrillaComb : cuadrillaCombinadasList) {
+
+                    List<CuadrillasDetalle> cdList = cuadrillaComb.getCuadrillasDetalles();
+
+                    // verificamos si el tecnico existe
+                    List<Tecnico> tenicoList = new ArrayList();
+                    for (CuadrillasDetalle cd : cdList) {
+                        Tecnico tecnico = cd.getTecnico();
+                        tenicoList.add(tecnico);
+                    }
+                    boolean existetec = false;
+                    existetec = existeTecnico(_cuadrillas, tenicoList);
+                    if (!existetec) {
+                        _cuadrillas.add(cuadrillaComb);
+                        //cuadrillaCombinadasList.remove(cuadrillaComb);
+                        logger.info("cuadrilla encontrada  break");
+                        continue soli;
+
+                    } 
+                }
+            }
+        }
+        
+        cuadrillaList.addAll(_cuadrillas);
+        // reenumerando cuadrillas
+        long numeroCuadrilla = 1;
+        for (Cuadrilla cuadrilla : cuadrillaList) {
+            cuadrilla.setNumeroCuadrilla(numeroCuadrilla);
+            cuadrilla.setNombre("Cuadrilla "+numeroCuadrilla);
+            numeroCuadrilla++;
+        }
+        
+        
         return cuadrillaList;
     }
 
-    public List<Cuadrilla> getCuadrillasCombinadas() {
+    boolean existeTecnico(List<Cuadrilla> cuadrillas, List<Tecnico> tecnicoList) {
 
+        for (Cuadrilla cuadrilla : cuadrillas) {
+            List<CuadrillasDetalle> cdList = cuadrilla.getCuadrillasDetalles();
+            for (CuadrillasDetalle cd : cdList) {
+                Tecnico _tecnico = cd.getTecnico();
+                //buscando la lista de tecnicos
+                for (Tecnico tecnico : tecnicoList) {
+                    if (_tecnico.equals(tecnico)) {
+                        return true;
+                    }
+                }
+
+            }
+        }
+
+        return false;
+    }
+
+    public List<Cuadrilla> getCuadrillasCombinadas() {
+        logger.info("metodo : getCuadrillasCombinadas ");
+        // lista de la posibles combinaciones de cuadrillas
         List<Cuadrilla> cuadrillaList = new ArrayList<>();
         List<Tecnico> tecnicoList = tecnicoDao.getTecnicoList();
         long ncuadrilla = 1;
@@ -1465,6 +1563,36 @@ public class ProgramacionService implements Serializable {
             }
         }
 
+        // calculo de promedio por cuadrillas
+        for (Cuadrilla cuadrilla : cuadrillaList) {
+            Map<Integer, List<Double>> mpcompetencias = new LinkedHashMap<>();
+            Map<Integer, Double> mppromedios = new LinkedHashMap<>();
+            cuadrilla.setCompetenciasPromedios(mppromedios);
+            for (CuadrillasDetalle cd : cuadrilla.getCuadrillasDetalles()) {
+                List<TecnicoCompetenciaDetalle> tcdList = cd.getTecnico().getTecnicoCompetenciaDetalles();
+                for (TecnicoCompetenciaDetalle tcd : tcdList) {
+                    Competencia competencia = tcd.getCompetencia();
+                    List<Double> gradoList = mpcompetencias.get(competencia.getCodigoCompetencia());
+                    if (gradoList == null) {
+                        gradoList = new ArrayList<>();
+                        gradoList.add(tcd.getGradoCompetencia().doubleValue());
+                        mpcompetencias.put(competencia.getCodigoCompetencia(), gradoList);
+                    } else {
+                        gradoList.add(tcd.getGradoCompetencia().doubleValue());
+                    }
+                }
+            }
+
+            Set<Integer> keys = mpcompetencias.keySet();
+            for (Integer key : keys) {
+                List<Double> grados = mpcompetencias.get(key);
+                Double promedio = 0.0;
+                for (Double grado : grados) {
+                    promedio += grado;
+                }
+                mppromedios.put(key, promedio);
+            }
+        }
         return cuadrillaList;
     }
 

@@ -68,6 +68,8 @@ public class SolicitudServicio extends ObjectBean implements Serializable, Clone
 
     @Column(name = "longitud")
     private Double longitud;
+    
+
 
     /**/
     //bi-directional many-to-one association to GrupoAtencionDetalle
@@ -385,6 +387,7 @@ public class SolicitudServicio extends ObjectBean implements Serializable, Clone
         this.solicitudServicioHorarioAtencionList = solicitudServicioHorarioAtencionList;
     }
 
+    
     @Override
     public Object clone() {
         Object object = null;

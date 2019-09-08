@@ -41,7 +41,9 @@ public class TipoSolicitudCompetenciaDetalleDao extends  CrudDao<TipoSolicitudCo
          
          TypedQuery  query  =  getEntityManager().createQuery(sql, TipoSolicitudCompetenciaDetalle.class);
          
+        
          
+        
          
          
          

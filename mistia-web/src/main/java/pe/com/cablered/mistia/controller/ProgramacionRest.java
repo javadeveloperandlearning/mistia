@@ -39,6 +39,7 @@ import pe.com.cablered.mistia.model.GrupoAtencionDetalle;
 import pe.com.cablered.mistia.model.PlanTrabajo;
 import pe.com.cablered.mistia.model.PlanTrabajoDetalle;
 import pe.com.cablered.mistia.model.SolicitudServicio;
+import pe.com.cablered.mistia.model.SolicitudServicioHorarioAtencion;
 import pe.com.cablered.mistia.service.CuadrillaService;
 import pe.com.cablered.mistia.service.ProgramacionService;
 import pe.com.cablered.mistia.util.ConstantBusiness;
@@ -103,6 +104,7 @@ public class ProgramacionRest implements Serializable {
         String solicitudesselect = request.getParameter("psolicitudesselect");
         String numerogrupos = request.getParameter("pnumerogrupos");
         Integer _numerogrupos = null;
+        logger.info(" solicitudesselect :  " + solicitudesselect);
 
         try {
             _numerogrupos = Integer.parseInt(numerogrupos);
@@ -117,7 +119,7 @@ public class ProgramacionRest implements Serializable {
 
         logger.info("#### asignando grupos a cuadrillas");
         Date fecPrgn = Calendar.getInstance().getTime();
-        
+
         List<PlanTrabajo> planTrabajoList = programacionService.asignarCuadrillasGrupos(fecPrgn, mpGrupos);
 
         logger.info(" ##### FINZALIZANDO  PROCESO ##");
@@ -212,18 +214,18 @@ public class ProgramacionRest implements Serializable {
                     codigoDistrito = Integer.parseInt(request.getParameter("codigoDistrito"), 10);
                     logger.info("##### codigoDistrito : " + codigoDistrito);
                     logger.info("##### codigoTipoSolicitud : " + codigoTipoSolicitud);
-                    solicitudList =  programacionService.getSolicitudList(codigoDistrito, codigoTipoSolicitud);
-                    logger.info(" cant solicitudes : "+solicitudList.size());
+                    solicitudList = programacionService.getSolicitudList(codigoDistrito, codigoTipoSolicitud);
+                    logger.info(" cant solicitudes : " + solicitudList.size());
 
                 } else {
 
                     numeroProgramacion = (Long) session.getAttribute("numeroProgramacion");
                     numeroProgramacion = numeroProgramacion == null ? 0 : numeroProgramacion;
-                    solicitudList =  programacionService.getSolicitudList(numeroProgramacion);
-                    logger.info(" cant solicitudes : "+solicitudList.size());
+                    solicitudList = programacionService.getSolicitudList(numeroProgramacion);
+                    logger.info(" cant solicitudes : " + solicitudList.size());
                 }
 
-                } catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             //solicitudList = programacionService.getSolicitudList(numeroProgramacion, accion, codigoDistrito, codigoTipoSolicitud);
@@ -231,7 +233,7 @@ public class ProgramacionRest implements Serializable {
         } catch (Exception e) {
             e.printStackTrace();
         }
-            return solicitudList;
+        return solicitudList;
 
     }
 
@@ -240,7 +242,7 @@ public class ProgramacionRest implements Serializable {
     @Path("/cuadrillas.html")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Map<String, Object>> cuadrillas(@Context HttpServletRequest request) {
-        
+
         logger.info(" ########## metodo :  cuadrilas ##### ###");
         Calendar cal = Calendar.getInstance(); // locale-specific
         cal.set(Calendar.HOUR_OF_DAY, 0);
@@ -249,7 +251,10 @@ public class ProgramacionRest implements Serializable {
         cal.set(Calendar.MILLISECOND, 0);
         Date fecPrgn = cal.getTime();
         //List<Cuadrilla> cuadrillas = CuadrillaService.getCuadrillaLibresList(fecPrgn);
-        List<Cuadrilla> cuadrillas = CuadrillaService.getCuadrillasCombinadas(fecPrgn);
+        //List<Cuadrilla> cuadrillas = CuadrillaService.getCuadrillasCombinadas(fecPrgn);
+        logger.info("iniciando cuadrillas combinadas");
+        List<Cuadrilla> cuadrillas = programacionService.getCuadrillasGeneradas();
+        logger.info("finalizando cuadrillas combinadas");
 
         return toFormatPlantrabajo(cuadrillas);
     }
@@ -285,8 +290,8 @@ public class ProgramacionRest implements Serializable {
         //List<Cuadrilla> cuadrillas = CuadrillaService.getCuadrillaList(fecPrgn);
         // planes generados 
         //List<PlanTrabajo> planTrabajoList = programacionService.asignarCuadrillasGrupos(fecPrgn);
-       
-        List<PlanTrabajo> planTrabajoList =null;
+
+        List<PlanTrabajo> planTrabajoList = null;
         plotPlanesTrabajo(planTrabajoList);
         return planTrabajoList;
 
@@ -355,9 +360,7 @@ public class ProgramacionRest implements Serializable {
 		programacionService.setMpGruposCached(mpGrupos);*/
         // cambio
         Map<Long, GrupoAtencion> mpGrupos = programacionService.reasignarSolictud(numerosoli, numerogrup);
-        
-        
-        
+
         return toFormatMap(mpGrupos);
 
     }
@@ -403,24 +406,24 @@ public class ProgramacionRest implements Serializable {
     private List<Map<String, Object>> toFormatPlantrabajo(List<Cuadrilla> cuadrillas) {
 
         List<Map<String, Object>> planList = new ArrayList<Map<String, Object>>();
-        
-        if(cuadrillas!=null && cuadrillas.size()>0){
+
+        if (cuadrillas != null && cuadrillas.size() > 0) {
             for (Cuadrilla c : cuadrillas) {
-                
-                StringBuilder tecnicos =   new StringBuilder("");
-                
-                for(CuadrillasDetalle cd:  c.getCuadrillasDetalles()){   
-                    String apellidos  =  cd.getTecnico().getApellidos().trim().split("\\s+")[0];
-                    String letraNombre=  cd.getTecnico().getNombres().trim().substring(0,1);
-                    if(tecnicos.toString().equals("")){
+
+                StringBuilder tecnicos = new StringBuilder("");
+
+                for (CuadrillasDetalle cd : c.getCuadrillasDetalles()) {
+                    String apellidos = cd.getTecnico().getApellidos().trim().split("\\s+")[0];
+                    String letraNombre = cd.getTecnico().getNombres().trim().substring(0, 1);
+                    if (tecnicos.toString().equals("")) {
                         tecnicos.append(letraNombre);
                         tecnicos.append(" ");
                         tecnicos.append(apellidos);
-                    }else{
+                    } else {
                         tecnicos.append(", ");
                         tecnicos.append(letraNombre);
                         tecnicos.append(" ");
-                        tecnicos.append( apellidos);
+                        tecnicos.append(apellidos);
                     }
                 }
 
@@ -483,9 +486,8 @@ public class ProgramacionRest implements Serializable {
         }
 
         //logger.info("### mostrando formato ### ");
-       // Gson gson = new Gson();
+        // Gson gson = new Gson();
         //logger.info(gson.toJson(grupoList));
-
         return grupoList;
     }
 
@@ -511,7 +513,41 @@ public class ProgramacionRest implements Serializable {
             map.put("numeroSolicitud", s.getNumeroSolicitud());
             map.put("tipoSolicitud", s.getTipoSolicitud().getDescripcion());
             map.put("horaAtencion", sdf.format(s.getFechaAtencion()));
+            map.put("tiempoEjecucion", d.getSolicitudServicio().getTipoSolicitud().getTiempoEjecucion());
 
+            if (s.getSolicitudServicioHorarioAtencionList() != null) {
+                List<SolicitudServicioHorarioAtencion> shList = s.getSolicitudServicioHorarioAtencionList();
+                StringBuilder sb = new StringBuilder("");
+
+                if (shList != null && !shList.isEmpty()) {
+                    if (shList.size() == 1) {
+                        SolicitudServicioHorarioAtencion sha  =  shList.get(0);
+                        sb.append("<br>" + sha.getHoraInicio() + " - " + sha.getHoraFin());
+                        sb.append(",</br>");
+                        map.put("horaSolicitada", sb.toString());
+
+                    } else {    
+                        
+                        SolicitudServicioHorarioAtencion sha  =  shList.get(0);
+                        sb.append("<br>" + sha.getHoraInicio() + " - " + sha.getHoraFin());
+                        sb.append(",</br>");
+                        
+                        sha  =  shList.get(shList.size()-1);
+                        sb.append("<br>" + sha.getHoraInicio() + " - " + sha.getHoraFin());
+                        sb.append(",</br>");
+                        
+                        map.put("horaSolicitada", sb.toString());
+                        
+
+                    }
+                }
+
+                /* for (SolicitudServicioHorarioAtencion sha : shList) {
+                    sb.append("<br>"+sha.getHoraInicio() +" - "+sha.getHoraFin());
+                    sb.append(",</br>");
+                    map.put("horaSolicitada", sb.toString());
+                }*/
+            }
             detalleList.add(map);
             i++;
         }
